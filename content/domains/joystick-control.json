@@ -1,0 +1,178 @@
+{
+  "domain": "joystick_control",
+  "title": "Joystick Control and Vessel Handling",
+  "order": 1,
+  "recommended_training_days": "1-8",
+  "description": "The TDPO learns to control vessel motion with precision, efficiency and professional discipline in any environmental condition. Professional standard means minimum inputs, no overcorrections, deliberate deceleration planned before it is needed, vessel arrives at intended position with near-zero residual velocity.",
+  "tasks": [
+    {
+      "id": "jc_001",
+      "title": "Pure Drift Stop",
+      "competency": "stopping_and_speed_management",
+      "difficulty": 1,
+      "min_training_day": 1,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH",
+      "setup": "Note your exact current position on the motion page. This is your datum. You will not be returning to it in this task — the only goal is stopping.",
+      "execute": "Select JSMH and set all joystick inputs to zero. Let the vessel drift freely for exactly 4 minutes. Do not touch any controls. When 4 minutes expires, using joystick only, bring the vessel to a complete stop. Both velocity axes must read below 0.1kts. Do not return to datum — stopping is the entire task.",
+      "professional_standard": [
+        "Stopped within 3 deliberate joystick inputs",
+        "Residual velocity below 0.1kts on both axes",
+        "Heading maintained throughout — no yaw during the stop",
+        "No overcorrection after initial input"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "drift_direction_degrees", "type": "number", "label": "Drift direction (degrees)" },
+          { "key": "drift_distance_metres", "type": "number", "label": "Drift distance (metres)" },
+          { "key": "vessel_speed_at_first_input_kts", "type": "number", "label": "Vessel speed at first input (kts)" },
+          { "key": "total_joystick_inputs", "type": "number", "label": "Total joystick inputs" },
+          { "key": "residual_velocity_at_stop_kts", "type": "number", "label": "Residual velocity at stop (kts)" },
+          { "key": "heading_change_during_stop_degrees", "type": "number", "label": "Heading change during stop (degrees)" },
+          { "key": "time_from_first_input_to_stop_seconds", "type": "number", "label": "Time from first input to stop (seconds)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which direction did the vessel drift and which environmental force dominated — wind, wave or current? How do you know?",
+        "At the speed your vessel was moving when you intervened, and knowing your stopping distance — at what range from a hard exclusion zone would you have needed to begin your deceleration to stop cleanly?",
+        "Why does stopping a vessel into the weather require different technique to stopping beam-on to it?",
+        "If wind increased from 15kts to 25kts mid-stop, what would change about your technique and why?",
+        "Your captain showed you a technique: slow to near zero in JSMH, brief Monitor selection, then DP. Why would you NOT do that sequence as your response to catching a drifting vessel at speed?"
+      ],
+      "variants": [
+        {
+          "id": "jc_001a",
+          "title": "Extended Drift Stop",
+          "based_on": "jc_001",
+          "changes": {
+            "drift_minutes": 6
+          },
+          "note_to_tdpo": "More speed to manage. Start your deceleration earlier than you think you need to."
+        },
+        {
+          "id": "jc_001b",
+          "title": "Beam Drift Stop",
+          "based_on": "jc_001",
+          "changes": {
+            "environment": {
+              "wind_dir_deg": 90
+            }
+          },
+          "note_to_tdpo": "The vessel will behave completely differently. Tunnel thruster geometry means beam stopping authority differs from head/stern stopping authority. Notice which thrusters the system uses."
+        },
+        {
+          "id": "jc_001c",
+          "title": "Drift Stop with Position Constraint",
+          "based_on": "jc_001",
+          "changes": {
+            "position_constraint_metres": 50
+          },
+          "note_to_tdpo": "Now you have two objectives. Stopping cleanly AND where you stop matters. This begins introducing position awareness into speed management."
+        },
+        {
+          "id": "jc_001d",
+          "title": "Drift, Stop and Return",
+          "based_on": "jc_001",
+          "changes": {
+            "add_return_phase": true,
+            "return_accuracy_metres": 2,
+            "final_mode": "DP"
+          },
+          "note_to_tdpo": "This is the complete manoeuvre. Three distinct phases. Do not start the return until velocity is below 0.1kts. Do not engage DP until you are within the DP operating radius and below 0.1kts."
+        }
+      ]
+    },
+    {
+      "id": "jc_002",
+      "title": "Controlled Surge Move",
+      "competency": "controlled_position_moves",
+      "difficulty": 1,
+      "min_training_day": 2,
+      "duration_minutes": 25,
+      "environment": {
+        "first_run": "calm",
+        "subsequent_runs": {
+          "wind_speed_kts": 15,
+          "wind_dir_deg": 37
+        }
+      },
+      "vessel_mode": "DP position move or JSMH",
+      "setup": "Confirm your exact datum position. You will return to within 2m of this position at the end of each run.",
+      "execute": "Move the vessel exactly 100m North from datum. Stop with residual velocity below 0.1kts. Return to within 2m of original datum position. This is one run. Complete three runs.",
+      "professional_standard": [
+        "Overshoot less than 5m on return each run",
+        "Residual velocity below 0.1kts at stop each run",
+        "Improvement visible between run 1 and run 3",
+        "Heading maintained throughout"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2, 3],
+        "fields_per_run": [
+          { "key": "overshoot_metres", "type": "number", "label": "Overshoot (metres)" },
+          { "key": "residual_velocity_kts", "type": "number", "label": "Residual velocity (kts)" },
+          { "key": "total_inputs", "type": "number", "label": "Total inputs" },
+          { "key": "return_accuracy_metres", "type": "number", "label": "Return accuracy — distance from exact datum (metres)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Did your overshoot reduce between run 1 and run 3? What specifically changed in your technique?",
+        "At what point in each run did you decide to begin decelerating — and in hindsight was that the right point?",
+        "Why is a 100m surge move (North/South) typically easier to execute cleanly than a 100m sway move (East/West) on most DP vessels? Think about thruster geometry.",
+        "In a real operation near a rig, what would be the consequence of a 5m overshoot versus a 15m overshoot?"
+      ],
+      "variants": [
+        {
+          "id": "jc_002a",
+          "title": "Short Surge Move",
+          "based_on": "jc_002",
+          "changes": {
+            "move_distance_metres": 50
+          },
+          "note_to_tdpo": "Shorter distance, less time to manage deceleration. Harder than it sounds."
+        },
+        {
+          "id": "jc_002b",
+          "title": "Long Surge Move",
+          "based_on": "jc_002",
+          "changes": {
+            "move_distance_metres": 200
+          },
+          "note_to_tdpo": "More speed builds, earlier deceleration decision required."
+        },
+        {
+          "id": "jc_002c",
+          "title": "Surge Move in Wind",
+          "based_on": "jc_002",
+          "changes": {
+            "environment": {
+              "wind_speed_kts": 15,
+              "wind_dir_deg": 37
+            }
+          },
+          "note_to_tdpo": "Same task, different feel. Apply all three runs in the same wind condition."
+        },
+        {
+          "id": "jc_002d",
+          "title": "Controlled Sway Move",
+          "based_on": "jc_002",
+          "changes": {
+            "move_direction": "East",
+            "move_distance_metres": 100
+          },
+          "note_to_tdpo": "Direct comparison of surge vs sway handling. Same distance, same standard. Notice what is different."
+        }
+      ]
+    }
+  ]
+}
