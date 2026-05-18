@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import domainData from '../../../content/domains/joystick-control.json'
 
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60).toString().padStart(2, '0')
@@ -7,10 +6,15 @@ function formatTime(seconds) {
   return `${m}:${s}`
 }
 
+function formatSessionTime(seconds) {
+  const h = Math.floor(seconds / 3600).toString().padStart(2, '0')
+  const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0')
+  const s = (seconds % 60).toString().padStart(2, '0')
+  return `${h}:${m}:${s}`
+}
+
 function formatEnvironment(env) {
   if (!env) return 'Not specified'
-
-  // jc_002 style: first_run calm, subsequent_runs with wind
   if (env.first_run === 'calm') {
     const sub = env.subsequent_runs
     const subStr = sub
@@ -18,17 +22,10 @@ function formatEnvironment(env) {
       : 'as specified'
     return `Run 1: Calm. Subsequent runs: ${subStr}`
   }
-
   const parts = []
-  if (env.wind_speed_kts != null) {
-    parts.push(`Wind: ${env.wind_speed_kts}kts @ ${env.wind_dir_deg}°`)
-  }
-  if (env.wave_height_m != null) {
-    parts.push(`Wave: ${env.wave_height_m}m @ ${env.wave_dir_deg}°`)
-  }
-  if (env.current_speed_kts != null) {
-    parts.push(`Current: ${env.current_speed_kts}kts @ ${env.current_dir_deg}°`)
-  }
+  if (env.wind_speed_kts != null) parts.push(`Wind: ${env.wind_speed_kts}kts @ ${env.wind_dir_deg}°`)
+  if (env.wave_height_m != null) parts.push(`Wave: ${env.wave_height_m}m @ ${env.wave_dir_deg}°`)
+  if (env.current_speed_kts != null) parts.push(`Current: ${env.current_speed_kts}kts @ ${env.current_dir_deg}°`)
   return parts.length ? parts.join(' | ') : 'Not specified'
 }
 
@@ -42,16 +39,9 @@ function buildInitialRecordedData(task) {
   return {}
 }
 
-export default function TaskScreen({ session, onComplete }) {
-  const { trainingDay } = session
-
-  const task = domainData.tasks
-    .filter(t => t.min_training_day <= trainingDay)
-    .reduce((best, t) => !best || t.min_training_day > best.min_training_day ? t : best, null)
-
-  const isMultiRun = !!(task?.observe_and_record?.runs)
-
+export default function TaskScreen({ task, profile, taskNumber, sessionStartTime, onComplete }) {
   const [elapsed, setElapsed] = useState(0)
+  const [sessionElapsed, setSessionElapsed] = useState(0)
   const [recordedData, setRecordedData] = useState(() =>
     task ? buildInitialRecordedData(task) : {}
   )
@@ -59,19 +49,36 @@ export default function TaskScreen({ session, onComplete }) {
   const [debriefAnswers, setDebriefAnswers] = useState({})
 
   useEffect(() => {
-    const id = setInterval(() => setElapsed(s => s + 1), 1000)
+    if (!task) return
+    setRecordedData(buildInitialRecordedData(task))
+    setElapsed(0)
+    setDebriefIndex(0)
+    setDebriefAnswers({})
+  }, [task?.id])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setElapsed(s => s + 1)
+      if (sessionStartTime) {
+        setSessionElapsed(Math.floor((Date.now() - sessionStartTime) / 1000))
+      }
+    }, 1000)
     return () => clearInterval(id)
-  }, [])
+  }, [sessionStartTime])
 
   if (!task) {
     return (
       <div className="screen">
         <p className="no-tasks">
-          No tasks available for training day {trainingDay}. Check content/domains/.
+          No tasks available for training day {profile.trainingDay}. Check content/domains/.
         </p>
       </div>
     )
   }
+
+  const isMultiRun = !!(task.observe_and_record?.runs)
+  const debriefQuestions = task.debrief_questions ?? []
+  const currentQuestion = debriefQuestions[debriefIndex]
 
   function handleSimpleChange(key, value) {
     setRecordedData(prev => ({ ...prev, [key]: value }))
@@ -85,22 +92,20 @@ export default function TaskScreen({ session, onComplete }) {
   }
 
   function handleComplete() {
-    onComplete({
-      task,
-      recordedData,
-      debriefAnswers,
-      elapsedSeconds: elapsed,
-    })
+    onComplete({ task, recordedData, debriefAnswers, elapsedSeconds: elapsed })
   }
-
-  const debriefQuestions = task.debrief_questions ?? []
-  const currentQuestion = debriefQuestions[debriefIndex]
 
   return (
     <div className="screen">
       <div className="timer-bar">
         <span className="timer">{formatTime(elapsed)}</span>
-        <span className="task-id">{task.id} — {session.traineeName} — Day {session.trainingDay}</span>
+        <div className="timer-right">
+          <span className="session-progress">
+            {`Task ${taskNumber} of session`}
+            {' — '}{formatSessionTime(sessionElapsed)} elapsed
+          </span>
+          <span className="task-id">{task.id} · {profile.traineeName} · Day {profile.trainingDay}</span>
+        </div>
       </div>
 
       <h1>{task.title}</h1>
