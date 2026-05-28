@@ -155,6 +155,22 @@ export default function HomeScreen({ onStart, onHistory, onProgress, onVesselPro
         Confirm each item before starting. All 16 must be verified.
       </div>
 
+      {checkedCount === 0 && (
+        <div className="checklist-test-row">
+          <button
+            className="btn-select-all"
+            onClick={() => {
+              const all = {}
+              CHECKLIST_ITEMS.forEach((_, i) => { all[i] = true })
+              setChecked(all)
+            }}
+          >
+            SELECT ALL (TEST)
+          </button>
+          <div className="checklist-test-label">Testing only — not for real sessions</div>
+        </div>
+      )}
+
       <div className="pre-checklist">
         {CHECKLIST_ITEMS.map((item, i) => (
           <div

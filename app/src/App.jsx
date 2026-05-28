@@ -6,11 +6,28 @@ import SummaryScreen from './screens/SummaryScreen.jsx'
 import HistoryScreen from './screens/HistoryScreen.jsx'
 import VesselProfileScreen from './screens/VesselProfileScreen.jsx'
 import ProgressScreen from './screens/ProgressScreen.jsx'
-import domainData from '../../content/domains/joystick-control.json'
+import setupData from '../../content/domains/setup.json'
+import joystickData from '../../content/domains/joystick-control.json'
+import environmentalData from '../../content/domains/environmental.json'
+import sensorsData from '../../content/domains/sensors.json'
+import modeData from '../../content/domains/mode-transitions.json'
+import approachData from '../../content/domains/approach.json'
+import alarmsData from '../../content/domains/alarms.json'
+import failuresData from '../../content/domains/failures.json'
+import watchkeepingData from '../../content/domains/watchkeeping.json'
+import operationsData from '../../content/domains/operations.json'
+import reviewData from '../../content/domains/review.json'
 import curriculumData from '../../content/curriculum.json'
 
+const allDomains = [
+  setupData, joystickData, environmentalData, sensorsData, modeData,
+  approachData, alarmsData, failuresData, watchkeepingData, operationsData, reviewData,
+]
+
 const taskById = {}
-domainData.tasks.forEach(t => { taskById[t.id] = t })
+allDomains.forEach(domain => {
+  domain.tasks.forEach(t => { taskById[t.id] = t })
+})
 
 function selectNextTask(trainingDay, completedTaskIds) {
   const dayEntry = curriculumData.curriculum.find(d => d.day === trainingDay)

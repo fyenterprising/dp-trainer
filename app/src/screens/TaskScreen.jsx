@@ -15,17 +15,30 @@ function formatSessionTime(seconds) {
 
 function formatEnvironment(env) {
   if (!env) return 'Not specified'
+  if (typeof env === 'string') return env
   if (env.first_run === 'calm') {
     const sub = env.subsequent_runs
     const subStr = sub
-      ? `Wind ${sub.wind_speed_kts}kts @ ${sub.wind_dir_deg}°`
+      ? `Wind ${sub.wind_speed_kts}kts${sub.wind_dir_deg != null ? ` @ ${sub.wind_dir_deg}°` : ''}`
       : 'as specified'
     return `Run 1: Calm. Subsequent runs: ${subStr}`
   }
   const parts = []
-  if (env.wind_speed_kts != null) parts.push(`Wind: ${env.wind_speed_kts}kts @ ${env.wind_dir_deg}°`)
-  if (env.wave_height_m != null) parts.push(`Wave: ${env.wave_height_m}m @ ${env.wave_dir_deg}°`)
-  if (env.current_speed_kts != null) parts.push(`Current: ${env.current_speed_kts}kts @ ${env.current_dir_deg}°`)
+  if (env.wind_speed_kts != null) {
+    parts.push(env.wind_dir_deg != null
+      ? `Wind: ${env.wind_speed_kts}kts @ ${env.wind_dir_deg}°`
+      : `Wind: ${env.wind_speed_kts}kts — direction not specified`)
+  }
+  if (env.wave_height_m != null) {
+    parts.push(env.wave_dir_deg != null
+      ? `Wave: ${env.wave_height_m}m @ ${env.wave_dir_deg}°`
+      : `Wave: ${env.wave_height_m}m — direction not specified`)
+  }
+  if (env.current_speed_kts != null) {
+    parts.push(env.current_dir_deg != null
+      ? `Current: ${env.current_speed_kts}kts @ ${env.current_dir_deg}°`
+      : `Current: ${env.current_speed_kts}kts — direction not specified`)
+  }
   return parts.length ? parts.join(' | ') : 'Not specified'
 }
 
