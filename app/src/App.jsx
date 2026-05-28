@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import HomeScreen from './screens/HomeScreen.jsx'
 import TaskScreen from './screens/TaskScreen.jsx'
 import BetweenTaskScreen from './screens/BetweenTaskScreen.jsx'
 import SummaryScreen from './screens/SummaryScreen.jsx'
 import HistoryScreen from './screens/HistoryScreen.jsx'
+import VesselProfileScreen from './screens/VesselProfileScreen.jsx'
+import ProgressScreen from './screens/ProgressScreen.jsx'
 import domainData from '../../content/domains/joystick-control.json'
 import curriculumData from '../../content/curriculum.json'
 
@@ -30,6 +32,33 @@ function selectNextTask(trainingDay, completedTaskIds) {
   return taskById[next.task_id]
 }
 
+function migrateProfile() {
+  const old = localStorage.getItem('dp-profile')
+  if (!old) return
+  try {
+    const parsed = JSON.parse(old)
+    const existing = JSON.parse(localStorage.getItem('dp-vessel-profiles') ?? '[]')
+    if (existing.length === 0) {
+      const now = new Date().toISOString()
+      const migrated = {
+        id: Date.now().toString(),
+        vesselName: parsed.vesselName ?? '',
+        dpClass: parsed.dpClass ?? 'DP2',
+        dpSystem: parsed.dpSystem ?? 'Kongsberg K-Pos',
+        traineeName: parsed.traineeName ?? '',
+        dpoName: parsed.dpoName ?? '',
+        dpoNiCert: parsed.dpoNiCert ?? '',
+        trainingDaysCurrent: parseInt(parsed.trainingDay, 10) || 1,
+        createdAt: now,
+        updatedAt: now,
+      }
+      localStorage.setItem('dp-vessel-profiles', JSON.stringify([migrated]))
+      localStorage.setItem('dp-active-profile-id', migrated.id)
+    }
+    localStorage.removeItem('dp-profile')
+  } catch {}
+}
+
 export default function App() {
   const [screen, setScreen] = useState('home')
   const [profile, setProfile] = useState(null)
@@ -38,6 +67,10 @@ export default function App() {
   const [sessionStartTime, setSessionStartTime] = useState(null)
   const [currentTask, setCurrentTask] = useState(null)
   const [taskNumber, setTaskNumber] = useState(1)
+
+  useEffect(() => {
+    migrateProfile()
+  }, [])
 
   function handleStart(profileData) {
     const next = selectNextTask(profileData.trainingDay, [])
@@ -59,6 +92,7 @@ export default function App() {
   function handleNextTask() {
     const completedIds = completedTasks.map(e => e.task.id)
     const next = selectNextTask(profile.trainingDay, completedIds)
+    if (!next) return
     setCurrentTask(next)
     setTaskNumber(prev => prev + 1)
     setScreen('task')
@@ -79,7 +113,14 @@ export default function App() {
   }
 
   if (screen === 'home') {
-    return <HomeScreen onStart={handleStart} onHistory={() => setScreen('history')} />
+    return (
+      <HomeScreen
+        onStart={handleStart}
+        onHistory={() => setScreen('history')}
+        onProgress={() => setScreen('progress')}
+        onVesselProfile={() => setScreen('vesselprofile')}
+      />
+    )
   }
 
   if (screen === 'task') {
@@ -120,6 +161,14 @@ export default function App() {
 
   if (screen === 'history') {
     return <HistoryScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'vesselprofile') {
+    return <VesselProfileScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'progress') {
+    return <ProgressScreen onBack={() => setScreen('home')} />
   }
 
   return null

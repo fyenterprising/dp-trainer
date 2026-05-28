@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react'
 
-const DP_CLASSES = ['DP1', 'DP2', 'DP3']
-const DP_SYSTEMS = ['Converteam', 'Kongsberg K-Pos', 'Wärtsilä NACOS', 'Other']
-
 const CHECKLIST_ITEMS = [
   'NI certified DPO is present and supervising',
   'DPO certificate number confirmed and recorded',
@@ -22,45 +19,34 @@ const CHECKLIST_ITEMS = [
   'Session timer started — confirmed',
 ]
 
-const EMPTY_PROFILE = {
-  vesselName: '',
-  dpClass: 'DP2',
-  dpSystem: 'Kongsberg K-Pos',
-  traineeName: '',
-  dpoName: '',
-  dpoNiCert: '',
-  trainingDay: '',
-}
-
-export default function HomeScreen({ onStart, onHistory }) {
+export default function HomeScreen({ onStart, onHistory, onProgress, onVesselProfile }) {
   const [step, setStep] = useState(1)
-  const [profile, setProfile] = useState(EMPTY_PROFILE)
+  const [activeProfile, setActiveProfile] = useState(null)
+  const [trainingDay, setTrainingDay] = useState('')
   const [checked, setChecked] = useState({})
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const saved = localStorage.getItem('dp-profile')
-    if (saved) {
-      try { setProfile(JSON.parse(saved)) } catch {}
+    const profiles = JSON.parse(localStorage.getItem('dp-vessel-profiles') ?? '[]')
+    const activeId = localStorage.getItem('dp-active-profile-id')
+    if (activeId) {
+      const found = profiles.find(p => p.id === activeId)
+      if (found) { setActiveProfile(found); return }
+    }
+    if (profiles.length > 0) {
+      setActiveProfile(profiles[0])
+      localStorage.setItem('dp-active-profile-id', profiles[0].id)
     }
   }, [])
 
-  function updateField(key, value) {
-    setProfile(prev => ({ ...prev, [key]: value }))
-  }
-
   function handleProfileNext() {
-    if (!profile.vesselName.trim()) { setError('Enter vessel name.'); return }
-    if (!profile.traineeName.trim()) { setError('Enter trainee name.'); return }
-    if (!profile.dpoName.trim()) { setError('Enter supervising DPO name.'); return }
-    if (!profile.dpoNiCert.trim()) { setError('Enter DPO NI certificate number.'); return }
-    const day = parseInt(profile.trainingDay, 10)
-    if (!profile.trainingDay || isNaN(day) || day < 1 || day > 30) {
+    if (!activeProfile) { setError('Select or create a vessel profile first.'); return }
+    const day = parseInt(trainingDay, 10)
+    if (!trainingDay || isNaN(day) || day < 1 || day > 30) {
       setError('Training day must be between 1 and 30.')
       return
     }
     setError('')
-    localStorage.setItem('dp-profile', JSON.stringify(profile))
     setChecked({})
     setStep(2)
   }
@@ -74,7 +60,10 @@ export default function HomeScreen({ onStart, onHistory }) {
 
   function handleStartSession() {
     if (!allChecked) return
-    onStart({ ...profile, trainingDay: parseInt(profile.trainingDay, 10) })
+    onStart({
+      ...activeProfile,
+      trainingDay: parseInt(trainingDay, 10),
+    })
   }
 
   if (step === 1) {
@@ -86,80 +75,41 @@ export default function HomeScreen({ onStart, onHistory }) {
         <div className="home-nav">
           <button className="btn-nav btn-nav-active">New Session</button>
           <button className="btn-nav" onClick={onHistory}>Past Sessions</button>
+          <button className="btn-nav" onClick={onProgress}>Progress</button>
         </div>
 
         <div className="home-form">
           <div className="form-section-label">Vessel Profile</div>
 
-          <div className="form-group">
-            <label htmlFor="vessel-name">Vessel Name</label>
-            <input
-              id="vessel-name"
-              type="text"
-              value={profile.vesselName}
-              onChange={e => updateField('vesselName', e.target.value)}
-              placeholder="e.g. Pacific Surveyor"
-              autoFocus
-            />
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="dp-class">DP Class</label>
-              <select
-                id="dp-class"
-                value={profile.dpClass}
-                onChange={e => updateField('dpClass', e.target.value)}
+          {activeProfile ? (
+            <div className="active-profile-card">
+              <div className="active-profile-vessel">{activeProfile.vesselName}</div>
+              <div className="active-profile-meta">
+                {activeProfile.dpClass} · {activeProfile.dpSystem}
+              </div>
+              <div className="active-profile-crew">
+                {activeProfile.traineeName} · DPO: {activeProfile.dpoName}
+              </div>
+              <button
+                className="btn-secondary"
+                onClick={onVesselProfile}
+                style={{ marginTop: '12px', width: '100%' }}
               >
-                {DP_CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
+                Change Vessel
+              </button>
             </div>
-            <div className="form-group form-group-grow">
-              <label htmlFor="dp-system">DP System</label>
-              <select
-                id="dp-system"
-                value={profile.dpSystem}
-                onChange={e => updateField('dpSystem', e.target.value)}
+          ) : (
+            <div className="no-profile-prompt">
+              <p className="no-tasks" style={{ marginBottom: '10px' }}>No vessel profile set.</p>
+              <button
+                className="btn-secondary"
+                onClick={onVesselProfile}
+                style={{ width: '100%' }}
               >
-                {DP_SYSTEMS.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
+                Create Vessel Profile
+              </button>
             </div>
-          </div>
-
-          <div className="form-section-label" style={{ marginTop: '8px' }}>Crew</div>
-
-          <div className="form-group">
-            <label htmlFor="trainee-name">Trainee Name</label>
-            <input
-              id="trainee-name"
-              type="text"
-              value={profile.traineeName}
-              onChange={e => updateField('traineeName', e.target.value)}
-              placeholder="Full name"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="dpo-name">Supervising DPO Name</label>
-            <input
-              id="dpo-name"
-              type="text"
-              value={profile.dpoName}
-              onChange={e => updateField('dpoName', e.target.value)}
-              placeholder="Full name"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="dpo-cert">DPO NI Certificate Number</label>
-            <input
-              id="dpo-cert"
-              type="text"
-              value={profile.dpoNiCert}
-              onChange={e => updateField('dpoNiCert', e.target.value)}
-              placeholder="e.g. NI-DP-12345"
-            />
-          </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="training-day">Training Day Number (1–30)</label>
@@ -168,8 +118,8 @@ export default function HomeScreen({ onStart, onHistory }) {
               type="number"
               min="1"
               max="30"
-              value={profile.trainingDay}
-              onChange={e => updateField('trainingDay', e.target.value)}
+              value={trainingDay}
+              onChange={e => setTrainingDay(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleProfileNext()}
               placeholder="e.g. 3"
             />
@@ -177,7 +127,11 @@ export default function HomeScreen({ onStart, onHistory }) {
 
           {error && <div className="form-error">{error}</div>}
 
-          <button className="btn-start" onClick={handleProfileNext}>
+          <button
+            className={`btn-start${!activeProfile ? ' btn-start--disabled' : ''}`}
+            onClick={handleProfileNext}
+            disabled={!activeProfile}
+          >
             Next →
           </button>
         </div>
@@ -190,10 +144,10 @@ export default function HomeScreen({ onStart, onHistory }) {
       <div className="checklist-screen-header">
         <div className="checklist-screen-title">Pre-Session Checklist</div>
         <div className="checklist-screen-vessel">
-          {profile.vesselName} · {profile.dpClass} · Day {profile.trainingDay}
+          {activeProfile?.vesselName} · {activeProfile?.dpClass} · Day {trainingDay}
         </div>
         <div className="checklist-screen-crew">
-          {profile.traineeName} · DPO: {profile.dpoName}
+          {activeProfile?.traineeName} · DPO: {activeProfile?.dpoName}
         </div>
       </div>
 

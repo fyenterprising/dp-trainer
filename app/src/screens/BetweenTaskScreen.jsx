@@ -22,7 +22,7 @@ export default function BetweenTaskScreen({ lastTask, nextTaskAvailable, onNextT
           </button>
         ) : (
           <p className="between-tasks-done">
-            This task is coming soon. More tasks coming soon — end your session and your progress will be saved.
+            You have completed all available tasks for today. End your session and save your progress.
           </p>
         )}
         <button className="btn-secondary btn-between-end" onClick={onEndSession}>

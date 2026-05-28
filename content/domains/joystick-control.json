@@ -47,7 +47,7 @@
         "At the speed your vessel was moving when you intervened, and knowing your stopping distance — at what range from a hard exclusion zone would you have needed to begin your deceleration to stop cleanly?",
         "Why does stopping a vessel into the weather require different technique to stopping beam-on to it?",
         "If wind increased from 15kts to 25kts mid-stop, what would change about your technique and why?",
-        "After catching a drifting vessel, a colleague suggests going straight from JSMH into DP without a Monitor transition. What is the risk of doing this, and what does the DP mathematical model inherit from the JSMH transit?"
+        "The DP mathematical model builds its understanding of environmental forces partly from thruster activity. After a large joystick transit, what does the model incorrectly learn — and why does selecting Monitor briefly before DP help the model reset more accurately than going straight from JSMH to DP?"
       ],
       "variants": [
         {
