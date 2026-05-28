@@ -1,0 +1,277 @@
+{
+  "domain": "alarms",
+  "title": "DP Alarms, Warnings and Emergency Response",
+  "order": 7,
+  "recommended_training_days": "10-20",
+  "description": "The TDPO learns to recognise, interpret, and respond correctly to every DP alarm category. Professional standard means the TDPO acknowledges within 15 seconds, correctly identifies the cause within 60 seconds, takes appropriate action, and escalates to the correct people in the correct order. All tasks in this domain map directly to NI logbook Section 11 which is fully passive-eligible.",
+  "tasks": [
+    {
+      "id": "alarm_001",
+      "title": "Position Deviation Alarm Response",
+      "competency": "alarm_recognition_and_response",
+      "difficulty": 2,
+      "min_training_day": 10,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP in moderate conditions. DPO will trigger a position deviation alarm without warning at an unannounced time. Do not anticipate — watch the display normally.",
+      "execute": "When the alarm sounds, respond correctly. Acknowledge the alarm. Identify the cause — is it environmental, reference, or thruster related? Take appropriate action. Record your response time and the steps you took. DPO repeats with a different cause. Minimum two runs with different causes.",
+      "professional_standard": [
+        "Alarm acknowledged within 15 seconds",
+        "Cause identified within 60 seconds",
+        "Correct action taken for the identified cause",
+        "Correct escalation if required",
+        "Time from alarm to acknowledgement recorded honestly"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2],
+        "fields_per_run": [
+          { "key": "time_to_acknowledge_seconds", "type": "number", "label": "Time from alarm to acknowledgement (seconds)" },
+          { "key": "cause_identified", "type": "text", "label": "Cause identified — environmental, reference, or thruster?" },
+          { "key": "time_to_identify_seconds", "type": "number", "label": "Time to identify cause (seconds)" },
+          { "key": "action_taken", "type": "text", "label": "Action taken" },
+          { "key": "escalation_required", "type": "text", "label": "Was escalation required? Who was informed?" },
+          { "key": "correct_response", "type": "text", "label": "DPO assessment — was response correct?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the first thing you check when a position deviation alarm sounds — before anything else?",
+        "How do you distinguish between an environmental cause and a reference cause from the DP display alone?",
+        "At what point does a position alert become a position action alarm and what does that change?",
+        "Who needs to be informed of a position action alarm and in what order?"
+      ],
+      "variants": [
+        {
+          "id": "alarm_001a",
+          "title": "Position Deviation Near Structure",
+          "based_on": "alarm_001",
+          "changes": { "virtual_structure_active": true, "standoff_metres": 100 },
+          "note_to_tdpo": "Same alarm but you are at the operating radius of a virtual structure. The urgency is higher. Your response time target is reduced to 10 seconds acknowledgement and 30 seconds cause identification."
+        }
+      ]
+    },
+    {
+      "id": "alarm_002",
+      "title": "Reference System Rejection Response",
+      "competency": "alarm_recognition_and_response",
+      "difficulty": 3,
+      "min_training_day": 11,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Two DGPS references active. Vessel stable on DP. DPO will trigger reference rejection without warning.",
+      "execute": "Run 1 — Single rejection: DPO triggers auto-rejection of one reference. Respond correctly. Assess remaining configuration. Make go or no-go decision. Run 2 — Compound: After restoring Run 1, DPO degrades a second reference shortly after restoring the first. Assess minimum reference threshold and make go or no-go decision with reasoning.",
+      "professional_standard": [
+        "Alarm acknowledged within 15 seconds",
+        "Correct minimum reference assessment",
+        "Correct go or no-go decision with clear reasoning",
+        "Correct re-acceptance procedure",
+        "Appropriate escalation"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2],
+        "fields_per_run": [
+          { "key": "alarm_response_time_seconds", "type": "number", "label": "Time to acknowledge alarm (seconds)" },
+          { "key": "references_remaining", "type": "text", "label": "Reference configuration after rejection" },
+          { "key": "minimum_config_met", "type": "text", "label": "Is minimum reference configuration met? Yes or no and why?" },
+          { "key": "decision", "type": "text", "label": "Decision — continue or go off DP?" },
+          { "key": "reasoning", "type": "text", "label": "Reasoning for decision" },
+          { "key": "re_acceptance_procedure", "type": "text", "label": "Re-acceptance procedure used" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the difference between auto-rejection and manual inhibit — and does it matter which way a reference is removed from the solution?",
+        "What is the minimum reference configuration for your vessel's operations and where is this defined?",
+        "When re-enabling a recovered reference why must you verify it is healthy before accepting it — what is the risk of premature acceptance?",
+        "How does being near a structure change the minimum reference requirement compared to open water operations?"
+      ],
+      "variants": [
+        {
+          "id": "alarm_002a",
+          "title": "Reference Rejection During Approach",
+          "based_on": "alarm_002",
+          "changes": { "failure_during_approach": true },
+          "note_to_tdpo": "Reference rejected while you are inside the 500m zone at 150m from structure. Do you hold position on remaining references or initiate departure? This is a genuine operational decision."
+        }
+      ]
+    },
+    {
+      "id": "alarm_003",
+      "title": "Thruster Fault Response",
+      "competency": "alarm_recognition_and_response",
+      "difficulty": 3,
+      "min_training_day": 12,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "All thrusters active. Vessel on DP in moderate conditions. DPO will fault one thruster without warning.",
+      "execute": "When thruster fault alarm sounds, identify which thruster has faulted. Assess your remaining thrust capability. Assess the new worst case failure given the reduced thruster complement. Inform the appropriate parties. DPO asks: can you continue operations? Give a reasoned answer. Repeat with a different thruster faulted.",
+      "professional_standard": [
+        "Correct thruster identified within 30 seconds",
+        "Correct capability assessment",
+        "Correct new worst case failure identified",
+        "Appropriate parties informed in correct order",
+        "Reasoned continue or abort decision"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2],
+        "fields_per_run": [
+          { "key": "thruster_faulted", "type": "text", "label": "Which thruster faulted?" },
+          { "key": "time_to_identify_seconds", "type": "number", "label": "Time to identify faulted thruster (seconds)" },
+          { "key": "remaining_capability", "type": "text", "label": "Assessment of remaining thrust capability" },
+          { "key": "new_wcf", "type": "text", "label": "New worst case failure with this thruster lost" },
+          { "key": "parties_informed", "type": "text", "label": "Who was informed and in what order?" },
+          { "key": "decision", "type": "text", "label": "Decision — continue or abort? Reasoning?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "How does losing this specific thruster change your worst case failure scenario?",
+        "Which direction is position keeping most degraded with this thruster lost — and why?",
+        "At what point does a thruster fault require going off DP rather than continuing with reduced capability?",
+        "What is the correct communication chain for a thruster fault during DP operations near a structure?"
+      ],
+      "variants": [
+        {
+          "id": "alarm_003a",
+          "title": "Thruster Fault Near Structure",
+          "based_on": "alarm_003",
+          "changes": { "virtual_structure_active": true, "standoff_metres": 80 },
+          "note_to_tdpo": "Thruster fault triggered at 80m from structure. Urgency is high. Assess quickly — hold or depart? Your decision window is shorter than you think."
+        }
+      ]
+    },
+    {
+      "id": "alarm_004",
+      "title": "Consequence Alarm Recognition",
+      "competency": "alarm_recognition_and_response",
+      "difficulty": 4,
+      "min_training_day": 14,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.5,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.5,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP near virtual structure. Moderate to heavy conditions. DPO will configure conditions to trigger consequence alarm.",
+      "execute": "When consequence alarm sounds, respond immediately. Identify the alarm type. Understand its significance. Take appropriate immediate actions. Escalate to OIM immediately. Assess abort criteria. Record everything.",
+      "professional_standard": [
+        "Immediate recognition as highest priority alarm",
+        "OIM informed within 60 seconds",
+        "Abort criteria assessed immediately",
+        "Correct understanding of what the alarm predicts",
+        "No hesitation in escalation"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "time_to_acknowledge_seconds", "type": "number", "label": "Time to acknowledge alarm (seconds)" },
+          { "key": "alarm_type_identified", "type": "text", "label": "Alarm type identified correctly?" },
+          { "key": "immediate_actions_taken", "type": "text", "label": "Immediate actions taken — in order" },
+          { "key": "oim_informed_time_seconds", "type": "number", "label": "Time to OIM notification (seconds)" },
+          { "key": "abort_assessment", "type": "text", "label": "Abort criteria assessment — continue or abort?" },
+          { "key": "understanding_of_alarm", "type": "text", "label": "In your own words — what does a consequence alarm predict?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What does a consequence alarm predict — and why is this alarm categorically different from all other DP alarms?",
+        "Why is OIM notification the immediate first action rather than trying to resolve the situation yourself?",
+        "What immediate actions follow a consequence alarm before you have spoken to the OIM?",
+        "Under what circumstances if any would you accept a consequence alarm and continue operations?"
+      ],
+      "variants": [
+        {
+          "id": "alarm_004a",
+          "title": "Consequence Alarm During ROV in Water",
+          "based_on": "alarm_004",
+          "changes": { "rov_in_water": true },
+          "note_to_tdpo": "Same alarm but ROV is deployed. The consequence of position excursion is now significantly higher. How does this change your abort threshold and the urgency of your response?"
+        }
+      ]
+    },
+    {
+      "id": "alarm_005",
+      "title": "Drive Off Recognition and Response",
+      "competency": "alarm_recognition_and_response",
+      "difficulty": 4,
+      "min_training_day": 15,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP then immediate JSMH or manual",
+      "setup": "Vessel on DP near virtual structure. DPO will simulate a drive off without warning at an unannounced time.",
+      "execute": "When drive off begins — vessel accelerating away from setpoint with thrusters at maximum in the wrong direction — recognise it, select joystick or manual immediately, and arrest the vessel movement. Record time from drive off initiation to your recognition. Record distance travelled before arrested.",
+      "professional_standard": [
+        "Drive off recognised within 30 seconds",
+        "Correct immediate mode selection — joystick or manual",
+        "Vessel movement arrested",
+        "No collision with virtual structure",
+        "Post drive off checks completed"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "time_to_recognition_seconds", "type": "number", "label": "Time from drive off initiation to recognition (seconds)" },
+          { "key": "visual_signature_observed", "type": "text", "label": "What visual signatures indicated a drive off?" },
+          { "key": "mode_selected", "type": "text", "label": "Mode selected on recognition — joystick or manual?" },
+          { "key": "distance_travelled_before_arrest_m", "type": "number", "label": "Distance travelled before vessel arrested (metres)" },
+          { "key": "direction_of_drive_off", "type": "text", "label": "Direction of drive off — toward or away from structure?" },
+          { "key": "post_checks_completed", "type": "text", "label": "Post drive off checks completed before returning to DP?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What are the visual signatures of a drive off on the DP display that distinguish it from a normal position excursion?",
+        "Why does a drive off require immediate manual intervention rather than waiting for the DP to self-correct?",
+        "What is the difference between a drive off and a position excursion in terms of cause and response?",
+        "What checks must be completed after a drive off before you return the vessel to DP control?"
+      ],
+      "variants": [
+        {
+          "id": "alarm_005a",
+          "title": "Drive Off Toward Structure",
+          "based_on": "alarm_005",
+          "changes": { "drive_off_direction": "toward_structure" },
+          "note_to_tdpo": "The drive off is toward the structure not away from it. Time to collision is very short. Recognition and action within 15 seconds is the target. This is the worst case drive off scenario."
+        }
+      ]
+    }
+  ]
+}

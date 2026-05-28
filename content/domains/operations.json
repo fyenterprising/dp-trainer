@@ -1,0 +1,216 @@
+{
+  "domain": "operations",
+  "title": "DP Operations and Operational Decision Making",
+  "order": 10,
+  "recommended_training_days": "8-28",
+  "description": "The TDPO learns to plan, execute, and debrief complete DP operations including 500m zone entry procedures, ASOG application, risk assessment, toolbox talks, and full end-to-end operations with no prompting. Professional standard means the TDPO can run a complete DP operation independently, make correct ASOG assessments, and communicate clearly with all parties.",
+  "tasks": [
+    {
+      "id": "ops_001",
+      "title": "Full DP Operation — End to End",
+      "competency": "operational_planning_and_execution",
+      "difficulty": 5,
+      "min_training_day": 20,
+      "duration_minutes": 120,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "Off",
+      "vessel_mode_execute": "All modes as required",
+      "setup": "Cold screen. No pre-configuration. This is the full operation with no prompting from DPO unless a genuine safety issue develops.",
+      "execute": "Complete the following sequence without prompting. Phase 1 — Setup: Full system setup from scratch. All checklists completed. Phase 2 — Transit: Move vessel from open water to 500m standoff of virtual structure. Phase 3 — Zone entry: Complete 500m zone entry checklist verbally. Approach to operating radius on JSMH then DP. Phase 4 — Hold: Hold at operating radius for 20 minutes. DPO will trigger one alarm during hold. Phase 5 — Handover: Conduct a full watch handover to DPO. Phase 6 — Departure: Receive the watch back. Execute controlled departure. Return to open water. Save session record.",
+      "professional_standard": [
+        "All phases completed in correct sequence without prompting",
+        "No zone breaches during approach or hold",
+        "Alarm during hold responded to correctly",
+        "Handover covers all required items",
+        "Departure executed cleanly",
+        "Session record saved with all observations completed"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "setup_time_minutes", "type": "number", "label": "Setup completion time (minutes)" },
+          { "key": "zone_entry_checklist_complete", "type": "text", "label": "500m zone entry checklist completed without prompting?" },
+          { "key": "approach_speed_compliance", "type": "text", "label": "Speed limits observed at each zone boundary?" },
+          { "key": "dp_capture_quality", "type": "text", "label": "DP capture quality at operating radius" },
+          { "key": "hold_position_footprint", "type": "text", "label": "Position footprint during 20 minute hold" },
+          { "key": "alarm_response", "type": "text", "label": "Alarm during hold — identified and responded to correctly?" },
+          { "key": "handover_quality", "type": "text", "label": "DPO assessment of handover quality" },
+          { "key": "departure_quality", "type": "text", "label": "Departure execution — clean and controlled?" },
+          { "key": "total_zone_breaches", "type": "number", "label": "Total hard exclusion zone breaches (target zero)" },
+          { "key": "phases_requiring_prompting", "type": "text", "label": "Which phases if any required DPO prompting?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which phase was hardest and what specifically caused the difficulty?",
+        "What would you do differently on the next full operation?",
+        "How did the alarm during hold affect your situational awareness for the remainder of the operation?",
+        "Were your log entries and session record complete enough to reconstruct the operation from the record alone?"
+      ],
+      "variants": [
+        {
+          "id": "ops_001a",
+          "title": "Full Operation in Heavy Weather",
+          "based_on": "ops_001",
+          "changes": { "wind_speed_kts": 25, "wave_height_m": 2.0 },
+          "note_to_tdpo": "Same full operation in heavier conditions. Every phase becomes harder. Setup and checklist discipline is even more important when the operation itself is more demanding."
+        },
+        {
+          "id": "ops_001b",
+          "title": "Full Operation with Compound Failure",
+          "based_on": "ops_001",
+          "changes": { "compound_failure_during_hold": true },
+          "note_to_tdpo": "DPO will trigger a compound failure during the hold phase rather than a simple alarm. No warning. This is the assessment-level scenario — Day 29 standard."
+        }
+      ]
+    },
+    {
+      "id": "ops_002",
+      "title": "500m Zone Entry Checklist Walk-Through",
+      "competency": "operational_planning_and_execution",
+      "difficulty": 2,
+      "min_training_day": 8,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel at 500m standoff of virtual structure. Before approaching, complete the full zone entry checklist verbally with DPO. Every item, in order, with reasoning for why each item matters.",
+      "execute": "Work through the 500m zone entry checklist item by item. For each item state what you are checking, confirm its status, and explain why it matters before entering the 500m zone. DPO challenges any item you cannot explain. After completing the checklist verbally, execute the approach.",
+      "professional_standard": [
+        "All checklist items covered without prompting",
+        "Correct status confirmed for each item",
+        "Clear reasoning given for each item",
+        "No items skipped when challenged"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "items_completed_without_prompting", "type": "number", "label": "Items completed without prompting" },
+          { "key": "items_requiring_prompting", "type": "text", "label": "Which items required prompting?" },
+          { "key": "items_challenged_by_dpo", "type": "text", "label": "Which items did DPO challenge?" },
+          { "key": "reasoning_quality", "type": "text", "label": "DPO assessment of reasoning quality" },
+          { "key": "working_side_assessed", "type": "text", "label": "Working side correctly assessed — windward or leeward?" },
+          { "key": "abort_heading_confirmed", "type": "text", "label": "Abort heading confirmed before approach commenced?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which checklist items have the highest safety significance for this specific operation?",
+        "What happens operationally if you enter the 500m zone without completing this checklist?",
+        "How does the working side assessment change your risk picture and your approach plan?",
+        "What SIMOPS information do you need from the installation before entering the 500m zone?"
+      ],
+      "variants": [
+        {
+          "id": "ops_002a",
+          "title": "Zone Entry Checklist From Memory",
+          "based_on": "ops_002",
+          "changes": { "checklist_from_memory": true },
+          "note_to_tdpo": "Complete the zone entry checklist entirely from memory — no app, no reference. This is the standard a DPO would expect on a real vessel. 14 of 16 items minimum."
+        }
+      ]
+    },
+    {
+      "id": "ops_003",
+      "title": "ASOG Application",
+      "competency": "operational_decision_making",
+      "difficulty": 3,
+      "min_training_day": 14,
+      "duration_minutes": 25,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "DPO will present three operational scenarios. For each scenario you must state the ASOG status, the action required, and who must be informed. No reference material — knowledge only.",
+      "execute": "Scenario 1 — Green status: Conditions and system configuration within all ASOG limits. State status and confirm operation proceeds. Scenario 2 — Yellow status: One parameter approaching its ASOG limit. State status, required action, and communication chain. Scenario 3 — Red or abort criteria: A parameter has exceeded its ASOG limit during an active operation. State status, immediate actions, and who decides whether to continue.",
+      "professional_standard": [
+        "Correct ASOG status assessment all three scenarios",
+        "Correct action identified for each status",
+        "Correct communication chain for each scenario",
+        "Correct identification of who has authority to override"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "scenario_1_status", "type": "text", "label": "Scenario 1 — ASOG status and action" },
+          { "key": "scenario_1_comms", "type": "text", "label": "Scenario 1 — Communication chain" },
+          { "key": "scenario_2_status", "type": "text", "label": "Scenario 2 — ASOG status and action" },
+          { "key": "scenario_2_comms", "type": "text", "label": "Scenario 2 — Communication chain" },
+          { "key": "scenario_3_status", "type": "text", "label": "Scenario 3 — ASOG status and action" },
+          { "key": "scenario_3_comms", "type": "text", "label": "Scenario 3 — Communication chain" },
+          { "key": "override_authority", "type": "text", "label": "Who has authority to continue operations outside ASOG limits?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the ASOG and who produces it for this vessel and operation?",
+        "What is the difference between a yellow and red ASOG status in terms of required actions?",
+        "Who has authority to continue operations outside ASOG limits and what documentation is required?",
+        "How does the ASOG relate to the vessel FMEA — are they the same document or different?"
+      ],
+      "variants": [
+        {
+          "id": "ops_003a",
+          "title": "ASOG Assessment During Live Operation",
+          "based_on": "ops_003",
+          "changes": { "assessment_during_hold": true },
+          "note_to_tdpo": "DPO will change conditions during an active hold to create a live ASOG transition — green to yellow to red. You must identify each transition in real time and respond correctly."
+        }
+      ]
+    },
+    {
+      "id": "ops_004",
+      "title": "Risk Assessment and Toolbox Talk",
+      "competency": "operational_planning_and_execution",
+      "difficulty": 3,
+      "min_training_day": 16,
+      "duration_minutes": 25,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "DPO describes a notional DP operation: vessel holding position near a fixed platform, ROV deployed to 50m depth, a second vessel on standby 300m away, wind 20kts and increasing. You must conduct a risk assessment and toolbox talk before the operation proceeds.",
+      "execute": "Conduct a verbal risk assessment covering all major risk categories: environmental conditions and forecast, vessel capability and ASOG status, reference configuration and quality, SIMOPS considerations, escape route and abort criteria, communication plan, personnel briefing requirements. Then conduct a one-minute toolbox talk covering the top three risks and the actions planned for each.",
+      "professional_standard": [
+        "All major risk categories addressed",
+        "Specific risks identified not just categories",
+        "Toolbox talk clear and under 2 minutes",
+        "Top three risks correctly prioritised",
+        "Action plan stated for each top risk"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "risk_categories_covered", "type": "text", "label": "Risk categories covered in assessment" },
+          { "key": "risk_categories_missed", "type": "text", "label": "Risk categories missed — DPO assessment" },
+          { "key": "top_3_risks_identified", "type": "text", "label": "Top 3 risks you identified" },
+          { "key": "toolbox_talk_duration_seconds", "type": "number", "label": "Toolbox talk duration (seconds)" },
+          { "key": "toolbox_talk_quality", "type": "text", "label": "DPO assessment of toolbox talk quality" },
+          { "key": "action_plans_stated", "type": "text", "label": "Action plan stated for each top risk?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What risk categories did you miss and why are they significant for this type of operation?",
+        "What makes a toolbox talk effective versus one that people switch off during?",
+        "How does the risk assessment change if wind increases by 10kts during the operation?",
+        "Who must be present for the toolbox talk and what happens if a key person is absent?"
+      ],
+      "variants": [
+        {
+          "id": "ops_004a",
+          "title": "Risk Assessment with Changing Scenario",
+          "based_on": "ops_004",
+          "changes": { "scenario_changes_mid_assessment": true },
+          "note_to_tdpo": "DPO will change one element of the scenario mid-assessment — a second vessel moves closer, weather forecast worsens, ROV has a technical issue. How does your risk assessment change? Can you adapt in real time?"
+        }
+      ]
+    }
+  ]
+}

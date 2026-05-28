@@ -1,0 +1,257 @@
+{
+  "domain": "environmental",
+  "title": "Environmental Awareness and Model Behaviour",
+  "order": 3,
+  "recommended_training_days": "2-10",
+  "description": "The TDPO learns how environmental forces act on the vessel, how the DP model interprets and responds to those forces, and how to predict thruster behaviour before it happens. Professional standard means the TDPO can predict which thrusters will respond to a given force before adding it, and can explain what the current vector actually represents.",
+  "tasks": [
+    {
+      "id": "env_001",
+      "title": "Environment Introduction — Progressive Build",
+      "competency": "environmental_awareness",
+      "difficulty": 1,
+      "min_training_day": 2,
+      "duration_minutes": 30,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP in calm conditions. Record baseline thruster output for all units — this is your zero reference. Before adding each stage, write down your prediction of which thrusters will increase and by how much.",
+      "execute": "Add environmental conditions in three stages. Stage 1: wind 8kts at 037 degrees. Let settle 3 minutes. Record thruster response. Compare to prediction. Stage 2: add current 0.3kts at 090 degrees. Let settle 3 minutes. Record changes. Compare to prediction. Stage 3: add wave 1.0m at 048 degrees. Let settle 3 minutes. Record changes. Compare to prediction.",
+      "professional_standard": [
+        "Accurate prediction of which thrusters increase before each stage",
+        "Correct identification of dominant force at each stage",
+        "Explanation of why specific thrusters responded",
+        "Current vector reading compared to set conditions"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "baseline_thruster_output", "type": "text", "label": "Baseline thruster output all units at calm (percent each)" },
+          { "key": "prediction_stage1", "type": "text", "label": "Prediction before Stage 1 — which thrusters increase?" },
+          { "key": "actual_stage1", "type": "text", "label": "Actual thruster response after Stage 1 wind 8kts" },
+          { "key": "current_vector_stage1", "type": "text", "label": "Current vector reading after Stage 1" },
+          { "key": "prediction_stage2", "type": "text", "label": "Prediction before Stage 2 — which thrusters increase?" },
+          { "key": "actual_stage2", "type": "text", "label": "Actual thruster response after Stage 2 current added" },
+          { "key": "current_vector_stage2", "type": "text", "label": "Current vector reading after Stage 2" },
+          { "key": "prediction_stage3", "type": "text", "label": "Prediction before Stage 3 — which thrusters increase?" },
+          { "key": "actual_stage3", "type": "text", "label": "Actual thruster response after Stage 3 wave added" },
+          { "key": "combined_force_direction", "type": "text", "label": "Your assessment of combined environmental force direction" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which thruster increased most when you added wind — and does its position on the vessel explain why?",
+        "Why did the current vector reading change when you added actual current, even though the tidal current was already there?",
+        "What is the combined environmental force vector direction given wind from 037, wave from 048, and current from 090?",
+        "How does wave loading differ from wind loading in terms of how the DP responds to it?"
+      ],
+      "variants": [
+        {
+          "id": "env_001a",
+          "title": "Adverse Environment Build",
+          "based_on": "env_001",
+          "changes": { "wind_speed_kts": 25, "current_speed_kts": 0.8 },
+          "note_to_tdpo": "Higher forces — predictions need to account for potential saturation. Watch which thruster hits its limit first."
+        }
+      ]
+    },
+    {
+      "id": "env_002",
+      "title": "Minimum Power Heading",
+      "competency": "environmental_awareness",
+      "difficulty": 2,
+      "min_training_day": 4,
+      "duration_minutes": 25,
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 37,
+        "current_speed_kts": 0.5,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Set environment as specified. Allow 5 minutes to settle. Record total thruster demand at current heading — this is your baseline.",
+      "execute": "Test four different headings spaced 45 degrees apart. Hold each heading for 3 minutes and record total thruster demand. Find the heading that gives minimum total demand. Hold that heading for 5 minutes and confirm it is stable.",
+      "professional_standard": [
+        "Test minimum four headings systematically",
+        "Correctly identify minimum power heading",
+        "Achieve measurable demand reduction from starting heading",
+        "Hold minimum power heading stably for 5 minutes"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "baseline_heading_deg", "type": "number", "label": "Starting heading (degrees)" },
+          { "key": "baseline_demand_percent", "type": "number", "label": "Total thruster demand at starting heading (percent)" },
+          { "key": "heading_1_deg", "type": "number", "label": "Heading 1 tested (degrees)" },
+          { "key": "heading_1_demand", "type": "number", "label": "Demand at heading 1 (percent)" },
+          { "key": "heading_2_deg", "type": "number", "label": "Heading 2 tested (degrees)" },
+          { "key": "heading_2_demand", "type": "number", "label": "Demand at heading 2 (percent)" },
+          { "key": "heading_3_deg", "type": "number", "label": "Heading 3 tested (degrees)" },
+          { "key": "heading_3_demand", "type": "number", "label": "Demand at heading 3 (percent)" },
+          { "key": "heading_4_deg", "type": "number", "label": "Heading 4 tested (degrees)" },
+          { "key": "heading_4_demand", "type": "number", "label": "Demand at heading 4 (percent)" },
+          { "key": "minimum_power_heading_deg", "type": "number", "label": "Minimum power heading found (degrees)" },
+          { "key": "reduction_achieved_percent", "type": "number", "label": "Demand reduction achieved vs starting heading (percent)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the minimum power heading you found and why does that specific heading minimise demand?",
+        "How does this concept apply to real operations where your heading is partly constrained by the work being done?",
+        "What is weathervaning and when would you use Minimum Power mode instead of holding a fixed heading?",
+        "How would the minimum power heading change if the current direction shifted by 45 degrees?"
+      ],
+      "variants": [
+        {
+          "id": "env_002a",
+          "title": "Minimum Power Heading — Heavy Weather",
+          "based_on": "env_002",
+          "changes": { "wind_speed_kts": 30, "current_speed_kts": 0.8 },
+          "note_to_tdpo": "Higher forces make heading selection more critical. The difference in demand between best and worst heading will be much larger."
+        }
+      ]
+    },
+    {
+      "id": "env_003",
+      "title": "Environmental Ramp to Saturation",
+      "competency": "capability_and_limits",
+      "difficulty": 3,
+      "min_training_day": 6,
+      "duration_minutes": 30,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP in calm conditions. Enable Ramp mode for wind and wave. Set wind target 35kts at 037 degrees, wave target 3.0m at 048 degrees.",
+      "execute": "Start the ramp and allow conditions to increase gradually. Monitor thruster loading continuously. Record at what wind speed the first thruster reaches saturation. Record at what point position footprint begins to degrade. Record at what point you would recommend to the OIM that operations should be reviewed.",
+      "professional_standard": [
+        "Identify first saturation before position degrades",
+        "Correct identification of which thruster saturates first",
+        "Reasoned recommendation point with evidence",
+        "Understanding of relationship between saturation and position accuracy"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "first_saturation_wind_speed_kts", "type": "number", "label": "Wind speed at first thruster saturation (kts)" },
+          { "key": "first_thruster_saturated", "type": "text", "label": "Which thruster saturated first?" },
+          { "key": "position_degradation_wind_speed_kts", "type": "number", "label": "Wind speed when position footprint began to degrade (kts)" },
+          { "key": "recommendation_wind_speed_kts", "type": "number", "label": "Wind speed at which you would recommend reviewing operations (kts)" },
+          { "key": "recommendation_reasoning", "type": "text", "label": "Reasoning for your recommendation" },
+          { "key": "final_demand_percent", "type": "number", "label": "Total thruster demand at maximum conditions (percent)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which thruster saturated first and does its position on the vessel explain why it was first?",
+        "At what sea state would you recommend the OIM consider changing heading or suspending operations on this vessel?",
+        "What is a capability plot and how would it have predicted what you just observed in this exercise?",
+        "What is the relationship between thruster saturation and position keeping accuracy — why does one cause the other?"
+      ],
+      "variants": [
+        {
+          "id": "env_003a",
+          "title": "Ramp at Non-Optimal Heading",
+          "based_on": "env_003",
+          "changes": { "heading_beam_on": true },
+          "note_to_tdpo": "Same ramp but with weather beam-on to the vessel. Saturation will occur earlier. Compare the result to your head-on ramp."
+        }
+      ]
+    },
+    {
+      "id": "env_004",
+      "title": "Current Vector Analysis",
+      "competency": "environmental_awareness",
+      "difficulty": 2,
+      "min_training_day": 5,
+      "duration_minutes": 20,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Set calm wind and wave. Add only current at 0.5kts from 090 degrees. Allow 10 minutes for model to fully settle before recording anything.",
+      "execute": "After 10 minutes, record the current vector displayed by the DP system. Compare the displayed value to the actual current you set. Then add wind at 15kts from 180 degrees — directly opposing current. Observe how the displayed current vector changes over 5 minutes. Record the new value. Explain the difference.",
+      "professional_standard": [
+        "Correctly record displayed vs set current values",
+        "Observe and record change when wind added",
+        "Correctly explain why displayed current changed when wind was added",
+        "Understand that DP current vector represents all unmodelled forces"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "current_set_kts", "type": "number", "label": "Current set in simulation (kts)" },
+          { "key": "current_set_dir_deg", "type": "number", "label": "Current set direction (degrees)" },
+          { "key": "displayed_vector_after_10min_kts", "type": "number", "label": "DP displayed current vector after 10 minutes (kts)" },
+          { "key": "displayed_vector_after_10min_dir", "type": "number", "label": "DP displayed current vector direction after 10 minutes (degrees)" },
+          { "key": "match_or_difference", "type": "text", "label": "Did displayed value match set value — if not why not?" },
+          { "key": "displayed_vector_after_wind_kts", "type": "number", "label": "Displayed current vector after adding wind (kts)" },
+          { "key": "displayed_vector_after_wind_dir", "type": "number", "label": "Displayed current vector direction after adding wind (degrees)" },
+          { "key": "explanation", "type": "text", "label": "Your explanation of why the vector changed when wind was added" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Did the displayed current vector match what you set in the simulation? If not — why not and what does this tell you?",
+        "When you added wind, why did the current vector change even though the tidal current did not change?",
+        "What does the DP current vector actually represent — is it purely tidal current?",
+        "How does this understanding affect how you interpret the current vector during a real operation?"
+      ],
+      "variants": [
+        {
+          "id": "env_004a",
+          "title": "Current Vector in Complex Environment",
+          "based_on": "env_004",
+          "changes": { "wind_speed_kts": 20, "wave_height_m": 1.5 },
+          "note_to_tdpo": "Add all three environmental forces and analyse the current vector. How much of what you see is tidal current vs wind vs wave force?"
+        }
+      ]
+    },
+    {
+      "id": "env_005",
+      "title": "Model Corruption and Recovery",
+      "competency": "model_behaviour",
+      "difficulty": 3,
+      "min_training_day": 4,
+      "duration_minutes": 25,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH then DP",
+      "setup": "Moderate environment set and settled. Vessel on DP at datum. Note current vector value before starting.",
+      "execute": "Run 1 — Corrupted transition: Make an aggressive 300m JSMH transit with large inputs and abrupt stops. Immediately select DP. Record thruster behaviour and current vector for 2 minutes. Note time to settle. Run 2 — Clean transition: Reset. Make the same 300m transit but slow to near zero before selecting Monitor briefly, then DP. Record settle time and capture quality. Compare both runs.",
+      "professional_standard": [
+        "Observe measurable difference in capture quality between runs",
+        "Correctly identify current vector corruption after aggressive transit",
+        "Explain the mechanism of model corruption",
+        "Record settle time difference between methods"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "current_vector_before_transit", "type": "text", "label": "Current vector before transit (kts and direction)" },
+          { "key": "run1_current_vector_immediately", "type": "text", "label": "Run 1 — Current vector immediately after aggressive transit" },
+          { "key": "run1_thruster_behaviour", "type": "text", "label": "Run 1 — Describe thruster behaviour first 30 seconds on DP" },
+          { "key": "run1_settle_time_seconds", "type": "number", "label": "Run 1 — Time to stable position (seconds)" },
+          { "key": "run2_current_vector_immediately", "type": "text", "label": "Run 2 — Current vector after clean transition" },
+          { "key": "run2_thruster_behaviour", "type": "text", "label": "Run 2 — Describe thruster behaviour first 30 seconds on DP" },
+          { "key": "run2_settle_time_seconds", "type": "number", "label": "Run 2 — Time to stable position (seconds)" },
+          { "key": "settle_time_difference_seconds", "type": "number", "label": "Difference in settle time between runs (seconds)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What did the current vector show immediately after the aggressive transit and what caused that reading?",
+        "Why does slowing to near zero before the Monitor transition improve DP capture quality?",
+        "What does the Kalman filter inherit from a large JSMH transit — and why is that a problem?",
+        "How long did the model take to settle in each method — and what explains the difference in time?"
+      ],
+      "variants": [
+        {
+          "id": "env_005a",
+          "title": "Model Corruption — Large Transit",
+          "based_on": "env_005",
+          "changes": { "transit_distance_metres": 1000 },
+          "note_to_tdpo": "A much larger transit produces much greater corruption. This simulates moving between rigs. Notice how much longer the model takes to settle."
+        }
+      ]
+    }
+  ]
+}

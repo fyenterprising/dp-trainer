@@ -1,0 +1,223 @@
+{
+  "domain": "sensors",
+  "title": "Sensor and Reference System Management",
+  "order": 4,
+  "recommended_training_days": "5-12",
+  "description": "The TDPO learns to monitor, assess, and manage all sensor inputs to the DP system. Professional standard means the TDPO can identify a degrading reference before the system auto-rejects it, understand what the DP model does with conflicting sensor data, and make correct manual inhibit decisions.",
+  "tasks": [
+    {
+      "id": "sen_001",
+      "title": "Reference System Weighting",
+      "competency": "reference_management",
+      "difficulty": 2,
+      "min_training_day": 5,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Two DGPS references active. Vessel stable on DP. Open the Sensors tab and observe the weighting assigned to each reference before doing anything.",
+      "execute": "Record initial weights for both references. Ask your DPO to introduce simulated HDOP degradation on one reference. Observe how the weighting changes. Record the new weights. Note how position quality changes. Assess at what point you would manually inhibit the degraded reference rather than waiting for auto-rejection. Re-enable and confirm both references return to healthy status.",
+      "professional_standard": [
+        "Correctly record initial reference weights",
+        "Observe and record weight change after degradation",
+        "Correct threshold assessment for manual inhibit",
+        "Correct procedure for re-enabling recovered reference"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "ref1_initial_weight", "type": "text", "label": "Reference 1 initial weight" },
+          { "key": "ref2_initial_weight", "type": "text", "label": "Reference 2 initial weight" },
+          { "key": "ref1_weight_after_degradation", "type": "text", "label": "Reference 1 weight after degradation introduced" },
+          { "key": "ref2_weight_after_degradation", "type": "text", "label": "Reference 2 weight after degradation introduced" },
+          { "key": "position_quality_change", "type": "text", "label": "How did position quality change after degradation?" },
+          { "key": "manual_inhibit_threshold", "type": "text", "label": "At what point would you manually inhibit — and why that point?" },
+          { "key": "recovery_confirmed", "type": "text", "label": "Did both references return to healthy status on re-enable?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "How does the DP Kalman filter decide how much weight to assign each reference — what factors influence this?",
+        "What HDOP value would concern you and at what value would you act?",
+        "At what point would you manually inhibit a reference rather than waiting for auto-rejection — and what is the risk of waiting?",
+        "What is the difference between a reference being auto-rejected and manually inhibited — and does it matter which way it happens?"
+      ],
+      "variants": [
+        {
+          "id": "sen_001a",
+          "title": "Reference Weighting with Three References",
+          "based_on": "sen_001",
+          "changes": { "reference_count": 3 },
+          "note_to_tdpo": "Add a third reference and observe how the weighting distributes across three. Then degrade one — how do the remaining two respond?"
+        }
+      ]
+    },
+    {
+      "id": "sen_002",
+      "title": "GPS Failure Response",
+      "competency": "reference_management",
+      "difficulty": 2,
+      "min_training_day": 6,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Two DGPS references active. Vessel stable on DP in moderate conditions. Note current position quality.",
+      "execute": "Without warning your DPO will disable one GPS reference. Observe the alarm sequence. Record which alarms triggered and in what order. Assess your remaining reference configuration. Decide whether to continue or go off DP. Re-enable the failed GPS and confirm re-acceptance procedure.",
+      "professional_standard": [
+        "Alarm acknowledged within 15 seconds",
+        "Correct assessment of remaining reference configuration",
+        "Correct go or no-go decision with reasoning",
+        "Correct re-acceptance procedure for recovered reference"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "alarm_sequence", "type": "text", "label": "Alarm sequence — which alarms in what order?" },
+          { "key": "time_to_acknowledge_seconds", "type": "number", "label": "Time to acknowledge first alarm (seconds)" },
+          { "key": "remaining_config_assessment", "type": "text", "label": "Your assessment of remaining reference configuration" },
+          { "key": "decision_continue_or_abort", "type": "text", "label": "Decision — continue or go off DP? Reasoning?" },
+          { "key": "position_quality_single_ref", "type": "text", "label": "Position quality with single reference" },
+          { "key": "re_acceptance_procedure", "type": "text", "label": "How did you re-accept the recovered reference?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the minimum reference configuration for your vessel's typical operations and where is this defined?",
+        "Why does losing one GPS not automatically mean you must go off DP?",
+        "What changed about your position quality with only one reference active?",
+        "When re-enabling a recovered reference — why must you confirm it is healthy before accepting it back into the solution?"
+      ],
+      "variants": [
+        {
+          "id": "sen_002a",
+          "title": "GPS Failure Near Structure",
+          "based_on": "sen_002",
+          "changes": { "virtual_structure_active": true, "standoff_metres": 150 },
+          "note_to_tdpo": "Same failure but you are 150m from a virtual structure. Does proximity change your minimum reference requirement? Does it change your decision?"
+        },
+        {
+          "id": "sen_002b",
+          "title": "Both GPS References Degrade Simultaneously",
+          "based_on": "sen_002",
+          "changes": { "both_references_degrade": true },
+          "note_to_tdpo": "Harder scenario. Both references degrade at the same time. What is your immediate action? This is a genuine off-DP decision."
+        }
+      ]
+    },
+    {
+      "id": "sen_003",
+      "title": "Gyro Failure Response",
+      "competency": "sensor_management",
+      "difficulty": 3,
+      "min_training_day": 7,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Both gyros active. Note heading agreement between gyro 1 and gyro 2 — should be within 0.5 degrees. Vessel stable on DP.",
+      "execute": "Without warning your DPO will introduce a 5 degree heading error on one gyro. Observe how the DP responds. Does it auto-reject? Does heading control degrade? Record the heading excursion. Manually inhibit the faulty gyro. Observe recovery. Record time from fault introduction to stable heading.",
+      "professional_standard": [
+        "Identify faulty gyro within 30 seconds",
+        "Correct inhibit procedure executed",
+        "Recovery confirmed before continuing",
+        "Time from fault to stable heading recorded"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "initial_gyro_agreement_deg", "type": "number", "label": "Initial gyro 1 vs gyro 2 agreement (degrees difference)" },
+          { "key": "dp_auto_rejection", "type": "text", "label": "Did the DP auto-reject the faulty gyro? Yes or no?" },
+          { "key": "heading_excursion_deg", "type": "number", "label": "Maximum heading excursion during fault (degrees)" },
+          { "key": "faulty_gyro_identified", "type": "text", "label": "Which gyro was identified as faulty and how?" },
+          { "key": "inhibit_procedure", "type": "text", "label": "Describe the inhibit procedure used" },
+          { "key": "time_fault_to_stable_seconds", "type": "number", "label": "Time from fault introduction to stable heading (seconds)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "How does the DP decide which gyro to trust when two gyros disagree — what is the voting logic?",
+        "What heading excursion is acceptable during a gyro failure response near a structure?",
+        "Why is gyro failure more immediately dangerous to vessel position than a GPS failure?",
+        "How does heading error propagate into position error — explain the mechanism?"
+      ],
+      "variants": [
+        {
+          "id": "sen_003a",
+          "title": "Gyro Failure During Heading Change",
+          "based_on": "sen_003",
+          "changes": { "failure_during_heading_change": true },
+          "note_to_tdpo": "Same failure introduced while the vessel is mid-turn. The combination of active heading change and gyro fault is harder to manage. Prioritise stopping the turn first."
+        }
+      ]
+    },
+    {
+      "id": "sen_004",
+      "title": "Wind Feedforward Disable",
+      "competency": "sensor_management",
+      "difficulty": 2,
+      "min_training_day": 6,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 37,
+        "ramp_enabled": true,
+        "ramp_variation_kts": 5
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Wind 20kts with ramp variation to simulate gusting. Vessel stable on DP with wind feedforward enabled. Record position footprint and thruster activity as baseline.",
+      "execute": "With feedforward enabled, observe and record position footprint size and thruster response character during gusting for 3 minutes. Then disable wind feedforward. Observe the change in position keeping. Record how the position footprint changes and how thruster response changes from anticipatory to reactive. Re-enable feedforward and compare recovery.",
+      "professional_standard": [
+        "Observe and record quantifiable difference in position footprint",
+        "Correctly characterise thruster response as anticipatory vs reactive",
+        "Understand the source of feedforward data",
+        "Correct explanation of why feedforward improves gusty condition performance"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "footprint_feedforward_on", "type": "text", "label": "Position footprint size with feedforward enabled" },
+          { "key": "thruster_character_feedforward_on", "type": "text", "label": "Describe thruster response character with feedforward on" },
+          { "key": "footprint_feedforward_off", "type": "text", "label": "Position footprint size with feedforward disabled" },
+          { "key": "thruster_character_feedforward_off", "type": "text", "label": "Describe thruster response character with feedforward off" },
+          { "key": "time_lag_observed_seconds", "type": "number", "label": "Observed time lag between gust and correction without feedforward (seconds)" },
+          { "key": "footprint_change_assessment", "type": "text", "label": "Your assessment of the difference — was it significant?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What specifically changed about the thruster response pattern when feedforward was disabled?",
+        "Why does feedforward give better position keeping in gusty conditions compared to feedback alone?",
+        "What is the source of wind feedforward data — and what happens to position keeping if that sensor fails mid-operation?",
+        "In what sea conditions would losing wind feedforward be most operationally significant?"
+      ],
+      "variants": [
+        {
+          "id": "sen_004a",
+          "title": "Wind Sensor Failure",
+          "based_on": "sen_004",
+          "changes": { "wind_sensor_fails": true },
+          "note_to_tdpo": "Rather than disabling feedforward manually, your DPO will fail the wind sensor. Observe the alarm, assess the impact on position keeping, and decide whether to continue."
+        }
+      ]
+    }
+  ]
+}

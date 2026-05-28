@@ -1,0 +1,233 @@
+{
+  "domain": "failures",
+  "title": "Failure Scenarios and Degraded Operations",
+  "order": 8,
+  "recommended_training_days": "12-25",
+  "description": "The TDPO learns to manage single and compound failures in DP operations, assess degraded capability, and make correct decisions about continuing or aborting operations. Professional standard means the TDPO never freezes, always assesses remaining capability before deciding, and communicates clearly and immediately. No failure scenario is announced in advance.",
+  "tasks": [
+    {
+      "id": "fail_001",
+      "title": "Single Thruster Failure Near Structure",
+      "competency": "failure_management",
+      "difficulty": 3,
+      "min_training_day": 12,
+      "duration_minutes": 30,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP at operating radius of virtual structure. Moderate conditions settled. DPO will trigger a single thruster failure at an unannounced time during the hold.",
+      "execute": "When the thruster failure occurs, hold position with remaining thrusters. Identify the faulted thruster. Assess new worst case failure. Assess remaining capability for current conditions. Decide whether to maintain position or increase standoff distance. Communicate your decision and reasoning to DPO as if communicating to OIM.",
+      "professional_standard": [
+        "Position maintained within double the normal footprint",
+        "Faulted thruster identified within 30 seconds",
+        "Correct new worst case failure identified",
+        "Correct capability assessment for current conditions",
+        "Clear reasoned decision with communication"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "thruster_faulted", "type": "text", "label": "Which thruster faulted?" },
+          { "key": "position_excursion_during_fault_m", "type": "number", "label": "Maximum position excursion during fault (metres)" },
+          { "key": "recovery_time_seconds", "type": "number", "label": "Time to stable position after fault (seconds)" },
+          { "key": "new_wcf_assessment", "type": "text", "label": "New worst case failure with this thruster lost" },
+          { "key": "capability_assessment", "type": "text", "label": "Can you maintain position in current conditions with reduced complement?" },
+          { "key": "decision", "type": "text", "label": "Decision — hold position or increase standoff? Reasoning?" },
+          { "key": "communication_to_oim", "type": "text", "label": "What would you say to the OIM?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "How did your worst case failure change when one thruster was lost — and why does that matter?",
+        "Was your decision to hold position or increase standoff correct given remaining capability and conditions?",
+        "What would the ASOG say about continuing operations with this degraded thruster complement?",
+        "What is your new abort threshold with reduced thrusters — at what environmental condition would you now go off DP?"
+      ],
+      "variants": [
+        {
+          "id": "fail_001a",
+          "title": "Single Thruster Failure in Heavy Weather",
+          "based_on": "fail_001",
+          "changes": { "wind_speed_kts": 25, "wave_height_m": 2.0 },
+          "note_to_tdpo": "Same failure in heavier conditions. The margin between capable and incapable is much narrower. Your decision to hold or depart will be harder to justify either way."
+        },
+        {
+          "id": "fail_001b",
+          "title": "Critical Thruster Failure",
+          "based_on": "fail_001",
+          "changes": { "dpo_selects_critical_thruster": true },
+          "note_to_tdpo": "Your DPO will select the most operationally critical thruster to fail for your vessel configuration. This may mean an immediate departure decision is the only safe choice."
+        }
+      ]
+    },
+    {
+      "id": "fail_002",
+      "title": "Power Failure Response",
+      "competency": "failure_management",
+      "difficulty": 4,
+      "min_training_day": 14,
+      "duration_minutes": 30,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP. DPO will trigger a generator dropout on one bus without warning. Know your vessel power configuration — which thrusters are on which bus — before this drill.",
+      "execute": "When the generator dropout occurs, observe which thrusters lose power. Observe auto load shedding. Assess remaining propulsion capability. Prevent blackout. Either hold position or initiate controlled departure. Communicate to DPO as OIM.",
+      "professional_standard": [
+        "Correct identification of thrusters lost on faulted bus",
+        "Auto load shedding observed and understood",
+        "Blackout prevention demonstrated",
+        "Correct hold or depart decision",
+        "Clear communication of situation"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "bus_that_faulted", "type": "text", "label": "Which bus faulted?" },
+          { "key": "thrusters_lost", "type": "text", "label": "Which thrusters lost power on that bus?" },
+          { "key": "auto_load_shedding_observed", "type": "text", "label": "Did auto load shedding occur? What shed?" },
+          { "key": "position_excursion_m", "type": "number", "label": "Position excursion during fault (metres)" },
+          { "key": "blackout_prevented", "type": "text", "label": "Was blackout prevented? How?" },
+          { "key": "decision", "type": "text", "label": "Decision — hold or depart? Reasoning?" },
+          { "key": "wcf_relation", "type": "text", "label": "Is this event the vessels defined WCF or worse?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which thrusters lost power and does the bus configuration of your vessel explain why those ones specifically?",
+        "What is the role of blackout prevention in this scenario — what would happen without it?",
+        "Why does the bus tie position matter so much in a power failure scenario?",
+        "What is the worst case failure for this vessel and how does this event relate to it — was this the WCF or something different?"
+      ],
+      "variants": [
+        {
+          "id": "fail_002a",
+          "title": "Power Failure Near Structure",
+          "based_on": "fail_002",
+          "changes": { "virtual_structure_active": true, "standoff_metres": 90 },
+          "note_to_tdpo": "Same power failure at 90m from structure. Your decision window is shorter and the consequences of the wrong decision are higher. Decide fast and communicate clearly."
+        }
+      ]
+    },
+    {
+      "id": "fail_003",
+      "title": "Compound Failure — Reference Loss During Approach",
+      "competency": "failure_management",
+      "difficulty": 4,
+      "min_training_day": 16,
+      "duration_minutes": 35,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH approach then DP",
+      "setup": "Begin an active approach to virtual structure from 500m. DPO will trigger reference loss at an unannounced point during the approach — inside the 500m zone.",
+      "execute": "Continue the approach normally. When reference loss occurs inside the 500m zone, make an immediate decision — continue approach on remaining references or abort. If continuing, hold position and reassess. If aborting, execute a controlled departure. There is no correct answer predetermined — your decision must be reasoned and clearly communicated.",
+      "professional_standard": [
+        "Immediate recognition of reference loss",
+        "Correct minimum reference assessment at moment of failure",
+        "Clear reasoned decision within 30 seconds",
+        "Correct execution of chosen action",
+        "Clear communication throughout"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "distance_at_failure_m", "type": "number", "label": "Distance from structure when reference failed (metres)" },
+          { "key": "reference_config_at_failure", "type": "text", "label": "Reference configuration at moment of failure" },
+          { "key": "minimum_config_met", "type": "text", "label": "Was minimum reference configuration still met?" },
+          { "key": "decision", "type": "text", "label": "Decision — continue or abort? Made within how many seconds?" },
+          { "key": "reasoning", "type": "text", "label": "Reasoning for decision" },
+          { "key": "execution", "type": "text", "label": "How was the decision executed — was it clean?" },
+          { "key": "outcome", "type": "text", "label": "Outcome — vessel safe, zone maintained?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What was your reference configuration at the moment of failure and was minimum configuration still met?",
+        "Was your decision to continue or abort correct given your proximity to structure at the moment of failure?",
+        "How does being inside the 500m zone change the minimum reference requirement compared to open water?",
+        "What would the ASOG say about this scenario — does it define a minimum reference requirement for inside 500m?"
+      ],
+      "variants": [
+        {
+          "id": "fail_003a",
+          "title": "Compound Failure — Reference Loss Plus Environmental Increase",
+          "based_on": "fail_003",
+          "changes": { "wind_increase_simultaneous": true, "wind_increase_to_kts": 25 },
+          "note_to_tdpo": "Reference loss and wind increase occur simultaneously during the approach. Two problems at once. Prioritise the higher risk issue first — which is it?"
+        }
+      ]
+    },
+    {
+      "id": "fail_004",
+      "title": "Worst Case Failure Exercise",
+      "competency": "failure_management",
+      "difficulty": 5,
+      "min_training_day": 18,
+      "duration_minutes": 40,
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.5,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.5,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP at operating radius of virtual structure. Moderate to heavy conditions. Before starting, state to your DPO what you understand to be the vessels defined worst case failure. DPO will then trigger it without further warning during the hold.",
+      "execute": "When the WCF is triggered, observe the full system response — position excursion, alarm sequence, thruster redistribution. Record the excursion distance. Assess whether the excursion would be within safe limits for a notional subsea operation with divers at 50m depth. Make a safety assessment and communicate it clearly.",
+      "professional_standard": [
+        "Correct pre-statement of vessel WCF",
+        "Full alarm sequence observed and recorded",
+        "Position excursion measured accurately",
+        "Correct safety assessment for subsea operation context",
+        "Clear communication of assessment"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "wcf_stated_before_drill", "type": "text", "label": "WCF stated before drill — what did you say?" },
+          { "key": "wcf_triggered", "type": "text", "label": "What was actually triggered by DPO?" },
+          { "key": "alarm_sequence", "type": "text", "label": "Alarm sequence — which alarms in what order?" },
+          { "key": "max_position_excursion_m", "type": "number", "label": "Maximum position excursion (metres)" },
+          { "key": "excursion_direction", "type": "text", "label": "Direction of excursion" },
+          { "key": "time_to_max_excursion_seconds", "type": "number", "label": "Time from failure to maximum excursion (seconds)" },
+          { "key": "recovery_or_continued_excursion", "type": "text", "label": "Did vessel recover or continue to excurse?" },
+          { "key": "safe_for_subsea_ops", "type": "text", "label": "Would this excursion be safe for diving or ROV operations? Reasoning?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the defined WCF for this vessel — where is it documented and how was it determined?",
+        "Was the excursion within acceptable limits for a notional subsea operation and what is that limit based on?",
+        "What is the FMEA and how does it define the WCF for this vessel class?",
+        "Under what environmental conditions does the WCF excursion become unacceptable for the operations this vessel typically supports?"
+      ],
+      "variants": [
+        {
+          "id": "fail_004a",
+          "title": "WCF in Heavy Weather",
+          "based_on": "fail_004",
+          "changes": { "wind_speed_kts": 30, "wave_height_m": 2.5 },
+          "note_to_tdpo": "Same WCF in significantly heavier conditions. The excursion will be larger and recovery may not occur. Observe the full consequence and assess whether operations should ever be conducted in these conditions on this vessel."
+        }
+      ]
+    }
+  ]
+}

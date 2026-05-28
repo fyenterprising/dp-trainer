@@ -1,0 +1,244 @@
+{
+  "domain": "approach",
+  "title": "Approach to Structure and Close Proximity Operations",
+  "order": 6,
+  "recommended_training_days": "8-20",
+  "description": "The TDPO learns to plan and execute controlled approaches to virtual structures, understanding windward and leeward geometry, speed management inside the 500m zone, abort heading planning, and the transition from JSMH to DP for final positioning. Professional standard means the TDPO never breaches the hard exclusion zone, always has a pre-planned abort heading, and arrives at the DP operating radius with near-zero velocity.",
+  "tasks": [
+    {
+      "id": "approach_001",
+      "title": "Leeward Approach to Structure",
+      "competency": "approach_and_proximity",
+      "difficulty": 3,
+      "min_training_day": 8,
+      "duration_minutes": 35,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH inside 500m, DP for final positioning",
+      "setup": "Place virtual structure 500m on 037 degrees True from your current position. You are on the leeward side — the dominant environmental force is pushing you away from the structure. Confirm your abort heading before starting. Write it down.",
+      "execute": "Enter the 500m zone on a heading of approximately 037 degrees True. Reduce to maximum 0.5kts by the 500m boundary. Reduce to maximum 0.3kts by the 200m boundary. Reduce to maximum 0.1kts by the 100m boundary. Transition from JSMH to DP at 100m. Hold at the DP operating radius for 10 minutes. Record approach track, speed at each zone boundary, and DP capture quality.",
+      "professional_standard": [
+        "No hard exclusion zone breach",
+        "Speed below 0.5kts at 500m boundary",
+        "Speed below 0.3kts at 200m boundary",
+        "Speed below 0.1kts at 100m boundary",
+        "DP capture within operating radius",
+        "Abort heading confirmed before entry"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "abort_heading_planned_deg", "type": "number", "label": "Abort heading planned before entry (degrees)" },
+          { "key": "working_side", "type": "text", "label": "Windward or leeward — state which and why" },
+          { "key": "speed_at_500m_kts", "type": "number", "label": "Speed at 500m zone entry (kts)" },
+          { "key": "speed_at_200m_kts", "type": "number", "label": "Speed at 200m boundary (kts)" },
+          { "key": "speed_at_100m_kts", "type": "number", "label": "Speed at 100m — transition point (kts)" },
+          { "key": "dp_capture_distance_m", "type": "number", "label": "Distance from structure at DP capture (metres)" },
+          { "key": "dp_capture_quality", "type": "text", "label": "DP capture quality — smooth or hunting?" },
+          { "key": "hold_position_footprint", "type": "text", "label": "Position footprint during 10 minute hold" },
+          { "key": "thruster_demand_at_hold", "type": "text", "label": "Approximate thruster demand at hold position" },
+          { "key": "zone_breaches", "type": "number", "label": "Hard exclusion zone breaches (target zero)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "This was a leeward approach — what is the failure mode if DP fails while you are at the operating radius?",
+        "At what point during the approach was the environment helping your deceleration and at what point was it not?",
+        "What is your abort heading from the operating radius and how long would it take to clear the 500m zone?",
+        "How did thruster demand change as you closed distance to the structure during the hold?"
+      ],
+      "variants": [
+        {
+          "id": "approach_001a",
+          "title": "Leeward Approach in Heavy Weather",
+          "based_on": "approach_001",
+          "changes": { "wind_speed_kts": 25, "wave_height_m": 2.0 },
+          "note_to_tdpo": "Same approach geometry but heavier conditions. Speed management becomes more critical. The environment assists braking more strongly — use it."
+        },
+        {
+          "id": "approach_001b",
+          "title": "Leeward Approach with Degraded Reference",
+          "based_on": "approach_001",
+          "changes": { "one_reference_degraded": true },
+          "note_to_tdpo": "Your DPO will degrade one reference before you enter the 500m zone. Assess whether to proceed. If you continue, how does reduced reference quality affect your approach discipline?"
+        }
+      ]
+    },
+    {
+      "id": "approach_002",
+      "title": "Windward Approach to Structure",
+      "competency": "approach_and_proximity",
+      "difficulty": 4,
+      "min_training_day": 9,
+      "duration_minutes": 35,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH inside 500m, DP for final positioning",
+      "setup": "Place virtual structure 500m on 217 degrees True from your current position. You are now on the windward side — the dominant environmental force is pushing you toward the structure. Confirm your abort heading before starting. This is more complex on the windward side — think carefully before writing it down.",
+      "execute": "Same speed profile as approach_001. Enter at 217 degrees True, reduce speed at each zone boundary, transition to DP at 100m, hold for 10 minutes. Pay particular attention to how the environment affects your closure rate and thruster demand compared to the leeward approach.",
+      "professional_standard": [
+        "No hard exclusion zone breach",
+        "All speed limits observed at each boundary",
+        "Abort heading correctly identified for windward side",
+        "Recognition of increased risk compared to leeward approach",
+        "Higher thruster demand noted and recorded"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "abort_heading_planned_deg", "type": "number", "label": "Abort heading planned before entry (degrees)" },
+          { "key": "abort_heading_reasoning", "type": "text", "label": "Why did you choose that abort heading on the windward side?" },
+          { "key": "speed_at_500m_kts", "type": "number", "label": "Speed at 500m zone entry (kts)" },
+          { "key": "speed_at_200m_kts", "type": "number", "label": "Speed at 200m boundary (kts)" },
+          { "key": "speed_at_100m_kts", "type": "number", "label": "Speed at 100m — transition point (kts)" },
+          { "key": "thruster_demand_comparison", "type": "text", "label": "How did thruster demand compare to leeward approach?" },
+          { "key": "closure_rate_difference", "type": "text", "label": "Was closure rate harder to control than leeward? Why?" },
+          { "key": "dp_capture_distance_m", "type": "number", "label": "Distance from structure at DP capture (metres)" },
+          { "key": "zone_breaches", "type": "number", "label": "Hard exclusion zone breaches (target zero)" },
+          { "key": "risk_comparison", "type": "text", "label": "Your risk assessment comparison — windward vs leeward" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the failure mode on the windward side compared to the leeward side — why is windward higher risk?",
+        "How much higher was thruster demand during the windward approach and hold compared to leeward?",
+        "Why is the abort heading more complex to plan on the windward side?",
+        "Under what operational circumstances would you accept a windward approach and what additional safeguards would you put in place?"
+      ],
+      "variants": [
+        {
+          "id": "approach_002a",
+          "title": "Windward Approach in Heavy Weather",
+          "based_on": "approach_002",
+          "changes": { "wind_speed_kts": 25, "wave_height_m": 2.0 },
+          "note_to_tdpo": "Heavy conditions on the windward side. Closure rate will be hard to control. Start your deceleration significantly earlier than you think necessary."
+        }
+      ]
+    },
+    {
+      "id": "approach_003",
+      "title": "Extended Hold at Operating Radius",
+      "competency": "approach_and_proximity",
+      "difficulty": 3,
+      "min_training_day": 10,
+      "duration_minutes": 30,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90,
+        "ramp_to": {
+          "wind_speed_kts": 30,
+          "ramp_rate": "gradual"
+        }
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Position vessel at DP operating radius of virtual structure. Moderate conditions initially. DPO will ramp wind gradually during the hold.",
+      "execute": "Hold position at the DP operating radius for 20 minutes. During the hold your DPO will gradually increase wind from 15kts to 30kts. Record position footprint at 15, 20, 25, and 30kts. Record thruster demand at each interval. Identify the point at which you would recommend moving further from structure or reviewing operations with the OIM.",
+      "professional_standard": [
+        "Position maintained throughout hold",
+        "Correct identification of degrading margin",
+        "Reasoned recommendation point with evidence",
+        "Correct communication chain identified"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "footprint_at_15kts", "type": "text", "label": "Position footprint at 15kts wind" },
+          { "key": "demand_at_15kts_percent", "type": "number", "label": "Thruster demand at 15kts (percent)" },
+          { "key": "footprint_at_20kts", "type": "text", "label": "Position footprint at 20kts wind" },
+          { "key": "demand_at_20kts_percent", "type": "number", "label": "Thruster demand at 20kts (percent)" },
+          { "key": "footprint_at_25kts", "type": "text", "label": "Position footprint at 25kts wind" },
+          { "key": "demand_at_25kts_percent", "type": "number", "label": "Thruster demand at 25kts (percent)" },
+          { "key": "footprint_at_30kts", "type": "text", "label": "Position footprint at 30kts wind" },
+          { "key": "demand_at_30kts_percent", "type": "number", "label": "Thruster demand at 30kts (percent)" },
+          { "key": "recommendation_at_kts", "type": "number", "label": "Wind speed at which you would recommend reviewing operations (kts)" },
+          { "key": "recommendation_reasoning", "type": "text", "label": "Reasoning for your recommendation" },
+          { "key": "communication_chain", "type": "text", "label": "Who would you inform and in what order?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "At what wind speed did your position footprint become unacceptable at this operating radius?",
+        "What is the ASOG concept and how would a properly defined ASOG have defined your action limit here?",
+        "Who do you inform and in what order when you identify a deteriorating situation during a hold?",
+        "What is the difference between moving further from the structure and going fully off DP — when would you choose each?"
+      ],
+      "variants": [
+        {
+          "id": "approach_003a",
+          "title": "Hold with Thruster Failure During Ramp",
+          "based_on": "approach_003",
+          "changes": { "thruster_failure_during_hold": true },
+          "note_to_tdpo": "Your DPO will fail one thruster at an unannounced point during the environmental ramp. You now have two simultaneous pressures — increasing weather and reduced thruster complement. Assess and decide."
+        }
+      ]
+    },
+    {
+      "id": "approach_004",
+      "title": "Controlled Departure from Structure",
+      "competency": "approach_and_proximity",
+      "difficulty": 2,
+      "min_training_day": 10,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP then JSMH",
+      "setup": "Vessel on DP at operating radius of virtual structure. Moderate conditions. This task follows an approach drill — do not reset between approach and departure.",
+      "execute": "Plan and execute a controlled departure. Select JSMH and move to the 500m boundary at appropriate speed — no more than 0.5kts. Once clear of 500m zone, return to open water DP. Complete the departure checklist verbally with your DPO. Record the mode transition point and speed management throughout.",
+      "professional_standard": [
+        "Speed below 0.5kts throughout departure",
+        "Mode change to JSMH executed at appropriate time",
+        "500m zone cleared cleanly",
+        "Departure checklist completed verbally",
+        "Navigation equipment status confirmed on clearing zone"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "mode_transition_point_m", "type": "number", "label": "Distance from structure at mode transition to JSMH (metres)" },
+          { "key": "max_speed_during_departure_kts", "type": "number", "label": "Maximum speed during departure (kts)" },
+          { "key": "time_dp_off_to_500m_clear_seconds", "type": "number", "label": "Time from DP off to 500m zone clear (seconds)" },
+          { "key": "departure_checklist_complete", "type": "text", "label": "Departure checklist completed — any items missed?" },
+          { "key": "drift_on_or_off", "type": "text", "label": "Was this a drift-on or drift-off departure situation?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why must you manoeuvre well clear of the structure before changing mode during departure?",
+        "The NI checklist states 1.5 to 2.5 ship lengths before mode change depending on drift-on or drift-off — which applied here and why?",
+        "How does the drift-on vs drift-off situation affect the urgency and direction of your departure?",
+        "What navigation equipment must be restored to correct status once clear of the 500m zone?"
+      ],
+      "variants": [
+        {
+          "id": "approach_004a",
+          "title": "Emergency Departure",
+          "based_on": "approach_004",
+          "changes": { "emergency_trigger": true },
+          "note_to_tdpo": "Your DPO will trigger an emergency at the operating radius without warning — DP failure, thruster fault, or consequence alarm. You must execute an immediate departure. No planning time."
+        }
+      ]
+    }
+  ]
+}

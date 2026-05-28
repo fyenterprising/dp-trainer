@@ -1,0 +1,148 @@
+{
+  "domain": "review",
+  "title": "Self-Assessment and Progress Review",
+  "order": 11,
+  "recommended_training_days": "5-30",
+  "description": "The TDPO pauses at key points in the 30-day programme to assess their own progress honestly, identify gaps, and agree focus areas with their DPO. Professional standard means the TDPO can accurately identify their own weaknesses without prompting and articulate a specific plan to address them. These tasks are not graded — honest self-assessment is the only standard.",
+  "tasks": [
+    {
+      "id": "review_001",
+      "title": "Self-Assessment — End of Foundation Phase",
+      "competency": "self_assessment",
+      "difficulty": 1,
+      "min_training_day": 5,
+      "duration_minutes": 20,
+      "vessel_mode_start": "None",
+      "vessel_mode_execute": "None — desk exercise only",
+      "setup": "No simulator running. Paper and pen. This is a reflection exercise not a drill.",
+      "execute": "Without reference to any notes or the app, write answers to the following. What have you learned in sessions 1 to 5 that surprised you? What skills do you feel genuinely confident about after these sessions? What skills do you feel uncertain or weak on? What questions remain unanswered that you need to ask your DPO? Then share your answers with your DPO and agree specific focus areas for days 6 to 10.",
+      "professional_standard": [
+        "Honest assessment — not optimistic, not falsely modest",
+        "Specific skills named not vague categories",
+        "Genuine unanswered questions identified",
+        "Agreed focus areas written down before ending the session"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "skills_confident", "type": "text", "label": "Skills you feel genuinely confident about after days 1-5" },
+          { "key": "skills_uncertain", "type": "text", "label": "Skills you feel uncertain or weak on" },
+          { "key": "surprises", "type": "text", "label": "What surprised you in sessions 1-5?" },
+          { "key": "unanswered_questions", "type": "text", "label": "Questions that remain unanswered — ask your DPO" },
+          { "key": "agreed_focus_days_6_10", "type": "text", "label": "Agreed focus areas for days 6-10 — agreed with DPO" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Are the skills you listed as confident ones you could demonstrate right now without preparation?",
+        "Are the skills you listed as weak ones you have actually practised or just read about?",
+        "Which of your unanswered questions is most important to resolve before the next phase?",
+        "What would a senior DPO say if they watched your best session from days 1 to 5?"
+      ]
+    },
+    {
+      "id": "review_002",
+      "title": "Self-Assessment — Mid Programme",
+      "competency": "self_assessment",
+      "difficulty": 2,
+      "min_training_day": 15,
+      "duration_minutes": 20,
+      "vessel_mode_start": "None",
+      "vessel_mode_execute": "None — desk exercise only",
+      "setup": "No simulator running. Bring your session records from days 1 to 15 if available. Compare your early sessions to your recent ones.",
+      "execute": "Answer the following from memory first, then check against your session records. Has your stopping distance improved since day 1? Has your approach discipline improved — speed management, zone compliance, abort heading planning? Can you now set up the simulator without any reference in under 15 minutes? What can you do on day 15 that you could not do on day 1? What is the gap between where you are and where you need to be for the NI Simulator Course? Share with DPO and agree focus for days 16 to 25.",
+      "professional_standard": [
+        "Measurable comparisons to day 1 performance",
+        "Honest gap assessment relative to NI Simulator Course standard",
+        "Specific focus areas for days 16-25 agreed",
+        "No generic statements — specific evidence only"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "stopping_distance_improvement", "type": "text", "label": "Stopping distance day 1 vs day 15 — has it improved? By how much?" },
+          { "key": "approach_improvement", "type": "text", "label": "Approach discipline improvement — specific evidence" },
+          { "key": "setup_time_now", "type": "text", "label": "Setup time now vs day 1" },
+          { "key": "new_capabilities", "type": "text", "label": "What can you do on day 15 that you could not do on day 1?" },
+          { "key": "gap_to_simulator_course", "type": "text", "label": "Your honest assessment of gap to NI Simulator Course standard" },
+          { "key": "agreed_focus_days_16_25", "type": "text", "label": "Agreed focus areas for days 16-25 — agreed with DPO" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Is the improvement you identified real and measurable or do you just feel more comfortable?",
+        "What is the single biggest gap between your current standard and the NI Simulator Course standard?",
+        "If days 16 to 25 go well what will you be able to do on day 25 that you cannot do today?",
+        "What does your DPO think your biggest weakness is — and do you agree?"
+      ]
+    },
+    {
+      "id": "review_003",
+      "title": "Self-Assessment — Pre-Completion Review",
+      "competency": "self_assessment",
+      "difficulty": 3,
+      "min_training_day": 25,
+      "duration_minutes": 20,
+      "vessel_mode_start": "None",
+      "vessel_mode_execute": "None — desk exercise only",
+      "setup": "No simulator running. Bring all session records. This is the final self-assessment before the assessment phase of days 26 to 30.",
+      "execute": "Answer the following. Are you ready for the NI Simulator Course — yes or no, with evidence either way? What is the one skill you are least confident about going into days 26 to 30? What is the one scenario that would most expose your weakness? What would need to happen in days 26 to 30 to make you confident you are ready? Share with DPO and agree final focus for the last five sessions.",
+      "professional_standard": [
+        "Honest yes or no to readiness question with evidence",
+        "One specific skill identified as weakest",
+        "Specific scenario identified as most exposing",
+        "Final five sessions have a concrete plan"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "ready_for_simulator_course", "type": "text", "label": "Are you ready for the NI Simulator Course? Yes or no and why?" },
+          { "key": "least_confident_skill", "type": "text", "label": "The one skill you are least confident about" },
+          { "key": "most_exposing_scenario", "type": "text", "label": "The scenario that would most expose your weakness" },
+          { "key": "what_needs_to_happen", "type": "text", "label": "What needs to happen in days 26-30 to make you confident?" },
+          { "key": "dpo_assessment", "type": "text", "label": "Your DPOs assessment of your readiness — do they agree with yours?" },
+          { "key": "agreed_focus_days_26_30", "type": "text", "label": "Agreed focus for days 26-30" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Is your readiness assessment consistent with what your session records show — or are you being optimistic?",
+        "Does your DPO agree with your self-assessment — and if not who is more likely to be right?",
+        "What is the single most important thing you can do in days 26 to 30 to close the biggest gap?",
+        "If the NI Simulator Course started tomorrow what would be the first thing that tripped you up?"
+      ]
+    },
+    {
+      "id": "review_004",
+      "title": "Pre-Course Mock Oral Examination",
+      "competency": "self_assessment",
+      "difficulty": 4,
+      "min_training_day": 28,
+      "duration_minutes": 30,
+      "vessel_mode_start": "None",
+      "vessel_mode_execute": "None — oral examination only",
+      "setup": "No simulator running. No notes. DPO conducts a mock oral examination as if they are the NI Simulator Course assessor. No warnings about topics in advance.",
+      "execute": "DPO asks a minimum of 12 questions across the following areas without announcing the topic in advance. System knowledge — at least 3 questions. Failure responses — at least 3 questions. Operational decisions — at least 3 questions. ASOG and regulatory knowledge — at least 2 questions. Bridge team and watchkeeping — at least 1 question. Trainee answers without notes. DPO assesses quality, completeness, and confidence of each answer.",
+      "professional_standard": [
+        "Correct answer to minimum 10 of 12 questions",
+        "No single topic area completely blank",
+        "Answers specific not vague",
+        "Confidence maintained throughout even when uncertain"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "questions_asked", "type": "text", "label": "Questions asked by DPO — list all 12 minimum" },
+          { "key": "answers_correct", "type": "number", "label": "Number of questions answered correctly" },
+          { "key": "weakest_topic_area", "type": "text", "label": "Weakest topic area identified by DPO" },
+          { "key": "strongest_topic_area", "type": "text", "label": "Strongest topic area" },
+          { "key": "dpo_overall_assessment", "type": "text", "label": "DPO overall assessment — ready for Simulator Course?" },
+          { "key": "topics_to_revise", "type": "text", "label": "Topics to revise before days 29-30" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which topic area was weakest and what is your plan to address it before the real course?",
+        "Were there any questions where you knew the answer but could not articulate it clearly?",
+        "How did your confidence hold up under examination conditions — did uncertainty show?",
+        "Based on this mock examination — are you ready for the NI Simulator Course?"
+      ]
+    }
+  ]
+}

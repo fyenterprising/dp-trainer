@@ -1,0 +1,172 @@
+{
+  "domain": "watchkeeping",
+  "title": "Watchkeeping and Bridge Team Procedures",
+  "order": 9,
+  "recommended_training_days": "9-25",
+  "description": "The TDPO learns the standards required for sustained DP watchkeeping — monitoring discipline, log entry practice, and formal watch handover procedure. Professional standard means the TDPO monitors all critical parameters at regular intervals without prompting, makes complete and timely log entries, and can conduct a full handover covering every required item.",
+  "tasks": [
+    {
+      "id": "watch_001",
+      "title": "Sustained Position Keeping Observation",
+      "competency": "watchkeeping",
+      "difficulty": 2,
+      "min_training_day": 9,
+      "duration_minutes": 30,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90,
+        "ramp_to": {
+          "wind_speed_kts": 25,
+          "ramp_rate": "gradual"
+        }
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP — observe only unless safety issue",
+      "setup": "Vessel on DP in moderate conditions. DPO will gradually increase environmental conditions during the observation period. Your role is monitor and assess — do not intervene unless a genuine safety issue develops.",
+      "execute": "Monitor the DP system holding position for 30 minutes while conditions increase. Record position footprint, thruster demand, reference quality, and current vector at 5-minute intervals. Identify any trends. Assess at what point intervention would be required. At each 5-minute mark write your observation before looking at the previous entry — do not let previous readings anchor your assessment.",
+      "professional_standard": [
+        "All parameters recorded at every 5-minute interval without prompting",
+        "Trends correctly identified from data",
+        "Correct intervention threshold identified with reasoning",
+        "Assessment does not simply mirror the previous reading"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "observation_0min", "type": "text", "label": "0 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "observation_5min", "type": "text", "label": "5 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "observation_10min", "type": "text", "label": "10 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "observation_15min", "type": "text", "label": "15 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "observation_20min", "type": "text", "label": "20 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "observation_25min", "type": "text", "label": "25 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "observation_30min", "type": "text", "label": "30 min — position footprint, thruster demand, reference quality, current vector" },
+          { "key": "trends_identified", "type": "text", "label": "Trends identified across the 30 minute period" },
+          { "key": "intervention_threshold", "type": "text", "label": "At what point would you have recommended intervention and why?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What trends did you identify across the 30-minute period — were conditions genuinely deteriorating or just varying?",
+        "At what point would you have recommended intervention and what specific evidence supported that recommendation?",
+        "What is the difference between active watchkeeping and passive observation — are you doing one or both?",
+        "What DP log entries would you have made during this 30-minute period?"
+      ],
+      "variants": [
+        {
+          "id": "watch_001a",
+          "title": "Sustained Observation Near Structure",
+          "based_on": "watch_001",
+          "changes": { "virtual_structure_active": true, "standoff_metres": 100 },
+          "note_to_tdpo": "Same observation but with a virtual structure at 100m. Degrading conditions now have a direct safety consequence. Your intervention threshold assessment is no longer theoretical."
+        }
+      ]
+    },
+    {
+      "id": "watch_002",
+      "title": "DP Watch Handover",
+      "competency": "watch_handover",
+      "difficulty": 3,
+      "min_training_day": 11,
+      "duration_minutes": 25,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP in moderate conditions with a virtual structure active at 100m. A realistic handover scenario — the incoming DPO needs everything.",
+      "execute": "Part 1 — Give handover: You are the outgoing DPO. Brief your DPO on full system status covering every checklist item. Vessel position and heading, mode and setpoint, reference systems and quality, sensor status, thruster configuration, power configuration, environmental conditions, nearby structures and working side, alarms active or recently cleared, any system degradation, operational requirements for the next watch. Part 2 — Receive handover: Swap roles. Receive a handover from your DPO. Ask all questions you would ask as an incoming DPO. Identify any gaps in what you were told.",
+      "professional_standard": [
+        "All handover items covered without prompting",
+        "Minimum 5 questions asked as incoming DPO",
+        "Gaps in received handover correctly identified",
+        "Refusal to accept an incomplete handover demonstrated"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "items_covered_in_handover_given", "type": "text", "label": "Items covered in handover you gave — list them" },
+          { "key": "items_missed_in_handover_given", "type": "text", "label": "Items DPO identified as missed in your handover" },
+          { "key": "questions_asked_as_incoming", "type": "text", "label": "Questions you asked when receiving handover" },
+          { "key": "gaps_in_received_handover", "type": "text", "label": "Gaps identified in the handover you received" },
+          { "key": "would_you_accept", "type": "text", "label": "Would you have accepted the watch based on the handover you received? Why or why not?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What items did you miss in the handover you gave — and are those items safety-critical?",
+        "Under what circumstances would you refuse to accept a watch handover?",
+        "What is the single most important piece of information in a DP watch handover?",
+        "How does a DP watch handover differ from a standard bridge watchkeeping handover?"
+      ],
+      "variants": [
+        {
+          "id": "watch_002a",
+          "title": "Handover with Degraded System",
+          "based_on": "watch_002",
+          "changes": { "system_degradation_active": true },
+          "note_to_tdpo": "DPO will introduce a system degradation before the handover — one reference inhibited, one thruster on standby, an alarm cleared but not resolved. You must identify all degradations in the handover you receive and decide whether to accept."
+        }
+      ]
+    },
+    {
+      "id": "watch_003",
+      "title": "DP Log Entry Discipline",
+      "competency": "watchkeeping",
+      "difficulty": 2,
+      "min_training_day": 12,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on DP. Paper and pen ready for log entries. DPO will trigger events during a 20-minute period without announcing what or when. Your job is to log everything correctly.",
+      "execute": "During the 20-minute period your DPO will trigger several events — a reference quality degradation, a wind increase, a thruster loading change, and a position alert. For each event make a DP log entry in the correct format: time, event description, action taken, system status after action. DPO assesses completeness and accuracy of all entries at the end.",
+      "professional_standard": [
+        "Every event logged within 2 minutes of occurrence",
+        "Timestamp accurate to within 1 minute",
+        "All required fields completed for each entry",
+        "Action taken clearly stated for each entry",
+        "No events missed"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "event_1_log_entry", "type": "text", "label": "Log entry for Event 1 — include time, event, action, status" },
+          { "key": "event_2_log_entry", "type": "text", "label": "Log entry for Event 2 — include time, event, action, status" },
+          { "key": "event_3_log_entry", "type": "text", "label": "Log entry for Event 3 — include time, event, action, status" },
+          { "key": "event_4_log_entry", "type": "text", "label": "Log entry for Event 4 — include time, event, action, status" },
+          { "key": "dpo_assessment", "type": "text", "label": "DPO assessment — entries complete and accurate?" },
+          { "key": "missed_events", "type": "text", "label": "Any events missed or logged late?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What information is mandatory in every DP log entry — what are the minimum required fields?",
+        "Why is timestamp accuracy critical in a DP log — what happens to your log if a DP incident occurs?",
+        "What constitutes an event worthy of a log entry versus routine monitoring that does not need logging?",
+        "Who reads your DP log entries after an incident — and how should that knowledge affect how you write them?"
+      ],
+      "variants": [
+        {
+          "id": "watch_003a",
+          "title": "Log Entries Under Pressure",
+          "based_on": "watch_003",
+          "changes": { "events_compressed_timeframe": true },
+          "note_to_tdpo": "Same exercise but DPO will trigger multiple events in quick succession. Logging discipline under time pressure is harder than when events are spaced out. Prioritise — what gets logged first?"
+        }
+      ]
+    }
+  ]
+}

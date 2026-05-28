@@ -1,0 +1,166 @@
+{
+  "domain": "mode_transitions",
+  "title": "Mode Transitions and Model Management",
+  "order": 5,
+  "recommended_training_days": "3-10",
+  "description": "The TDPO learns when and how to transition between DP modes cleanly, understanding what each transition does to the mathematical model. Professional standard means the TDPO can execute any mode transition smoothly, explain the model implications of each transition, and never select DP onto a vessel with significant residual velocity.",
+  "tasks": [
+    {
+      "id": "mode_001",
+      "title": "Clean Mode Transition — JSMH to Monitor to DP",
+      "competency": "mode_transitions",
+      "difficulty": 2,
+      "min_training_day": 4,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH then Monitor then DP",
+      "setup": "Vessel on DP at datum. Moderate environment settled. Note current vector value before starting.",
+      "execute": "Three runs. Each run: select JSMH with zero inputs and allow vessel to drift for 2 minutes. Then slow to near zero. Select Monitor briefly. Select DP. Record capture quality. Vary the vessel speed at the Monitor transition between runs — Run 1 transition at 0.3kts, Run 2 at 0.1kts, Run 3 at near zero. Compare capture quality across all three runs.",
+      "professional_standard": [
+        "Cleanest capture when vessel nearest zero at Monitor transition",
+        "Correct explanation of what Monitor does to the model",
+        "Improvement in capture quality from Run 1 to Run 3",
+        "Time to stable position reducing each run"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2, 3],
+        "fields_per_run": [
+          { "key": "speed_at_monitor_transition_kts", "type": "number", "label": "Vessel speed at Monitor selection (kts)" },
+          { "key": "capture_quality", "type": "text", "label": "DP capture quality — smooth or hunting?" },
+          { "key": "time_to_stable_seconds", "type": "number", "label": "Time to stable position after DP selected (seconds)" },
+          { "key": "current_vector_at_dp_selection", "type": "text", "label": "Current vector value at moment of DP selection" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why did DP capture quality improve when the vessel was closer to zero speed at the Monitor transition?",
+        "What does Monitor actually do to the DP mathematical model — is it a hard reset or something else?",
+        "How long did Monitor need to be active before DP capture improved — what does this tell you about the model?",
+        "When would you use this JSMH to Monitor to DP sequence in a real operational scenario?"
+      ],
+      "variants": [
+        {
+          "id": "mode_001a",
+          "title": "Transition After Large Transit",
+          "based_on": "mode_001",
+          "changes": { "pre_transit_distance_metres": 500 },
+          "note_to_tdpo": "Complete a 500m JSMH transit first, then apply the clean transition technique. This simulates moving between work locations. Model corruption will be greater — observe how this affects the required Monitor duration."
+        }
+      ]
+    },
+    {
+      "id": "mode_002",
+      "title": "Minimum Power Mode Observation",
+      "competency": "mode_transitions",
+      "difficulty": 2,
+      "min_training_day": 5,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 25,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.5,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP Minimum Power",
+      "setup": "Vessel on DP holding a fixed heading. Record current heading and total thruster demand as baseline.",
+      "execute": "Select Minimum Power mode. Observe as the vessel weathervanes toward the minimum resistance heading. Record what heading it settles on. Compare this to the minimum power heading you found manually in env_002 — do they agree? Hold the settled heading for 10 minutes and record demand reduction achieved compared to the fixed heading baseline.",
+      "professional_standard": [
+        "Correctly observe and record weathervane behaviour",
+        "Compare settled heading to env_002 result",
+        "Record quantified demand reduction",
+        "Understand operational limitations of this mode"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "starting_heading_deg", "type": "number", "label": "Starting heading before Minimum Power selected (degrees)" },
+          { "key": "starting_demand_percent", "type": "number", "label": "Total thruster demand at starting heading (percent)" },
+          { "key": "settled_heading_deg", "type": "number", "label": "Heading vessel settled on in Minimum Power mode (degrees)" },
+          { "key": "settled_demand_percent", "type": "number", "label": "Total thruster demand at settled heading (percent)" },
+          { "key": "reduction_achieved_percent", "type": "number", "label": "Demand reduction achieved (percent)" },
+          { "key": "agrees_with_env002", "type": "text", "label": "Does settled heading agree with env_002 result? If not — why not?" },
+          { "key": "time_to_settle_minutes", "type": "number", "label": "Time for vessel to settle on minimum power heading (minutes)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Did Minimum Power mode find the same heading you identified manually in env_002 — and if not what explains the difference?",
+        "When would you use Minimum Power mode operationally and when would you not use it?",
+        "What are the risks of selecting Minimum Power mode when near a structure?",
+        "How does weathervaning affect your vessel position relative to any nearby installation or subsea asset?"
+      ],
+      "variants": [
+        {
+          "id": "mode_002a",
+          "title": "Minimum Power in Changing Conditions",
+          "based_on": "mode_002",
+          "changes": { "wind_direction_change_mid_task": true },
+          "note_to_tdpo": "Your DPO will change the wind direction mid-task. Observe whether the vessel re-weathervanes. How quickly does it respond? What are the implications if this happens during an operation?"
+        }
+      ]
+    },
+    {
+      "id": "mode_003",
+      "title": "JSAH vs JSMH Comparison",
+      "competency": "mode_transitions",
+      "difficulty": 2,
+      "min_training_day": 3,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "JSMH and JSAH alternating",
+      "setup": "Vessel on DP at datum. Moderate conditions settled.",
+      "execute": "Part 1 — Surge move in JSMH: Select JSMH and make a controlled 100m surge move North. Record heading drift during the move. Return to datum. Part 2 — Same surge move in JSAH: Select JSAH and repeat the identical move. Record heading drift. Compare. Part 3 — Heading change in each mode: Attempt a 20 degree heading change in JSMH, then in JSAH. Compare the experience and result.",
+      "professional_standard": [
+        "Correctly identify heading behaviour difference between modes",
+        "Articulate when each mode is appropriate",
+        "Complete all three parts with observations recorded",
+        "Correct statement of fundamental difference between modes"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "jsmh_surge_heading_drift_deg", "type": "number", "label": "Heading drift during surge move in JSMH (degrees)" },
+          { "key": "jsah_surge_heading_drift_deg", "type": "number", "label": "Heading drift during surge move in JSAH (degrees)" },
+          { "key": "jsmh_heading_change_result", "type": "text", "label": "Result of heading change attempt in JSMH" },
+          { "key": "jsah_heading_change_result", "type": "text", "label": "Result of heading change attempt in JSAH" },
+          { "key": "fundamental_difference", "type": "text", "label": "In your own words — what is the fundamental difference between JSMH and JSAH?" },
+          { "key": "jsmh_best_for", "type": "text", "label": "JSMH is best suited for which situations?" },
+          { "key": "jsah_best_for", "type": "text", "label": "JSAH is best suited for which situations?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What is the fundamental difference between JSMH and JSAH in terms of what the DP system controls?",
+        "During the surge move in wind — which mode gave better heading control and why?",
+        "When would you choose JSMH over JSAH during a real approach to a structure?",
+        "What is the risk of using JSAH when close to a fixed structure in a cross-wind condition?"
+      ],
+      "variants": [
+        {
+          "id": "mode_003a",
+          "title": "JSAH vs JSMH in Heavy Weather",
+          "based_on": "mode_003",
+          "changes": { "wind_speed_kts": 25 },
+          "note_to_tdpo": "Same comparison in heavier conditions. The difference between modes becomes more pronounced as environmental loading increases."
+        }
+      ]
+    }
+  ]
+}

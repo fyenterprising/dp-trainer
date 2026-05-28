@@ -1,0 +1,102 @@
+{
+  "domain": "setup",
+  "title": "System Setup and Initialisation",
+  "order": 0,
+  "recommended_training_days": "1-30",
+  "description": "The TDPO learns to set up the DP simulator correctly from scratch on every session. Professional standard means every field populated accurately, every sensor confirmed, every thruster enabled, and a clean steady-state before any drill begins.",
+  "tasks": [
+    {
+      "id": "setup_001",
+      "title": "Full System Setup From Scratch",
+      "competency": "system_initialisation",
+      "difficulty": 1,
+      "min_training_day": 1,
+      "duration_minutes": 20,
+      "vessel_mode_start": "Off",
+      "vessel_mode_execute": "DP",
+      "setup": "Cold screen. No pre-configuration. Start from the beginning.",
+      "execute": "Complete the full simulator setup procedure without using any guide. Enter real vessel position from GPS display, heading from gyrocompass, draft from stability display, water depth from echosounder. Confirm all sensors active and healthy. Confirm all thrusters enabled. Set environment to calm. Run a 3-minute steady state check — vessel must hold position with minimal thruster activity before you declare setup complete.",
+      "professional_standard": [
+        "All fields correctly populated from live vessel data",
+        "All sensors showing green — no rejections or warnings",
+        "All thrusters enabled and showing in schematic",
+        "Vessel stable after 3-minute steady state check",
+        "Setup completed within 15 minutes"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "time_to_complete_minutes", "type": "number", "label": "Time to complete setup (minutes)" },
+          { "key": "items_missed_first_attempt", "type": "text", "label": "Any items missed or incorrect on first attempt" },
+          { "key": "sensor_status_at_completion", "type": "text", "label": "Sensor status at completion — all green?" },
+          { "key": "thruster_status_at_completion", "type": "text", "label": "Thruster status at completion — all enabled?" },
+          { "key": "steady_state_result", "type": "text", "label": "Steady state check result — vessel stable?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What would happen to the vessel model if you entered the wrong water depth — how does an incorrect depth affect the simulation?",
+        "Why must the initial heading entered match the actual vessel heading precisely — what goes wrong if it does not?",
+        "What does the 3-minute steady state check confirm — and what does it tell you if the vessel is not stable?",
+        "Which sensor is most critical for DP position keeping and why?",
+        "If one gyro was showing a 2 degree difference from the other at setup — would you proceed? What would you do and why?"
+      ],
+      "variants": [
+        {
+          "id": "setup_001a",
+          "title": "Setup Against the Clock",
+          "based_on": "setup_001",
+          "changes": { "target_time_minutes": 10 },
+          "note_to_tdpo": "Same setup, harder target. A professional DPO can set up efficiently. Aim for 10 minutes without sacrificing accuracy."
+        },
+        {
+          "id": "setup_001b",
+          "title": "Setup With One Deliberate Error",
+          "based_on": "setup_001",
+          "changes": { "dpo_introduces_error": true },
+          "note_to_tdpo": "Your DPO will introduce one deliberate misconfiguration during setup. Find it before starting any drill. This simulates inheriting a badly configured desk."
+        }
+      ]
+    },
+    {
+      "id": "setup_002",
+      "title": "Checklist Discipline",
+      "competency": "system_initialisation",
+      "difficulty": 1,
+      "min_training_day": 2,
+      "duration_minutes": 15,
+      "vessel_mode_start": "Off",
+      "vessel_mode_execute": "DP",
+      "setup": "Paper and pen only. App closed.",
+      "execute": "Before opening the app, write down every item on the pre-session checklist from memory. All 16 items, in order, with a one-sentence explanation of why each item matters. Then open the app and compare your list. Note any items missed, any items in wrong order, any explanations that were incomplete.",
+      "professional_standard": [
+        "Recall minimum 14 of 16 items without reference",
+        "Correct explanation for each item recalled",
+        "Identify own gaps accurately"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "items_recalled_count", "type": "number", "label": "Items recalled without reference" },
+          { "key": "items_missed", "type": "text", "label": "Items missed — which ones?" },
+          { "key": "items_wrong_order", "type": "text", "label": "Items recalled but in wrong order" },
+          { "key": "weakest_explanation", "type": "text", "label": "Which item was hardest to explain and why?" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which checklist items have the highest immediate safety significance if skipped?",
+        "What is the consequence of starting a drill with a reference system misconfigured?",
+        "Why does the checklist require DPO presence to be confirmed before anything else — not after setup?",
+        "If you could only check five items due to time pressure, which five would you choose and why?"
+      ],
+      "variants": [
+        {
+          "id": "setup_002a",
+          "title": "Checklist From Memory — No Mistakes",
+          "based_on": "setup_002",
+          "changes": { "target_score": 16 },
+          "note_to_tdpo": "All 16 items, correct order, correct explanation. This is the standard a DPO would expect before signing off Section 1 of your logbook."
+        }
+      ]
+    }
+  ]
+}

@@ -173,6 +173,268 @@
           "note_to_tdpo": "Direct comparison of surge vs sway handling. Same distance, same standard. Notice what is different."
         }
       ]
+    },
+    {
+      "id": "jc_003",
+      "title": "Controlled Sway Move",
+      "competency": "controlled_position_moves",
+      "difficulty": 2,
+      "min_training_day": 2,
+      "duration_minutes": 25,
+      "environment": {
+        "first_run": "calm",
+        "subsequent_runs": {
+          "wind_speed_kts": 15,
+          "wind_dir_deg": 37
+        }
+      },
+      "vessel_mode": "JSMH or DP position move",
+      "setup": "Confirm exact datum position. You will return to within 2m of this position at the end of each run.",
+      "execute": "Move the vessel exactly 100m East from datum. Stop with residual velocity below 0.1kts. Return to within 2m of original datum. This is one run. Complete three runs. Compare your results to jc_002.",
+      "professional_standard": [
+        "Overshoot less than 5m on return each run",
+        "Residual velocity below 0.1kts at stop each run",
+        "Improvement visible between run 1 and run 3",
+        "Heading maintained throughout"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2, 3],
+        "fields_per_run": [
+          { "key": "overshoot_metres", "type": "number", "label": "Overshoot (metres)" },
+          { "key": "residual_velocity_kts", "type": "number", "label": "Residual velocity (kts)" },
+          { "key": "total_inputs", "type": "number", "label": "Total inputs" },
+          { "key": "return_accuracy_metres", "type": "number", "label": "Return accuracy — distance from datum (metres)" },
+          { "key": "time_seconds", "type": "number", "label": "Time to complete run (seconds)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Was the sway move harder or easier than the surge move in jc_002? What specifically explains the difference?",
+        "Which thrusters did the most work during the sway move — and why those ones based on their position on the vessel?",
+        "What does this tell you about the vessel's athwartship stopping authority compared to fore-aft?",
+        "In a real operation, when would you need to make a pure sway move rather than repositioning on DP?"
+      ],
+      "variants": [
+        {
+          "id": "jc_003a",
+          "title": "Short Sway Move",
+          "based_on": "jc_003",
+          "changes": { "move_distance_metres": 50 },
+          "note_to_tdpo": "Shorter distance — less time to manage deceleration. Harder than it sounds in the athwartship axis."
+        },
+        {
+          "id": "jc_003b",
+          "title": "Sway Move in Wind",
+          "based_on": "jc_003",
+          "changes": { "environment": { "wind_speed_kts": 15, "wind_dir_deg": 37 } },
+          "note_to_tdpo": "Same task in wind. Notice how beam-on wind affects sway control differently to how head wind affected surge control."
+        }
+      ]
+    },
+    {
+      "id": "jc_004",
+      "title": "Diagonal Move",
+      "competency": "controlled_position_moves",
+      "difficulty": 2,
+      "min_training_day": 3,
+      "duration_minutes": 25,
+      "environment": {
+        "wind_speed_kts": 0,
+        "wind_dir_deg": 0,
+        "wave_height_m": 0,
+        "current_speed_kts": 0
+      },
+      "vessel_mode": "JSMH",
+      "setup": "Confirm datum. Calm conditions only for first run.",
+      "execute": "Move the vessel 100m Northeast simultaneously — not North then East in sequence, but both axes at the same time. Stop with residual below 0.1kts on both axes. Return to datum. Three runs.",
+      "professional_standard": [
+        "Heading maintained within 3 degrees throughout",
+        "Both axes within 5m overshoot on return",
+        "Residual velocity below 0.1kts at stop",
+        "Smooth coordinated inputs — no axis fighting"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2, 3],
+        "fields_per_run": [
+          { "key": "heading_drift_degrees", "type": "number", "label": "Heading drift during move (degrees)" },
+          { "key": "harder_axis", "type": "text", "label": "Which axis was harder to control?" },
+          { "key": "overshoot_n_metres", "type": "number", "label": "Overshoot North axis (metres)" },
+          { "key": "overshoot_e_metres", "type": "number", "label": "Overshoot East axis (metres)" },
+          { "key": "total_inputs", "type": "number", "label": "Total joystick inputs" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Which axis was harder to control simultaneously and what caused the difficulty?",
+        "Did your heading drift during the move — what caused it and how did you correct?",
+        "In what real operational scenario would a diagonal move be required rather than sequential axis moves?",
+        "How does the DP thrust allocation algorithm handle simultaneous surge and sway demand — does it prioritise one axis?"
+      ],
+      "variants": [
+        {
+          "id": "jc_004a",
+          "title": "Diagonal Move in Moderate Conditions",
+          "based_on": "jc_004",
+          "changes": { "environment": { "wind_speed_kts": 15, "wind_dir_deg": 37 } },
+          "note_to_tdpo": "Same task with wind. The wind vector intersects your movement vector — notice how this changes which axis is harder."
+        }
+      ]
+    },
+    {
+      "id": "jc_005",
+      "title": "Heading Change at Controlled Rate",
+      "competency": "heading_control",
+      "difficulty": 2,
+      "min_training_day": 3,
+      "duration_minutes": 20,
+      "environment": {
+        "first_run": { "wind_speed_kts": 0 },
+        "second_run": { "wind_speed_kts": 15, "wind_dir_deg": 37 }
+      },
+      "vessel_mode": "DP auto heading",
+      "setup": "Note current heading. This is your start heading. Your target is current heading plus 45 degrees.",
+      "execute": "Change vessel heading by 45 degrees at no more than 2 degrees per minute. Stop exactly on the new heading. Record position excursion during the turn. Then return to original heading at 5 degrees per minute. Record excursion on return.",
+      "professional_standard": [
+        "Rate of turn does not exceed 2 degrees per minute on slow turn",
+        "Position excursion under 5m during turn",
+        "Stop within 1 degree of target heading",
+        "Heading maintained on return"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "start_heading_deg", "type": "number", "label": "Start heading (degrees)" },
+          { "key": "target_heading_deg", "type": "number", "label": "Target heading (degrees)" },
+          { "key": "max_excursion_slow_turn_m", "type": "number", "label": "Maximum position excursion during slow turn (metres)" },
+          { "key": "heading_accuracy_at_stop_deg", "type": "number", "label": "Heading accuracy at stop — degrees off target" },
+          { "key": "max_excursion_fast_return_m", "type": "number", "label": "Maximum position excursion during fast return (metres)" },
+          { "key": "thruster_pattern_observed", "type": "text", "label": "Describe thruster pattern during turn" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why did position keeping degrade during the heading change even though you were on DP auto position?",
+        "Why would you limit rate of turn to 2 degrees per minute near a structure?",
+        "What happens to thruster allocation geometry as the vessel rotates — which thrusters change role?",
+        "When would you use a fast heading change versus a slow controlled turn operationally?"
+      ],
+      "variants": [
+        {
+          "id": "jc_005a",
+          "title": "90 Degree Heading Change",
+          "based_on": "jc_005",
+          "changes": { "heading_change_degrees": 90 },
+          "note_to_tdpo": "Larger rotation means longer period of degraded position keeping. Plan for more excursion and debrief on where the worst excursion occurred in the turn."
+        },
+        {
+          "id": "jc_005b",
+          "title": "Heading Change Near Structure",
+          "based_on": "jc_005",
+          "changes": { "virtual_structure_active": true, "standoff_metres": 150 },
+          "note_to_tdpo": "Same turn but with a virtual structure 150m away. Your excursion margin is now constrained. Does your technique change?"
+        }
+      ]
+    },
+    {
+      "id": "jc_006",
+      "title": "Emergency Stop from Speed",
+      "competency": "stopping_and_speed_management",
+      "difficulty": 3,
+      "min_training_day": 5,
+      "duration_minutes": 20,
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode": "JSMH",
+      "setup": "Moderate conditions set. Vessel on DP at datum. Identify a clear stopping lane with no constraints.",
+      "execute": "Deliberately build the vessel to 1.0kt forward speed using joystick. Then stop as quickly and cleanly as possible. Record stopping distance. Reset to datum. Repeat three times — try to improve stopping distance each run.",
+      "professional_standard": [
+        "Stop within 30m from 1.0kt in moderate conditions",
+        "Residual velocity below 0.1kts at stop",
+        "No heading change greater than 5 degrees during stop",
+        "Improvement between run 1 and run 3"
+      ],
+      "observe_and_record": {
+        "runs": [1, 2, 3],
+        "fields_per_run": [
+          { "key": "speed_at_intervention_kts", "type": "number", "label": "Speed at intervention (kts)" },
+          { "key": "stopping_distance_m", "type": "number", "label": "Stopping distance (metres)" },
+          { "key": "residual_velocity_kts", "type": "number", "label": "Residual velocity at stop (kts)" },
+          { "key": "heading_change_degrees", "type": "number", "label": "Heading change during stop (degrees)" },
+          { "key": "inputs_used", "type": "number", "label": "Joystick inputs used" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "What was your stopping distance from 1.0kt? Is that a safe margin at 100m from a hard exclusion zone?",
+        "What specific technique change reduced your stopping distance between runs?",
+        "How does heading relative to wind affect stopping efficiency — is it easier to stop into the weather or with it?",
+        "At what speed would you consider the vessel out of safe control in a DP operational context near structure?"
+      ],
+      "variants": [
+        {
+          "id": "jc_006a",
+          "title": "Emergency Stop from Higher Speed",
+          "based_on": "jc_006",
+          "changes": { "target_speed_kts": 1.5 },
+          "note_to_tdpo": "Faster entry speed. Stopping distance will increase non-linearly. Notice how much earlier you need to intervene."
+        },
+        {
+          "id": "jc_006b",
+          "title": "Emergency Stop in Heavy Weather",
+          "based_on": "jc_006",
+          "changes": { "environment": { "wind_speed_kts": 25, "wave_height_m": 2.0 } },
+          "note_to_tdpo": "Heavy conditions change everything about stopping. Environmental forces may assist or resist depending on your heading. Assess before you act."
+        }
+      ]
+    },
+    {
+      "id": "jc_007",
+      "title": "Blind Stop Challenge",
+      "competency": "stopping_and_speed_management",
+      "difficulty": 4,
+      "min_training_day": 15,
+      "duration_minutes": 20,
+      "environment": "Set by DPO — unknown to trainee",
+      "vessel_mode": "JSMH",
+      "setup": "DPO sets a random drift duration between 3 and 8 minutes and an environment the trainee has not seen. Trainee does not know duration or conditions in advance.",
+      "execute": "DPO starts the drift without telling the trainee how long it will run. Trainee observes the drift. When DPO gives the instruction to stop — stop the vessel. No preparation time. Residual velocity and time to stop are your score.",
+      "professional_standard": [
+        "Residual velocity below 0.2kts",
+        "Vessel stopped within 60 seconds of instruction",
+        "Correct assessment of dominant environmental force stated before acting",
+        "Heading maintained during stop"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "drift_direction_assessed", "type": "text", "label": "Drift direction assessed before acting" },
+          { "key": "dominant_force_assessed", "type": "text", "label": "Dominant force assessed — wind, wave or current?" },
+          { "key": "speed_at_intervention_kts", "type": "number", "label": "Speed at intervention (kts)" },
+          { "key": "residual_velocity_kts", "type": "number", "label": "Residual velocity at stop (kts)" },
+          { "key": "time_to_stop_seconds", "type": "number", "label": "Time from instruction to stopped (seconds)" },
+          { "key": "inputs_used", "type": "number", "label": "Total joystick inputs" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "How did unknown conditions change your approach compared to prepared drills?",
+        "What information did you gather in the first 30 seconds of observation — and was it enough?",
+        "How does this drill simulate real operational conditions when DP fails unexpectedly?",
+        "What is the difference in your mental process between a prepared stop and a blind stop?"
+      ],
+      "variants": [
+        {
+          "id": "jc_007a",
+          "title": "Blind Stop with Position Constraint",
+          "based_on": "jc_007",
+          "changes": { "virtual_structure_active": true },
+          "note_to_tdpo": "Same blind stop but a virtual structure is active. You must stop before reaching the alert zone. Stakes are now real."
+        }
+      ]
     }
   ]
 }
