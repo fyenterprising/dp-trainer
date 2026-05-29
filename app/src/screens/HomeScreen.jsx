@@ -19,7 +19,7 @@ const CHECKLIST_ITEMS = [
   'Session timer started — confirmed',
 ]
 
-export default function HomeScreen({ onStart, onHistory, onProgress, onVesselProfile }) {
+export default function HomeScreen({ onStart, onHistory, onProgress, onVesselProfile, onDPLog }) {
   const [step, setStep] = useState(1)
   const [activeProfile, setActiveProfile] = useState(null)
   const [trainingDay, setTrainingDay] = useState('')
@@ -76,6 +76,7 @@ export default function HomeScreen({ onStart, onHistory, onProgress, onVesselPro
           <button className="btn-nav btn-nav-active">New Session</button>
           <button className="btn-nav" onClick={onHistory}>Past Sessions</button>
           <button className="btn-nav" onClick={onProgress}>Progress</button>
+          <button className="btn-nav" onClick={onDPLog}>DP Log</button>
         </div>
 
         <div className="home-form">

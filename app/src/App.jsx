@@ -6,6 +6,7 @@ import SummaryScreen from './screens/SummaryScreen.jsx'
 import HistoryScreen from './screens/HistoryScreen.jsx'
 import VesselProfileScreen from './screens/VesselProfileScreen.jsx'
 import ProgressScreen from './screens/ProgressScreen.jsx'
+import DPTimeLogScreen from './screens/DPTimeLogScreen.jsx'
 import setupData from '../../content/domains/setup.json'
 import joystickData from '../../content/domains/joystick-control.json'
 import environmentalData from '../../content/domains/environmental.json'
@@ -136,6 +137,7 @@ export default function App() {
         onHistory={() => setScreen('history')}
         onProgress={() => setScreen('progress')}
         onVesselProfile={() => setScreen('vesselprofile')}
+        onDPLog={() => setScreen('dptimelog')}
       />
     )
   }
@@ -186,6 +188,10 @@ export default function App() {
 
   if (screen === 'progress') {
     return <ProgressScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'dptimelog') {
+    return <DPTimeLogScreen onBack={() => setScreen('home')} />
   }
 
   return null
