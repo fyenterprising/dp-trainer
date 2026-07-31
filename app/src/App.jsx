@@ -85,10 +85,21 @@ export default function App() {
   const [sessionStartTime, setSessionStartTime] = useState(null)
   const [currentTask, setCurrentTask] = useState(null)
   const [taskNumber, setTaskNumber] = useState(1)
+  const [theme, setTheme] = useState(() =>
+    document.body.classList.contains('theme-night') ? 'night' : 'day'
+  )
 
   useEffect(() => {
     migrateProfile()
   }, [])
+
+  function toggleTheme() {
+    const next = theme === 'day' ? 'night' : 'day'
+    document.body.classList.remove('theme-day', 'theme-night')
+    document.body.classList.add(`theme-${next}`)
+    localStorage.setItem('dp-theme', next)
+    setTheme(next)
+  }
 
   function handleStart(profileData) {
     const next = selectNextTask(profileData.trainingDay, [])
@@ -130,27 +141,43 @@ export default function App() {
     setScreen('home')
   }
 
+  const themeToggle = (
+    <button
+      className="btn-theme-toggle"
+      onClick={toggleTheme}
+      style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 1000 }}
+    >
+      {theme === 'day' ? '☽ NIGHT MODE' : '☀ DAY MODE'}
+    </button>
+  )
+
   if (screen === 'home') {
     return (
-      <HomeScreen
-        onStart={handleStart}
-        onHistory={() => setScreen('history')}
-        onProgress={() => setScreen('progress')}
-        onVesselProfile={() => setScreen('vesselprofile')}
-        onDPLog={() => setScreen('dptimelog')}
-      />
+      <>
+        {themeToggle}
+        <HomeScreen
+          onStart={handleStart}
+          onHistory={() => setScreen('history')}
+          onProgress={() => setScreen('progress')}
+          onVesselProfile={() => setScreen('vesselprofile')}
+          onDPLog={() => setScreen('dptimelog')}
+        />
+      </>
     )
   }
 
   if (screen === 'task') {
     return (
-      <TaskScreen
-        task={currentTask}
-        profile={profile}
-        taskNumber={taskNumber}
-        sessionStartTime={sessionStartTime}
-        onComplete={handleCompleteTask}
-      />
+      <>
+        {themeToggle}
+        <TaskScreen
+          task={currentTask}
+          profile={profile}
+          taskNumber={taskNumber}
+          sessionStartTime={sessionStartTime}
+          onComplete={handleCompleteTask}
+        />
+      </>
     )
   }
 
@@ -158,40 +185,66 @@ export default function App() {
     const completedIds = completedTasks.map(e => e.task.id)
     const nextTaskAvailable = selectNextTask(profile.trainingDay, completedIds) !== null
     return (
-      <BetweenTaskScreen
-        lastTask={lastCompletedTask}
-        nextTaskAvailable={nextTaskAvailable}
-        onNextTask={handleNextTask}
-        onEndSession={handleEndSession}
-      />
+      <>
+        {themeToggle}
+        <BetweenTaskScreen
+          lastTask={lastCompletedTask}
+          nextTaskAvailable={nextTaskAvailable}
+          onNextTask={handleNextTask}
+          onEndSession={handleEndSession}
+        />
+      </>
     )
   }
 
   if (screen === 'summary') {
     return (
-      <SummaryScreen
-        profile={profile}
-        completedTasks={completedTasks}
-        sessionStartTime={sessionStartTime}
-        onDone={handleDone}
-      />
+      <>
+        {themeToggle}
+        <SummaryScreen
+          profile={profile}
+          completedTasks={completedTasks}
+          sessionStartTime={sessionStartTime}
+          onDone={handleDone}
+        />
+      </>
     )
   }
 
   if (screen === 'history') {
-    return <HistoryScreen onBack={() => setScreen('home')} />
+    return (
+      <>
+        {themeToggle}
+        <HistoryScreen onBack={() => setScreen('home')} />
+      </>
+    )
   }
 
   if (screen === 'vesselprofile') {
-    return <VesselProfileScreen onBack={() => setScreen('home')} />
+    return (
+      <>
+        {themeToggle}
+        <VesselProfileScreen onBack={() => setScreen('home')} />
+      </>
+    )
   }
 
   if (screen === 'progress') {
-    return <ProgressScreen onBack={() => setScreen('home')} />
+    return (
+      <>
+        {themeToggle}
+        <ProgressScreen onBack={() => setScreen('home')} />
+      </>
+    )
   }
 
   if (screen === 'dptimelog') {
-    return <DPTimeLogScreen onBack={() => setScreen('home')} />
+    return (
+      <>
+        {themeToggle}
+        <DPTimeLogScreen onBack={() => setScreen('home')} />
+      </>
+    )
   }
 
   return null
