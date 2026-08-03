@@ -553,6 +553,19 @@ button {
 .dplog-btn-delete { background: transparent; border: 1px solid var(--border); color: var(--red); font-family: var(--font); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: var(--radius); cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
 .dplog-btn-delete:hover { border-color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); }
 
+/* ── APP FOOTER ── */
+#root { display: flex; flex-direction: column; min-height: 100%; }
+.app-footer {
+  margin-top: auto;
+  padding: 24px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--txt3);
+  text-align: center;
+  line-height: 1.6;
+}
+.app-footer-email { color: var(--acc); text-decoration: none; }
+
 /* ── PRINT STYLES ── */
 .print-only { display: none; }
 
@@ -576,7 +589,7 @@ button {
 
   body { background: #ffffff !important; color: #111111 !important; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11pt; margin: 0; padding: 0; }
 
-  .no-print, .btn-back, .timer-bar, .summary-actions, .dplog-toolbar, .dplog-btn-edit, .dplog-btn-delete { display: none !important; }
+  .no-print, .btn-back, .timer-bar, .summary-actions, .dplog-toolbar, .dplog-btn-edit, .dplog-btn-delete, .app-footer { display: none !important; }
   .print-only { display: block !important; }
   .screen { max-width: 100%; padding: 0; overflow: visible; }
 

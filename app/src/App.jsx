@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Footer from './components/Footer.jsx'
 import HomeScreen from './screens/HomeScreen.jsx'
 import TaskScreen from './screens/TaskScreen.jsx'
 import BetweenTaskScreen from './screens/BetweenTaskScreen.jsx'
@@ -162,6 +163,7 @@ export default function App() {
           onVesselProfile={() => setScreen('vesselprofile')}
           onDPLog={() => setScreen('dptimelog')}
         />
+        <Footer />
       </>
     )
   }
@@ -177,6 +179,7 @@ export default function App() {
           sessionStartTime={sessionStartTime}
           onComplete={handleCompleteTask}
         />
+        <Footer />
       </>
     )
   }
@@ -193,6 +196,7 @@ export default function App() {
           onNextTask={handleNextTask}
           onEndSession={handleEndSession}
         />
+        <Footer />
       </>
     )
   }
@@ -207,6 +211,7 @@ export default function App() {
           sessionStartTime={sessionStartTime}
           onDone={handleDone}
         />
+        <Footer />
       </>
     )
   }
@@ -216,6 +221,7 @@ export default function App() {
       <>
         {themeToggle}
         <HistoryScreen onBack={() => setScreen('home')} />
+        <Footer />
       </>
     )
   }
@@ -225,6 +231,7 @@ export default function App() {
       <>
         {themeToggle}
         <VesselProfileScreen onBack={() => setScreen('home')} />
+        <Footer />
       </>
     )
   }
@@ -234,6 +241,7 @@ export default function App() {
       <>
         {themeToggle}
         <ProgressScreen onBack={() => setScreen('home')} />
+        <Footer />
       </>
     )
   }
@@ -243,6 +251,7 @@ export default function App() {
       <>
         {themeToggle}
         <DPTimeLogScreen onBack={() => setScreen('home')} />
+        <Footer />
       </>
     )
   }
