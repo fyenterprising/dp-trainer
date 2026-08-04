@@ -1,0 +1,25 @@
+{
+  "checklist": "drill_briefing",
+  "title": "Drill Briefing Checklist (Pre-Drill & Post-Drill)",
+  "description": "Short structured briefing to run before and after any dp_drills task, adapted from IMCA M273 Appendix B for a single-trainee ship-based simulator context. Keep the pre-drill briefing to 5 minutes; the debrief is where the real learning happens.",
+  "source_reference": "IMCA M273 (Jan 2026) - Appendix B",
+  "pre_drill": [
+    { "id": "pd_01", "item": "Confirm the drill type: live simulator, desktop, or touch (mimic-only)" },
+    { "id": "pd_02", "item": "State the failure mode being simulated and why it matters" },
+    { "id": "pd_03", "item": "Confirm current DP configuration and any known limitations" },
+    { "id": "pd_04", "item": "State which actions are real, which are simulated, and which are mimic-only" },
+    { "id": "pd_05", "item": "Confirm no unplanned intervention outside the drill scope" },
+    { "id": "pd_06", "item": "State the expected DP system behaviour and alarms before triggering the fault" },
+    { "id": "pd_07", "item": "Confirm who can stop the drill immediately if anything looks unsafe" }
+  ],
+  "post_drill": [
+    { "id": "po_01", "item": "Did the drill proceed as planned?" },
+    { "id": "po_02", "item": "Did the DP system react as expected? Note any surprises." },
+    { "id": "po_03", "item": "Were alarms correct and timely?" },
+    { "id": "po_04", "item": "Was the TDPO's prediction (made before the fault) correct?" },
+    { "id": "po_05", "item": "What went well?" },
+    { "id": "po_06", "item": "What did not go well, or took longer than expected to recognise?" },
+    { "id": "po_07", "item": "What would be done differently next time?" },
+    { "id": "po_08", "item": "Record outcomes in the session log against the relevant dp_drills task ID" }
+  ]
+}

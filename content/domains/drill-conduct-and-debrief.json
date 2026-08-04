@@ -1,0 +1,164 @@
+{
+  "domain": "drill_conduct_and_debrief",
+  "title": "Drill Conduct, Briefing and Debrief",
+  "order": 18,
+  "recommended_training_days": "10-30",
+  "description": "The TDPO learns that the induced failure is the smallest part of a drill. Professional standard means the drill is briefed before it starts, observed and timed while it runs, debriefed immediately after, and recorded so the lessons survive the session. This domain covers the discipline around a drill — the existing dp_drills domain covers the drills themselves.",
+  "source_reference": "IMCA M273, A Guide to Conducting DP Drills and Ensuring Preparedness for DP Failures — Sections 3 (Conducting Effective Drills), 4 (Drill Safety Briefings and Debrief) and Appendix B (Drill Briefing Checklists).",
+  "tasks": [
+    {
+      "id": "dc_001",
+      "title": "Pre-Drill Briefing and Expected Behaviour",
+      "competency": "drill_briefing_and_behaviour_prediction",
+      "difficulty": 2,
+      "min_training_day": 10,
+      "duration_minutes": 30,
+      "ni_task_ref": ["1.3.4", "2.3", "7.25", "11.9"],
+      "environment": {
+        "wind_speed_kts": 18,
+        "wind_dir_deg": 120,
+        "wave_height_m": 1.2,
+        "wave_dir_deg": 130,
+        "current_speed_kts": 0.4,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Choose a single failure you have already practiced — one position reference loss is the baseline. Write a briefing covering, in order: drill type and boundaries; purpose and the failure mode under test; current system status; the scenario step by step, stating what is done for real and what is mimicked; hazards; roles, communications, and who may stop the drill; expected behaviour — the alarms you predict, what the DP system should do, and how long stabilisation should take; and a two-to-three point summary. Deliver the briefing aloud and time it. Target five to ten minutes.",
+      "execute": "Run the failure exactly as briefed. Respond, recover, restore. Then score your briefing against reality: how many of your predicted alarms appeared, whether the system behaved as you said it would, and whether recovery took the time you estimated.",
+      "professional_standard": [
+        "Briefing delivered in full before any action, inside five to ten minutes",
+        "All eight briefing sections addressed",
+        "Expected behaviour stated in specific, checkable terms before execution",
+        "Every mismatch between briefed and actual behaviour noted in the record"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "briefing_duration_minutes", "type": "number", "label": "Briefing duration (minutes)" },
+          { "key": "briefing_sections_covered_of_8", "type": "number", "label": "Briefing sections covered (of 8)" },
+          { "key": "predicted_alarms_count", "type": "number", "label": "Alarms predicted" },
+          { "key": "actual_alarms_count", "type": "number", "label": "Alarms observed" },
+          { "key": "predictions_confirmed_count", "type": "number", "label": "Predictions confirmed" },
+          { "key": "time_to_recovery_seconds", "type": "number", "label": "Time to recovery (seconds)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why does a briefing spell out which actions are real and which are mimic-only, and what kind of incident does that distinction prevent?",
+        "What did predicting the alarms in advance force you to know that simply reacting to them would not?",
+        "Why must the authority to stop a drill be stated aloud before it starts?",
+        "Which of your predictions missed, and what does the miss tell you about your mental model of the system?"
+      ],
+      "variants": [
+        {
+          "id": "dc_001a",
+          "title": "Thruster Deselection Briefing",
+          "based_on": "dc_001",
+          "changes": {
+            "failure_mode": "single thruster deselection"
+          },
+          "note_to_tdpo": "Thrust reallocation is harder to predict than a reference failure. Your expected-behaviour section should name which thrusters pick up the load."
+        },
+        {
+          "id": "dc_001b",
+          "title": "Brief Another Trainee",
+          "based_on": "dc_001",
+          "changes": {
+            "delivery": "briefing delivered to a second person who then runs the drill while you observe"
+          },
+          "note_to_tdpo": "If your briefing was clear, their response will show it. If it wasn't, that will show too. Requires a second person at the desk."
+        }
+      ]
+    },
+    {
+      "id": "dc_002",
+      "title": "Observer Discipline",
+      "competency": "drill_observation_and_timeline_recording",
+      "difficulty": 3,
+      "min_training_day": 14,
+      "duration_minutes": 25,
+      "ni_task_ref": ["2.2", "2.3", "11.3", "11.12"],
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 45,
+        "wave_height_m": 1.4,
+        "wave_dir_deg": 50,
+        "current_speed_kts": 0.5,
+        "current_dir_deg": 20
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "This task is best run with a second person — a supervising DPO or another trainee — inducing the failure while you observe. Working alone, induce a familiar single failure yourself and switch immediately into the observer role. Prepare a blank timeline sheet before starting: one column for elapsed time, one for what happened, one for what the operator did.",
+      "execute": "From the moment the failure is applied, keep a continuous timestamped log: first alarm, alarm count, first operator action, every subsequent input, and the moment the vessel is stable again. Nothing is reconstructed afterwards — if you missed an entry, log that you missed it. Finish with maximum excursion and total recovery time.",
+      "professional_standard": [
+        "Timeline continuous and written in real time",
+        "Every operator action timestamped",
+        "Missed observations admitted in the record, not backfilled",
+        "Log legible to a third party without verbal explanation"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "time_failure_to_first_alarm_seconds", "type": "number", "label": "Failure to first alarm (seconds)" },
+          { "key": "time_first_alarm_to_first_action_seconds", "type": "number", "label": "First alarm to first action (seconds)" },
+          { "key": "total_actions_logged", "type": "number", "label": "Operator actions logged" },
+          { "key": "time_to_stable_seconds", "type": "number", "label": "Time to stable (seconds)" },
+          { "key": "max_excursion_metres", "type": "number", "label": "Max excursion (metres)" },
+          { "key": "missed_entries_count", "type": "number", "label": "Entries admitted as missed" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why do properly run drills assign an observer who is not the operator?",
+        "What does the interval between first alarm and first action tell you, and what in training or ergonomics would shorten it?",
+        "Which of your observations would justify a change to a checklist or a familiarisation programme?",
+        "Why is an honest record with gaps worth more than a tidy record written afterwards?"
+      ],
+      "variants": []
+    },
+    {
+      "id": "dc_003",
+      "title": "Structured Debrief and Drill Record",
+      "competency": "post_drill_debrief_and_record_keeping",
+      "difficulty": 3,
+      "min_training_day": 16,
+      "duration_minutes": 30,
+      "ni_task_ref": ["1.3.3", "1.3.4", "1.3.5", "7.24"],
+      "environment": {
+        "wind_speed_kts": 16,
+        "wind_dir_deg": 200,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 210,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 180
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Run any familiar single-failure drill on the simulator. The drill itself is not the task — the fifteen minutes after it is. Before starting, prepare a debrief sheet with six headings: factual review; comparison to expected behaviour; communication and decisions; human factors; procedural or training needs; actions and follow-up.",
+      "execute": "Execute the drill and recover. Immediately after recovery, work the debrief sheet aloud, heading by heading. Then complete a formal drill record: type, date, scenario, participants, timings, equipment behaviour, deviations, lessons, and action points — every action point with an owner and a close-out date. The record is finished before the session ends, not later.",
+      "professional_standard": [
+        "Debrief conducted immediately after the drill, not at end of session",
+        "At least one honest item recorded under what did not go well",
+        "Every action point has an owner and a close-out date",
+        "Record filed within the same session"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "drill_duration_minutes", "type": "number", "label": "Drill duration (minutes)" },
+          { "key": "debrief_duration_minutes", "type": "number", "label": "Debrief duration (minutes)" },
+          { "key": "lessons_identified_count", "type": "number", "label": "Lessons identified" },
+          { "key": "did_not_go_well_count", "type": "number", "label": "Of which: did not go well" },
+          { "key": "action_points_count", "type": "number", "label": "Action points raised" },
+          { "key": "action_points_with_owner_and_date_count", "type": "number", "label": "Action points with owner and date" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why is the value of a drill said to sit in the debrief rather than in the simulation itself?",
+        "What happens to the honesty of debriefs the first time one is used to assign blame?",
+        "Pick one lesson from today: which document on a real vessel would it change — a checklist, the familiarisation programme, or a decision support tool — and how?",
+        "What does an action point without an owner and a date actually achieve?"
+      ],
+      "variants": []
+    }
+  ]
+}

@@ -1,0 +1,270 @@
+{
+  "domain": "dp_drills",
+  "title": "DP Emergency Drills & Preparedness",
+  "order": 13,
+  "recommended_training_days": "10-25",
+  "description": "The TDPO practises structured failure-response drills adapted from IMCA M273's live/desktop/touch drill framework, run safely on the ship-based simulator. Unlike joystick-control tasks, the value here is procedural: predicting a failure's effect before triggering it, observing what actually happens, and articulating the correct human response and escalation path. Each drill should be run with a supervising DPO able to trigger the fault and observe the response.",
+  "source_reference": "IMCA M273 (Jan 2026) - Section 2 (Types of Drills), Appendix A (Drill Examples)",
+  "tasks": [
+    {
+      "id": "drill_001",
+      "title": "Auto/Manual Human Intervention Familiarisation",
+      "competency": "failure_response_procedural",
+      "difficulty": 1,
+      "min_training_day": 5,
+      "ni_task_ref": [
+        "7.19",
+        "11.10",
+        "1.5"
+      ],
+      "duration_minutes": 30,
+      "task_type": "live_simulator_drill",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel settled on auto DP in a safe open area of the simulated environment, no proximity hazards, no risk of unsafe position excursion.",
+      "execute": "One piece of running equipment at a time (thruster, engine, pump, controller) is switched to local/manual control by the supervising DPO while the TDPO watches the DP control screens. Before each switch, TDPO predicts aloud what should happen. After each switch, TDPO records what actually happened, then the DPO reinstates the equipment.",
+      "professional_standard": [
+        "Predicts correctly, before the action, whether DP control will be affected",
+        "Correctly identifies which alarms should appear and does appear",
+        "Does not freeze or hesitate when an unexpected effect occurs — verbalises what is being observed",
+        "Can state afterwards which of the tested items rely on operator intervention as part of the vessel's redundancy concept"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "equipment_type",
+            "type": "text",
+            "label": "Equipment tested"
+          },
+          {
+            "key": "prediction_made",
+            "type": "text",
+            "label": "TDPO's prediction"
+          },
+          {
+            "key": "dp_effect_observed",
+            "type": "text",
+            "label": "Actual DP effect observed"
+          },
+          {
+            "key": "alarm_generated",
+            "type": "text",
+            "label": "Alarm(s) generated"
+          },
+          {
+            "key": "prediction_correct",
+            "type": "boolean",
+            "label": "Prediction correct?"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Were all the effects you observed ones you actually understood, or were some a surprise even after seeing them happen?",
+        "What should your response be, as a watchkeeper, if you saw someone switch a running thruster to local without warning you first?",
+        "Discuss the alternative actions available in response to an unplanned local-control switch — is there one correct response, or several defensible ones?",
+        "What gap in your own understanding did this drill expose that you'd want to close before doing this for real?"
+      ],
+      "variants": [
+        {
+          "id": "drill_001a",
+          "title": "Thrusters Only",
+          "based_on": "drill_001",
+          "note_to_tdpo": "Restrict to thruster local/manual switching only. Good first pass before adding engines and pumps."
+        },
+        {
+          "id": "drill_001b",
+          "title": "Power System Only (Engines, Pumps)",
+          "based_on": "drill_001",
+          "note_to_tdpo": "Restrict to engines and cooling/fuel pumps. Notice these often have less visible immediate effect on DP than thrusters do — that's the point."
+        }
+      ]
+    },
+    {
+      "id": "drill_002",
+      "title": "Loss of Seawater Cooling Pump Redundancy",
+      "competency": "failure_response_procedural",
+      "difficulty": 2,
+      "min_training_day": 9,
+      "ni_task_ref": [
+        "11.3",
+        "11.12",
+        "4.4"
+      ],
+      "duration_minutes": 25,
+      "task_type": "live_simulator_drill",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel in full auto DP, power plant configured per the vessel's DP operations manual for the current DP class. Simulated location and activity agreed and stated aloud before starting.",
+      "execute": "Supervising DPO simulates loss of a duty seawater pump. TDPO observes the standby pump start and confirms alarms and equipment temperatures remain within normal limits. Test is then repeated with the standby pump isolated, so the TDPO can observe what happens when the redundancy itself is unavailable.",
+      "professional_standard": [
+        "Correctly distinguishes the two scenarios: standby available vs standby isolated",
+        "Notices and reports any DP equipment temperature trend, not just the immediate alarm",
+        "Recognises which system components are on which side of the redundancy split",
+        "Communicates the fault and status clearly rather than working silently through it"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "standby_available",
+            "type": "boolean",
+            "label": "Standby pump was available?"
+          },
+          {
+            "key": "alarms_generated",
+            "type": "text",
+            "label": "Alarms generated"
+          },
+          {
+            "key": "temperature_trend",
+            "type": "text",
+            "label": "Equipment temperature trend observed"
+          },
+          {
+            "key": "time_to_recognise_seconds",
+            "type": "number",
+            "label": "Time to recognise the fault (seconds)"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "What risks arise from 'multi-tasking' during DP operations that could delay noticing a scenario like this — radio traffic, deck operations, routine paperwork?",
+        "Following this drill, would your response change if you faced the same fault for real, given what you now know about the vessel's reaction?",
+        "How is the seawater system's segregation related to the vessel's redundancy groups, and how would you check that on your own vessel's diagrams?",
+        "What would you look for on the operator station specifically to distinguish 'duty pump failed, standby running fine' from 'both pumps degraded'?"
+      ],
+      "variants": []
+    },
+    {
+      "id": "drill_003",
+      "title": "Loss of Main DP System UPS",
+      "competency": "failure_response_procedural",
+      "difficulty": 3,
+      "min_training_day": 14,
+      "ni_task_ref": [
+        "3.2",
+        "4.8",
+        "11.3"
+      ],
+      "duration_minutes": 25,
+      "task_type": "live_simulator_drill",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel in full auto DP, power plant and equipment configured per the vessel's DP operations manual and applicable checklists.",
+      "execute": "Supervising DPO simulates loss of a main DP system UPS by isolating its outputs. TDPO observes and reports the vessel's ability to maintain position using remaining online equipment, and identifies what specifically was lost.",
+      "professional_standard": [
+        "Correctly identifies which DP-critical equipment was fed from the affected UPS",
+        "Does not assume the DP system is unaffected just because position is being maintained — checks what redundancy remains",
+        "Recognises that an internal UPS fault can sometimes prevent its own bypass from working, and knows to check for this",
+        "Reports the fault and its implications clearly and promptly"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "equipment_affected",
+            "type": "text",
+            "label": "DP equipment affected"
+          },
+          {
+            "key": "position_maintained",
+            "type": "boolean",
+            "label": "Position maintained on remaining equipment?"
+          },
+          {
+            "key": "redundancy_remaining",
+            "type": "text",
+            "label": "Redundancy remaining after the fault"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "What DP-specific equipment on your vessel is fed by each main UPS, and could you locate that on a single-line diagram if asked?",
+        "Why might an internal UPS failure prevent a bypass supply from working, even though the bypass circuit itself is intact?",
+        "What alarms or events specifically indicate a UPS failure rather than a downstream equipment failure?",
+        "How would you methodically fault-find this rather than just reacting to the first alarm you see?"
+      ],
+      "variants": []
+    },
+    {
+      "id": "drill_004",
+      "title": "Loss of All Position References",
+      "competency": "failure_response_procedural",
+      "difficulty": 3,
+      "min_training_day": 16,
+      "ni_task_ref": [
+        "11.6",
+        "11.9",
+        "5.1"
+      ],
+      "duration_minutes": 30,
+      "task_type": "live_simulator_drill",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Vessel on full auto DP, mathematical model allowed to build and stabilise for at least 30 minutes before the drill begins. Environmental conditions noted beforehand.",
+      "execute": "Supervising DPO deselects all Position Reference Systems from DP control. TDPO monitors the vessel's dead-reckoning behaviour using an independent position measuring method (waypoint range/bearing, or UTM northings/eastings) at one-minute intervals for 5 minutes, and reports the drift observed.",
+      "professional_standard": [
+        "Correctly sets up an independent monitoring method before the PRSs are deselected, not after",
+        "Recognises the DP system is now on dead-reckoning, not \"no control\"",
+        "Position change of no more than roughly 20m over 5 minutes is treated as the expected benchmark, and deviation from that prompts further investigation",
+        "Can discuss what should happen next given the vessel's Time to Safely Terminate for the current activity"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "starting_position",
+            "type": "text",
+            "label": "Starting position (northings/eastings or bearing/range)"
+          },
+          {
+            "key": "position_at_5min",
+            "type": "text",
+            "label": "Position at +5 minutes"
+          },
+          {
+            "key": "drift_distance_metres",
+            "type": "number",
+            "label": "Drift distance over 5 minutes (metres)"
+          },
+          {
+            "key": "heading_change_degrees",
+            "type": "number",
+            "label": "Heading change over 5 minutes (degrees)"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "This drill connects directly to your earlier drift-and-recovery drill design — how does dead-reckoning behaviour here compare to what you saw during a genuine drift-off?",
+        "Given your vessel's Time to Safely Terminate, at what point after losing all references would you need to have already started terminating the operation?",
+        "How would this scenario play out differently in benign versus deteriorating weather?",
+        "What's the very first practical action you'd take, before touching any controls, on realising all references were lost?"
+      ],
+      "variants": [
+        {
+          "id": "drill_004a",
+          "title": "Combined with Manual/IJS Handover",
+          "based_on": "drill_004",
+          "note_to_tdpo": "Once dead-reckoning drift is confirmed, transition to Independent Joystick or manual thruster control and demonstrate a controlled recovery, rather than just observing the drift passively."
+        }
+      ]
+    }
+  ]
+}

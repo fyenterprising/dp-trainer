@@ -1,0 +1,267 @@
+{
+  "domain": "asog_cam_tam",
+  "title": "ASOG, CAM & TAM Decision Support",
+  "order": 12,
+  "recommended_training_days": "3-15",
+  "description": "The TDPO builds fluency in reading and applying the vessel's Activity Specific Operating Guidelines (ASOG) and Critical/Task Appropriate Mode (CAM/TAM) configuration tables. This is knowledge-domain work rather than joystick work: given a scenario, the TDPO must correctly classify DP status (green/blue/yellow/red), state the required notification chain, and state the correct response action — without confusing an advisory status for a normal one, or a degraded status for an emergency one. Source concepts drawn from IMCA M220 (Recommended Practice on Operational Activity Planning).",
+  "source_reference": "IMCA M220 Rev 3.0 (Jan 2025) - Sections 3.1-4.5, Appendix 1 & 2",
+  "tasks": [
+    {
+      "id": "act_001",
+      "title": "ASOG Traffic Light Interpretation",
+      "competency": "decision_support_interpretation",
+      "difficulty": 1,
+      "min_training_day": 3,
+      "ni_task_ref": [
+        "7.21",
+        "7.23",
+        "7.24"
+      ],
+      "duration_minutes": 20,
+      "task_type": "applied_exercise",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP — sustained hold while working scenarios",
+      "setup": "Vessel settled on DP holding position at a safe open-water datum with the model built; the vessel remains on a sustained DP hold while the scenarios are worked at the desk. TDPO reviews the vessel's actual ASOG table (or a representative excerpt) prior to the session. DPO or supervisor prepares 3-4 short written scenarios describing a fault, alarm, or environmental change.",
+      "execute": "For each scenario presented, the TDPO must: (1) classify the correct DP status colour, (2) state who must be notified and by when, (3) state the required response action, and (4) explain the reasoning using the ASOG's own criteria rather than guesswork. Throughout, the TDPO references the live thruster loading, position footprint and environmental readings on the DP desk when justifying each answer.",
+      "professional_standard": [
+        "Correctly classifies status for at least 3 of 4 scenarios without prompting",
+        "Does not confuse Blue (advisory, operations continue) with Yellow (degraded, prepare to suspend)",
+        "Correctly identifies that a change to Blue does NOT require ceasing ongoing DP operations",
+        "States the notification chain accurately for the vessel's own management structure"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "scenario_presented",
+            "type": "text",
+            "label": "Scenario presented"
+          },
+          {
+            "key": "status_identified",
+            "type": "text",
+            "label": "Status identified (Green/Blue/Yellow/Red)"
+          },
+          {
+            "key": "status_correct",
+            "type": "boolean",
+            "label": "Correctly classified?"
+          },
+          {
+            "key": "notifications_stated",
+            "type": "text",
+            "label": "Notifications stated"
+          },
+          {
+            "key": "response_action_stated",
+            "type": "text",
+            "label": "Response action stated"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "What is the practical difference between the Blue and Yellow response — why does Yellow require preparing to suspend operations while Blue does not?",
+        "If the DP system generates a consequence-analysis drift-off warning, which status does that typically trigger, and why does that differ from an ordinary equipment alarm?",
+        "The operation must not resume after a Yellow status until redundancy is regained — who makes that call on your vessel, and what evidence would they want to see first?",
+        "Can you think of a fault on your vessel's actual configuration that would immediately jump to Red rather than passing through Yellow first? Why does it skip a step?"
+      ],
+      "variants": [
+        {
+          "id": "act_001a",
+          "title": "Single Thruster Loss Scenario",
+          "based_on": "act_001",
+          "note_to_tdpo": "Loss of one bow thruster where two are fitted is the textbook Yellow example — redundancy lost, position still held. Confirm you can articulate why this isn't Red."
+        },
+        {
+          "id": "act_001b",
+          "title": "Weather Forecast Advisory Scenario",
+          "based_on": "act_001",
+          "changes": {
+            "scenario_type": "forecast_based"
+          },
+          "note_to_tdpo": "A 6-hour forecast showing conditions that would compromise station-keeping after a worst-case failure is a Blue trigger even though nothing has actually failed yet. This tests whether you're waiting for a hard failure before reacting."
+        },
+        {
+          "id": "act_001c",
+          "title": "SIMOPS-Specific Row Scenario",
+          "based_on": "act_001",
+          "note_to_tdpo": "If your vessel's ASOG has a separate SIMOPS section, use a scenario where another vessel or structure in the field changes status — not your own equipment. Notice the response differs (escape routes, adjacent vessel comms)."
+        }
+      ]
+    },
+    {
+      "id": "act_002",
+      "title": "CAM vs TAM Configuration Recognition",
+      "competency": "decision_support_interpretation",
+      "difficulty": 2,
+      "min_training_day": 5,
+      "ni_task_ref": [
+        "7.21",
+        "7.22",
+        "7.24"
+      ],
+      "duration_minutes": 25,
+      "task_type": "applied_exercise",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP — sustained hold while working scenarios",
+      "setup": "Vessel settled on DP holding position; the hold is sustained while the exercise is worked at the desk. TDPO reviews the vessel's CAM (and TAM, if the vessel operates one) configuration table. DPO presents a description of a planned activity (e.g. within 500m of a structure, IRM work, standby duty outside the zone).",
+      "execute": "For each activity described, TDPO must state whether CAM or TAM applies, justify it against the vessel's documented criteria (not general assumption), and identify the minimum thruster/generator configuration required. When justifying each answer, the TDPO references the live thruster loading, position footprint and environmental readings, comparing the running configuration against the minimum the table requires.",
+      "professional_standard": [
+        "Correctly defaults to CAM unless a documented, signed-off risk assessment permits TAM",
+        "Does not treat TAM as merely 'a lower-effort mode' — can state the specific risk-acceptance basis",
+        "Correctly identifies minimum generator/thruster count from the vessel's own CAM/TAM table",
+        "Recognises that TAM does not remove the requirement for mitigating controls"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "activity_described",
+            "type": "text",
+            "label": "Activity described"
+          },
+          {
+            "key": "mode_selected",
+            "type": "text",
+            "label": "CAM or TAM selected"
+          },
+          {
+            "key": "justification",
+            "type": "text",
+            "label": "Justification given"
+          },
+          {
+            "key": "min_config_stated",
+            "type": "text",
+            "label": "Minimum generator/thruster config stated"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Why should CAM be the default, and TAM the exception requiring sign-off, rather than the other way round?",
+        "What's the difference between 'the vessel can lose position in TAM and that's accepted' versus 'TAM removes the need for controls' — why is that distinction important?",
+        "On your vessel, is there more than one CAM depending on which industrial mission is being performed? If so, what changes between them?",
+        "If you were only given the CAM/TAM table with no further context, could you tell from the table alone what triggers a return to CAM from TAM?"
+      ],
+      "variants": [
+        {
+          "id": "act_002a",
+          "title": "IRM During Standby",
+          "based_on": "act_002",
+          "note_to_tdpo": "Inspection/Repair/Maintenance work onboard is often explicitly prohibited during CAM operations. Check whether your vessel's ASOG title block states this — it usually does."
+        }
+      ]
+    },
+    {
+      "id": "act_003",
+      "title": "Personal ASOG Quick-Reference Build",
+      "competency": "decision_support_application",
+      "difficulty": 2,
+      "min_training_day": 8,
+      "ni_task_ref": [
+        "7.20",
+        "7.21",
+        "7.24"
+      ],
+      "duration_minutes": 30,
+      "task_type": "applied_exercise",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP — sustained hold while working scenarios",
+      "setup": "TDPO has access to the vessel's full ASOG document for the operational area currently relevant (e.g. 500m zone entry near a fixed structure).",
+      "execute": "TDPO condenses the ASOG's Green/Blue/Yellow/Red criteria for the systems most relevant to the current activity into a single-page quick-reference card, in their own words. DPO or supervisor reviews it for accuracy and gaps.",
+      "professional_standard": [
+        "Quick-reference is accurate against the source document, not just plausible-sounding",
+        "Covers the specific systems relevant to the current operation, not a generic copy of the whole ASOG",
+        "Correctly separates 'what triggers the status change' from 'what the response action is'",
+        "TDPO can explain any abbreviation or threshold used on their own card without referring back to the source"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "systems_covered",
+            "type": "text",
+            "label": "Systems covered on the card"
+          },
+          {
+            "key": "reviewer_corrections",
+            "type": "number",
+            "label": "Number of corrections needed on review"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "What did you leave off the card, and was that a deliberate scoping decision or an oversight?",
+        "If a new crew member picked up your card cold, would they be able to use it correctly, or does it rely on knowledge you already had in your head?",
+        "Which threshold on the card surprised you most once you looked at the actual numbers — thruster loading, heading excursion, position excursion?"
+      ],
+      "variants": []
+    },
+    {
+      "id": "act_004",
+      "title": "Consequence Analysis Alarm Response",
+      "competency": "decision_support_application",
+      "difficulty": 3,
+      "min_training_day": 12,
+      "ni_task_ref": [
+        "11.5",
+        "11.4",
+        "9.11"
+      ],
+      "duration_minutes": 20,
+      "task_type": "applied_exercise",
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP — sustained hold while working scenarios",
+      "setup": "Applicable where the vessel's DP system has consequence analysis fitted and enabled (Class 2/3). Vessel settled on DP holding position; the hold is sustained while the scenario is worked. DPO presents a scenario where a consequence-analysis drift-off warning has been triggered.",
+      "execute": "TDPO must state: what the warning actually means (predicted loss of position/heading if the next failure occurred now, not an actual failure), what status it should trigger per the ASOG, and what the correct operator response is — including whether it is appropriate to continue working under the alarm. While answering, the TDPO references the live thruster loading, position footprint and environmental readings to ground each judgement in the vessel's present state.",
+      "professional_standard": [
+        "Does not confuse a consequence-analysis warning with an actual equipment failure",
+        "Correctly states that continuing to work while the alarm is active is a Yellow-status decision requiring justification, not a default",
+        "Can describe what would be happening in the ECR (power plant under stress) that corroborates the alarm",
+        "States the correct action if a further failure occurred while the alarm was already active"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "warning_explained_correctly",
+            "type": "boolean",
+            "label": "Explained warning meaning correctly?"
+          },
+          {
+            "key": "status_stated",
+            "type": "text",
+            "label": "Status stated"
+          },
+          {
+            "key": "continue_or_suspend",
+            "type": "text",
+            "label": "Continue or suspend decision"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Is it ever appropriate to keep working while a consequence-analysis drift-off warning is active? What would need to be true for that to be acceptable?",
+        "Why does the DP system give priority to heading over position when it starts shedding capability — and what does that mean practically for you as the watchkeeper?",
+        "How would you tell the difference between the DP system being genuinely at its limit versus a false or over-sensitive alarm?"
+      ],
+      "variants": []
+    }
+  ]
+}

@@ -5,11 +5,55 @@
       "focus": "System Setup and Basic Vessel Control",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "setup_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["1.1", "1.2", "4.12"] },
-        { "order": 2, "task_id": "jc_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14"] },
-        { "order": 3, "task_id": "jc_002", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.5", "7.5.1"] },
-        { "order": 4, "task_id": "jc_003", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.5", "7.5.1"] },
-        { "order": 5, "task_id": "buffer_001", "duration_minutes": 30, "status": "placeholder", "description": "Additional joystick practice — repeat jc_001 or jc_002 variant", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "setup_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.1",
+            "1.2",
+            "4.12"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "jc_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "jc_002",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.5.1"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "jc_003",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.5.1"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "buffer_001",
+          "duration_minutes": 30,
+          "status": "placeholder",
+          "description": "Additional joystick practice — repeat jc_001 or jc_002 variant",
+          "ni_task_ref": null
+        }
       ]
     },
     {
@@ -17,23 +61,124 @@
       "focus": "Joystick Precision and Environmental Introduction",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "setup_002", "duration_minutes": 15, "status": "ready", "ni_task_ref": ["1.1.4", "1.3.4"] },
-        { "order": 2, "task_id": "jc_004", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.5", "7.5.1"] },
-        { "order": 3, "task_id": "env_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["7.13", "7.17"] },
-        { "order": 4, "task_id": "jc_005", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.12"] },
-        { "order": 5, "task_id": "buffer_002", "duration_minutes": 30, "status": "placeholder", "description": "Repeat env_001 with different heading to compare thruster response", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "setup_002",
+          "duration_minutes": 15,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.1.4",
+            "1.3.4"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "jc_004",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.5.1"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "env_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.13",
+            "7.17"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "jc_005",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.12"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "buffer_002",
+          "duration_minutes": 30,
+          "status": "placeholder",
+          "description": "Repeat env_001 with different heading to compare thruster response",
+          "ni_task_ref": null
+        }
       ]
     },
     {
       "day": 3,
       "focus": "Mode Transitions and Environmental Loading",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 150,
       "slots": [
-        { "order": 1, "task_id": "mode_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.4", "7.5"] },
-        { "order": 2, "task_id": "jc_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14"], "note": "Repeat in moderate conditions" },
-        { "order": 3, "task_id": "env_002", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.12", "7.13"] },
-        { "order": 4, "task_id": "jc_006", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14"] },
-        { "order": 5, "task_id": "buffer_003", "duration_minutes": 35, "status": "placeholder", "description": "Repeat jc_003 in wind conditions", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "mode_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.4",
+            "7.5"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "jc_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14"
+          ],
+          "note": "Repeat in moderate conditions"
+        },
+        {
+          "order": 3,
+          "task_id": "env_002",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.12",
+            "7.13"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "jc_006",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "act_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.21",
+            "7.23",
+            "7.24"
+          ]
+        },
+        {
+          "order": 6,
+          "task_id": "ds_001",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.16",
+            "7.17",
+            "4.12"
+          ]
+        }
       ]
     },
     {
@@ -41,22 +186,122 @@
       "focus": "Model Management and Mode Transitions",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "mode_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.4", "7.16"] },
-        { "order": 2, "task_id": "env_005", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.16", "7.17"] },
-        { "order": 3, "task_id": "mode_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.12", "7.15"] },
-        { "order": 4, "task_id": "env_004", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.13", "7.17"] },
-        { "order": 5, "task_id": "buffer_004", "duration_minutes": 35, "status": "placeholder", "description": "Repeat mode_001 after longer JSMH transit", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "mode_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.4",
+            "7.16"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "env_005",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.16",
+            "7.17"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "mode_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.12",
+            "7.15"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "env_004",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.13",
+            "7.17"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "buffer_004",
+          "duration_minutes": 35,
+          "status": "placeholder",
+          "description": "Repeat mode_001 after longer JSMH transit",
+          "ni_task_ref": null
+        }
       ]
     },
     {
       "day": 5,
       "focus": "Foundation Review and Emergency Stopping",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 170,
       "slots": [
-        { "order": 1, "task_id": "jc_006", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14"] },
-        { "order": 2, "task_id": "env_003", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["7.13", "7.17", "7.21"] },
-        { "order": 3, "task_id": "review_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": null },
-        { "order": 4, "task_id": "buffer_005", "duration_minutes": 50, "status": "placeholder", "description": "Repeat any day 1-4 task identified as weak in review_001", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "jc_006",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "env_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.13",
+            "7.17",
+            "7.21"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "review_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": null
+        },
+        {
+          "order": 4,
+          "task_id": "act_002",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.21",
+            "7.22",
+            "7.24"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "ds_002",
+          "duration_minutes": 40,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.15",
+            "8.5",
+            "7.17"
+          ]
+        },
+        {
+          "order": 6,
+          "task_id": "drill_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.19",
+            "11.10",
+            "1.5"
+          ]
+        }
       ]
     },
     {
@@ -64,11 +309,60 @@
       "focus": "Sensor Management and Reference Systems",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "sen_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["5.1", "5.2", "7.9", "7.10"] },
-        { "order": 2, "task_id": "sen_004", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["6.3", "7.8"] },
-        { "order": 3, "task_id": "env_004", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.13", "7.17"] },
-        { "order": 4, "task_id": "sen_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["5.1", "5.2", "7.9"] },
-        { "order": 5, "task_id": "buffer_006", "duration_minutes": 40, "status": "placeholder", "description": "Sensor observation — document all reference system details for this vessel", "ni_task_ref": ["5.1", "5.8"] }
+        {
+          "order": 1,
+          "task_id": "sen_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "5.1",
+            "5.2",
+            "7.9",
+            "7.10"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "sen_004",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "6.3",
+            "7.8"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "env_004",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.13",
+            "7.17"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "sen_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "5.1",
+            "5.2",
+            "7.9"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "buffer_006",
+          "duration_minutes": 40,
+          "status": "placeholder",
+          "description": "Sensor observation — document all reference system details for this vessel",
+          "ni_task_ref": [
+            "5.1",
+            "5.8"
+          ]
+        }
       ]
     },
     {
@@ -76,44 +370,270 @@
       "focus": "Drift Assessment and Recovery",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "jc_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14", "7.18"], "note": "Drift focus — full observation before acting" },
-        { "order": 2, "task_id": "jc_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14", "7.18"], "note": "Extended drift variant — 6 minutes" },
-        { "order": 3, "task_id": "jc_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14", "7.18"], "note": "Beam drift variant — wind from 090" },
-        { "order": 4, "task_id": "sen_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["6.1", "7.8"] },
-        { "order": 5, "task_id": "buffer_007", "duration_minutes": 40, "status": "placeholder", "description": "Drift stop with position constraint — stop within 50m of datum", "ni_task_ref": ["7.14", "7.18"] }
+        {
+          "order": 1,
+          "task_id": "jc_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14",
+            "7.18"
+          ],
+          "note": "Drift focus — full observation before acting"
+        },
+        {
+          "order": 2,
+          "task_id": "jc_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14",
+            "7.18"
+          ],
+          "note": "Extended drift variant — 6 minutes"
+        },
+        {
+          "order": 3,
+          "task_id": "jc_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14",
+            "7.18"
+          ],
+          "note": "Beam drift variant — wind from 090"
+        },
+        {
+          "order": 4,
+          "task_id": "sen_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "6.1",
+            "7.8"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "buffer_007",
+          "duration_minutes": 40,
+          "status": "placeholder",
+          "description": "Drift stop with position constraint — stop within 50m of datum",
+          "ni_task_ref": [
+            "7.14",
+            "7.18"
+          ]
+        }
       ]
     },
     {
       "day": 8,
       "focus": "First Approach to Structure",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 170,
       "slots": [
-        { "order": 1, "task_id": "ops_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.20", "7.24", "7.25"] },
-        { "order": 2, "task_id": "approach_001", "duration_minutes": 35, "status": "ready", "ni_task_ref": ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"] },
-        { "order": 3, "task_id": "approach_004", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["10.1", "10.2", "10.3"] },
-        { "order": 4, "task_id": "buffer_008", "duration_minutes": 45, "status": "placeholder", "description": "Repeat approach_001 — second leeward approach", "ni_task_ref": ["8.1", "8.2", "8.5", "8.6"] }
+        {
+          "order": 1,
+          "task_id": "ops_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.20",
+            "7.24",
+            "7.25"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "approach_001",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.1",
+            "8.2",
+            "8.3",
+            "8.4",
+            "8.5",
+            "8.6"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "approach_004",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "10.1",
+            "10.2",
+            "10.3"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "act_003",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.20",
+            "7.21",
+            "7.24"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "er_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.3.5",
+            "1.3.3",
+            "11.4"
+          ]
+        },
+        {
+          "order": 6,
+          "task_id": "ds_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.21",
+            "7.17",
+            "9.15"
+          ]
+        }
       ]
     },
     {
       "day": 9,
       "focus": "Windward Approach and Environmental Awareness",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 125,
       "slots": [
-        { "order": 1, "task_id": "approach_002", "duration_minutes": 35, "status": "ready", "ni_task_ref": ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"] },
-        { "order": 2, "task_id": "env_005", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.16", "7.17"] },
-        { "order": 3, "task_id": "watch_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["9.1", "9.2", "9.3", "9.4", "9.5"] },
-        { "order": 4, "task_id": "buffer_009", "duration_minutes": 30, "status": "placeholder", "description": "Repeat approach_002 — second windward approach", "ni_task_ref": ["8.1", "8.2", "8.5", "8.6"] }
+        {
+          "order": 1,
+          "task_id": "approach_002",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.1",
+            "8.2",
+            "8.3",
+            "8.4",
+            "8.5",
+            "8.6"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "env_005",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.16",
+            "7.17"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "watch_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "9.1",
+            "9.2",
+            "9.3",
+            "9.4",
+            "9.5"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "drill_002",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.12",
+            "4.4"
+          ]
+        }
       ]
     },
     {
       "day": 10,
       "focus": "Extended Hold and Alarm Introduction",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 160,
       "slots": [
-        { "order": 1, "task_id": "approach_003", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["8.5", "8.6", "9.1", "9.2"] },
-        { "order": 2, "task_id": "approach_004", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["10.1", "10.2", "10.3"] },
-        { "order": 3, "task_id": "alarm_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["11.1", "11.2", "11.4"] },
-        { "order": 4, "task_id": "buffer_010", "duration_minutes": 50, "status": "placeholder", "description": "Approach with one reference degraded — ops_002 then approach_001b", "ni_task_ref": ["8.1", "8.2", "8.9", "8.10"] }
+        {
+          "order": 1,
+          "task_id": "approach_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.5",
+            "8.6",
+            "9.1",
+            "9.2"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "approach_004",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "10.1",
+            "10.2",
+            "10.3"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "alarm_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.1",
+            "11.2",
+            "11.4"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "er_004",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.13",
+            "11.4",
+            "7.19",
+            "1.3.2"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "dc_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.3.4",
+            "2.3",
+            "7.25",
+            "11.9"
+          ]
+        },
+        {
+          "order": 6,
+          "task_id": "prs_002",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "5.1",
+            "6.3",
+            "8.1"
+          ]
+        }
       ]
     },
     {
@@ -121,22 +641,138 @@
       "focus": "Sensor Failures and Watch Handover",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "sen_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["6.1", "7.8", "11.9"] },
-        { "order": 2, "task_id": "watch_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["9.1", "9.2", "9.7", "9.8"] },
-        { "order": 3, "task_id": "watch_002", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["2.5", "2.6", "2.7"] },
-        { "order": 4, "task_id": "buffer_011", "duration_minutes": 45, "status": "placeholder", "description": "Repeat sen_002 near structure variant", "ni_task_ref": ["5.1", "5.2", "7.9", "11.9"] }
+        {
+          "order": 1,
+          "task_id": "sen_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "6.1",
+            "7.8",
+            "11.9"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "watch_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "9.1",
+            "9.2",
+            "9.7",
+            "9.8"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "watch_002",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "2.5",
+            "2.6",
+            "2.7"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_011",
+          "duration_minutes": 45,
+          "status": "placeholder",
+          "description": "Repeat sen_002 near structure variant",
+          "ni_task_ref": [
+            "5.1",
+            "5.2",
+            "7.9",
+            "11.9"
+          ]
+        }
       ]
     },
     {
       "day": 12,
       "focus": "Alarms and Single Failures",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 165,
       "slots": [
-        { "order": 1, "task_id": "alarm_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["11.2", "11.3", "11.9"] },
-        { "order": 2, "task_id": "alarm_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["11.3", "11.4", "11.10"] },
-        { "order": 3, "task_id": "watch_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["9.12", "9.13", "9.14"] },
-        { "order": 4, "task_id": "fail_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["11.3", "11.4", "11.10"] },
-        { "order": 5, "task_id": "buffer_012", "duration_minutes": 30, "status": "placeholder", "description": "Repeat alarm_001 near structure variant", "ni_task_ref": ["11.1", "11.2", "11.4"] }
+        {
+          "order": 1,
+          "task_id": "alarm_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.2",
+            "11.3",
+            "11.9"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "alarm_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.4",
+            "11.10"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "watch_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "9.12",
+            "9.13",
+            "9.14"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "fail_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.4",
+            "11.10"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "act_004",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.5",
+            "11.4",
+            "9.11"
+          ]
+        },
+        {
+          "order": 6,
+          "task_id": "er_001",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "4.2",
+            "3.1",
+            "11.10",
+            "7.19"
+          ]
+        },
+        {
+          "order": 7,
+          "task_id": "prs_003",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.12",
+            "3.1"
+          ]
+        }
       ]
     },
     {
@@ -144,9 +780,52 @@
       "focus": "Failure Scenarios",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "fail_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["11.3", "11.10", "11.12"], "note": "Critical thruster variant" },
-        { "order": 2, "task_id": "fail_002", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["11.3", "11.11", "11.12"] },
-        { "order": 3, "task_id": "buffer_013", "duration_minutes": 60, "status": "placeholder", "description": "Power failure near structure variant plus debrief", "ni_task_ref": ["11.3", "11.11", "11.12"] }
+        {
+          "order": 1,
+          "task_id": "fail_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.10",
+            "11.12"
+          ],
+          "note": "Critical thruster variant"
+        },
+        {
+          "order": 2,
+          "task_id": "fail_002",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.11",
+            "11.12"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "drill_003",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "3.2",
+            "4.8",
+            "11.3"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_013",
+          "duration_minutes": 25,
+          "status": "placeholder",
+          "description": "Power failure near structure variant plus debrief",
+          "ni_task_ref": [
+            "11.3",
+            "11.11",
+            "11.12"
+          ]
+        }
       ]
     },
     {
@@ -154,10 +833,64 @@
       "focus": "Consequence Alarms and ASOG",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "alarm_004", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["11.4", "11.5", "11.6"] },
-        { "order": 2, "task_id": "ops_003", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.21", "7.22", "7.23", "7.24"] },
-        { "order": 3, "task_id": "approach_003", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["8.5", "8.6", "9.1", "9.2"] },
-        { "order": 4, "task_id": "buffer_014", "duration_minutes": 45, "status": "placeholder", "description": "Repeat ops_003 with live ASOG transition during hold", "ni_task_ref": ["7.21", "7.23", "7.24"] }
+        {
+          "order": 1,
+          "task_id": "alarm_004",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.4",
+            "11.5",
+            "11.6"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "ops_003",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.21",
+            "7.22",
+            "7.23",
+            "7.24"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "approach_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.5",
+            "8.6",
+            "9.1",
+            "9.2"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "er_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.6",
+            "7.13",
+            "11.12"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "dc_002",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "2.2",
+            "2.3",
+            "11.3",
+            "11.12"
+          ]
+        }
       ]
     },
     {
@@ -165,20 +898,121 @@
       "focus": "Mid Programme Review and Advanced Joystick",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "jc_007", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14", "7.18"] },
-        { "order": 2, "task_id": "alarm_005", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["11.6", "11.7", "11.8", "11.10"] },
-        { "order": 3, "task_id": "review_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": null },
-        { "order": 4, "task_id": "buffer_015", "duration_minutes": 60, "status": "placeholder", "description": "Repeat weakest skill identified in review_002", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "jc_007",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14",
+            "7.18"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "alarm_005",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.10"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "review_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": null
+        },
+        {
+          "order": 4,
+          "task_id": "ta_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.1",
+            "1.1.4",
+            "6.1",
+            "11.9"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "buffer_015",
+          "duration_minutes": 30,
+          "status": "placeholder",
+          "description": "Repeat weakest skill identified in review_002",
+          "ni_task_ref": null
+        }
       ]
     },
     {
       "day": 16,
       "focus": "Compound Failures and Risk Assessment",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 165,
       "slots": [
-        { "order": 1, "task_id": "fail_003", "duration_minutes": 35, "status": "ready", "ni_task_ref": ["11.3", "11.9", "11.12"] },
-        { "order": 2, "task_id": "ops_004", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.24", "7.25", "9.11", "9.13"] },
-        { "order": 3, "task_id": "buffer_016", "duration_minutes": 60, "status": "placeholder", "description": "Repeat fail_003 with simultaneous environmental increase", "ni_task_ref": ["11.3", "11.9", "11.12"] }
+        {
+          "order": 1,
+          "task_id": "fail_003",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.9",
+            "11.12"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "ops_004",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.24",
+            "7.25",
+            "9.11",
+            "9.13"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "drill_004",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.6",
+            "11.9",
+            "5.1"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "dc_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.3.3",
+            "1.3.4",
+            "1.3.5",
+            "7.24"
+          ]
+        },
+        {
+          "order": 5,
+          "task_id": "tg_001",
+          "duration_minutes": 40,
+          "status": "ready",
+          "ni_task_ref": [
+            "4.4",
+            "4.6",
+            "7.6",
+            "7.17"
+          ]
+        }
       ]
     },
     {
@@ -186,19 +1020,105 @@
       "focus": "Heavy Weather Approaches",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "approach_001", "duration_minutes": 35, "status": "ready", "ni_task_ref": ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"], "note": "Heavy weather variant 25kts" },
-        { "order": 2, "task_id": "approach_002", "duration_minutes": 35, "status": "ready", "ni_task_ref": ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"], "note": "Heavy weather windward variant" },
-        { "order": 3, "task_id": "buffer_017", "duration_minutes": 50, "status": "placeholder", "description": "Emergency departure drill — alarm triggered at operating radius", "ni_task_ref": ["10.1", "10.2", "10.3", "11.10"] }
+        {
+          "order": 1,
+          "task_id": "approach_001",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.1",
+            "8.2",
+            "8.3",
+            "8.4",
+            "8.5",
+            "8.6"
+          ],
+          "note": "Heavy weather variant 25kts"
+        },
+        {
+          "order": 2,
+          "task_id": "approach_002",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.1",
+            "8.2",
+            "8.3",
+            "8.4",
+            "8.5",
+            "8.6"
+          ],
+          "note": "Heavy weather windward variant"
+        },
+        {
+          "order": 3,
+          "task_id": "buffer_017",
+          "duration_minutes": 50,
+          "status": "placeholder",
+          "description": "Emergency departure drill — alarm triggered at operating radius",
+          "ni_task_ref": [
+            "10.1",
+            "10.2",
+            "10.3",
+            "11.10"
+          ]
+        }
       ]
     },
     {
       "day": 18,
       "focus": "Worst Case Failure",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 130,
       "slots": [
-        { "order": 1, "task_id": "fail_004", "duration_minutes": 40, "status": "ready", "ni_task_ref": ["11.3", "11.4", "11.10", "11.11", "11.12"] },
-        { "order": 2, "task_id": "ops_003", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.21", "7.22", "7.23", "7.24"] },
-        { "order": 3, "task_id": "buffer_018", "duration_minutes": 55, "status": "placeholder", "description": "WCF near structure — fail_004a variant", "ni_task_ref": ["11.3", "11.4", "11.10", "11.12"] }
+        {
+          "order": 1,
+          "task_id": "fail_004",
+          "duration_minutes": 40,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.4",
+            "11.10",
+            "11.11",
+            "11.12"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "ops_003",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.21",
+            "7.22",
+            "7.23",
+            "7.24"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "ta_002",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.2",
+            "4.6",
+            "7.6",
+            "11.4"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "tg_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.17",
+            "7.21",
+            "9.2",
+            "9.12"
+          ]
+        }
       ]
     },
     {
@@ -206,18 +1126,110 @@
       "focus": "Watchkeeping Standards",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "watch_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["9.1", "9.2", "9.3", "9.4", "9.5", "9.7", "9.8"] },
-        { "order": 2, "task_id": "watch_002", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["2.5", "2.6", "2.7"] },
-        { "order": 3, "task_id": "watch_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["9.12", "9.13", "9.14", "9.15"] },
-        { "order": 4, "task_id": "buffer_019", "duration_minutes": 45, "status": "placeholder", "description": "Sustained observation near structure — watch_001a variant", "ni_task_ref": ["9.1", "9.2", "9.11", "9.15"] }
+        {
+          "order": 1,
+          "task_id": "watch_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "9.1",
+            "9.2",
+            "9.3",
+            "9.4",
+            "9.5",
+            "9.7",
+            "9.8"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "watch_002",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "2.5",
+            "2.6",
+            "2.7"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "watch_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "9.12",
+            "9.13",
+            "9.14",
+            "9.15"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_019",
+          "duration_minutes": 45,
+          "status": "placeholder",
+          "description": "Sustained observation near structure — watch_001a variant",
+          "ni_task_ref": [
+            "9.1",
+            "9.2",
+            "9.11",
+            "9.15"
+          ]
+        }
       ]
     },
     {
       "day": 20,
       "focus": "First Full Operation",
-      "target_duration_minutes": 120,
+      "target_duration_minutes": 200,
       "slots": [
-        { "order": 1, "task_id": "ops_001", "duration_minutes": 120, "status": "ready", "ni_task_ref": ["7.1", "7.4", "7.5", "7.20", "7.24", "7.25", "8.1", "8.2", "8.5", "8.6", "10.1", "10.2", "2.5", "2.6"] }
+        {
+          "order": 1,
+          "task_id": "ops_001",
+          "duration_minutes": 120,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.1",
+            "7.4",
+            "7.5",
+            "7.20",
+            "7.24",
+            "7.25",
+            "8.1",
+            "8.2",
+            "8.5",
+            "8.6",
+            "10.1",
+            "10.2",
+            "2.5",
+            "2.6"
+          ]
+        },
+        {
+          "order": 2,
+          "task_id": "tg_002",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "4.5",
+            "4.6",
+            "7.6",
+            "11.3"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "dv_001",
+          "duration_minutes": 45,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.1",
+            "1.1.5",
+            "1.2",
+            "1.3.1"
+          ]
+        }
       ]
     },
     {
@@ -225,10 +1237,56 @@
       "focus": "Advanced Sensor Management",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "sen_001", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["5.1", "5.2", "7.9", "7.10"], "note": "Three reference variant" },
-        { "order": 2, "task_id": "sen_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["5.1", "5.2", "7.9", "11.9"], "note": "Both references degrade variant" },
-        { "order": 3, "task_id": "sen_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["6.1", "7.8", "11.9"], "note": "Failure during heading change variant" },
-        { "order": 4, "task_id": "buffer_021", "duration_minutes": 60, "status": "placeholder", "description": "Combined sensor degradation scenario — reference plus gyro", "ni_task_ref": ["5.1", "6.1", "11.9"] }
+        {
+          "order": 1,
+          "task_id": "sen_001",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "5.1",
+            "5.2",
+            "7.9",
+            "7.10"
+          ],
+          "note": "Three reference variant"
+        },
+        {
+          "order": 2,
+          "task_id": "sen_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "5.1",
+            "5.2",
+            "7.9",
+            "11.9"
+          ],
+          "note": "Both references degrade variant"
+        },
+        {
+          "order": 3,
+          "task_id": "sen_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "6.1",
+            "7.8",
+            "11.9"
+          ],
+          "note": "Failure during heading change variant"
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_021",
+          "duration_minutes": 60,
+          "status": "placeholder",
+          "description": "Combined sensor degradation scenario — reference plus gyro",
+          "ni_task_ref": [
+            "5.1",
+            "6.1",
+            "11.9"
+          ]
+        }
       ]
     },
     {
@@ -236,9 +1294,55 @@
       "focus": "Compound Failure Scenarios",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "fail_001", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["11.3", "11.10", "11.12"], "note": "Heavy weather compound variant" },
-        { "order": 2, "task_id": "fail_002", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["11.3", "11.11", "11.12"], "note": "Near structure variant" },
-        { "order": 3, "task_id": "buffer_022", "duration_minutes": 60, "status": "placeholder", "description": "Compound failure — thruster loss plus reference degradation simultaneously", "ni_task_ref": ["11.3", "11.9", "11.10", "11.12"] }
+        {
+          "order": 1,
+          "task_id": "fail_001",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.10",
+            "11.12"
+          ],
+          "note": "Heavy weather compound variant"
+        },
+        {
+          "order": 2,
+          "task_id": "fail_002",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.11",
+            "11.12"
+          ],
+          "note": "Near structure variant"
+        },
+        {
+          "order": 3,
+          "task_id": "ta_003",
+          "duration_minutes": 45,
+          "status": "ready",
+          "ni_task_ref": [
+            "1.1",
+            "1.1.4",
+            "1.3.3",
+            "7.20"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_022",
+          "duration_minutes": 15,
+          "status": "placeholder",
+          "description": "Compound failure — thruster loss plus reference degradation simultaneously",
+          "ni_task_ref": [
+            "11.3",
+            "11.9",
+            "11.10",
+            "11.12"
+          ]
+        }
       ]
     },
     {
@@ -246,9 +1350,44 @@
       "focus": "Heavy Weather Approaches and Compound Failures",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "approach_003", "duration_minutes": 30, "status": "ready", "ni_task_ref": ["8.5", "8.6", "9.1", "9.2"], "note": "Thruster failure during environmental ramp variant" },
-        { "order": 2, "task_id": "fail_003", "duration_minutes": 35, "status": "ready", "ni_task_ref": ["11.3", "11.9", "11.12"], "note": "Reference loss plus environmental increase variant" },
-        { "order": 3, "task_id": "buffer_023", "duration_minutes": 55, "status": "placeholder", "description": "Full scenario — approach in heavy weather with unannounced failure at operating radius", "ni_task_ref": ["8.1", "8.2", "11.3", "11.10"] }
+        {
+          "order": 1,
+          "task_id": "approach_003",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": [
+            "8.5",
+            "8.6",
+            "9.1",
+            "9.2"
+          ],
+          "note": "Thruster failure during environmental ramp variant"
+        },
+        {
+          "order": 2,
+          "task_id": "fail_003",
+          "duration_minutes": 35,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.9",
+            "11.12"
+          ],
+          "note": "Reference loss plus environmental increase variant"
+        },
+        {
+          "order": 3,
+          "task_id": "buffer_023",
+          "duration_minutes": 55,
+          "status": "placeholder",
+          "description": "Full scenario — approach in heavy weather with unannounced failure at operating radius",
+          "ni_task_ref": [
+            "8.1",
+            "8.2",
+            "11.3",
+            "11.10"
+          ]
+        }
       ]
     },
     {
@@ -256,10 +1395,56 @@
       "focus": "Watchkeeping and Operational Decision Making",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "watch_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["9.12", "9.13", "9.14", "9.15"], "note": "Multiple events compressed variant" },
-        { "order": 2, "task_id": "ops_004", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["7.24", "7.25", "9.11", "9.13"] },
-        { "order": 3, "task_id": "watch_002", "duration_minutes": 25, "status": "ready", "ni_task_ref": ["2.5", "2.6", "2.7"], "note": "Degraded system handover variant" },
-        { "order": 4, "task_id": "buffer_024", "duration_minutes": 50, "status": "placeholder", "description": "Full watch cycle — hold, log entries, alarm, handover", "ni_task_ref": ["2.5", "2.6", "9.1", "9.12"] }
+        {
+          "order": 1,
+          "task_id": "watch_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "9.12",
+            "9.13",
+            "9.14",
+            "9.15"
+          ],
+          "note": "Multiple events compressed variant"
+        },
+        {
+          "order": 2,
+          "task_id": "ops_004",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.24",
+            "7.25",
+            "9.11",
+            "9.13"
+          ]
+        },
+        {
+          "order": 3,
+          "task_id": "watch_002",
+          "duration_minutes": 25,
+          "status": "ready",
+          "ni_task_ref": [
+            "2.5",
+            "2.6",
+            "2.7"
+          ],
+          "note": "Degraded system handover variant"
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_024",
+          "duration_minutes": 50,
+          "status": "placeholder",
+          "description": "Full watch cycle — hold, log entries, alarm, handover",
+          "ni_task_ref": [
+            "2.5",
+            "2.6",
+            "9.1",
+            "9.12"
+          ]
+        }
       ]
     },
     {
@@ -267,10 +1452,44 @@
       "focus": "Pre-Completion Review and Open Water Drills",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "review_003", "duration_minutes": 20, "status": "ready", "ni_task_ref": null },
-        { "order": 2, "task_id": "ops_002", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.20", "7.24", "7.25"], "note": "From memory variant — no reference" },
-        { "order": 3, "task_id": "jc_007", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["7.5", "7.14", "7.18"] },
-        { "order": 4, "task_id": "buffer_025", "duration_minutes": 60, "status": "placeholder", "description": "Repeat weakest identified skill from review_003", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "review_003",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": null
+        },
+        {
+          "order": 2,
+          "task_id": "ops_002",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.20",
+            "7.24",
+            "7.25"
+          ],
+          "note": "From memory variant — no reference"
+        },
+        {
+          "order": 3,
+          "task_id": "jc_007",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.5",
+            "7.14",
+            "7.18"
+          ]
+        },
+        {
+          "order": 4,
+          "task_id": "buffer_025",
+          "duration_minutes": 60,
+          "status": "placeholder",
+          "description": "Repeat weakest identified skill from review_003",
+          "ni_task_ref": null
+        }
       ]
     },
     {
@@ -278,7 +1497,29 @@
       "focus": "Full Operation Without Prompting",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "ops_001", "duration_minutes": 120, "status": "ready", "ni_task_ref": ["7.1", "7.4", "7.5", "7.20", "7.24", "7.25", "8.1", "8.2", "8.5", "8.6", "10.1", "10.2", "2.5", "2.6"], "note": "No prompts variant" }
+        {
+          "order": 1,
+          "task_id": "ops_001",
+          "duration_minutes": 120,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.1",
+            "7.4",
+            "7.5",
+            "7.20",
+            "7.24",
+            "7.25",
+            "8.1",
+            "8.2",
+            "8.5",
+            "8.6",
+            "10.1",
+            "10.2",
+            "2.5",
+            "2.6"
+          ],
+          "note": "No prompts variant"
+        }
       ]
     },
     {
@@ -286,9 +1527,47 @@
       "focus": "Worst Case Failure Near Structure",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "fail_004", "duration_minutes": 40, "status": "ready", "ni_task_ref": ["11.3", "11.4", "11.10", "11.11", "11.12"], "note": "Heavy weather WCF variant" },
-        { "order": 2, "task_id": "alarm_005", "duration_minutes": 20, "status": "ready", "ni_task_ref": ["11.6", "11.7", "11.8", "11.10"], "note": "Drive off toward structure variant" },
-        { "order": 3, "task_id": "buffer_027", "duration_minutes": 60, "status": "placeholder", "description": "Full scenario — approach plus WCF triggered at operating radius plus departure", "ni_task_ref": ["8.1", "8.2", "11.3", "11.10", "10.1"] }
+        {
+          "order": 1,
+          "task_id": "fail_004",
+          "duration_minutes": 40,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.3",
+            "11.4",
+            "11.10",
+            "11.11",
+            "11.12"
+          ],
+          "note": "Heavy weather WCF variant"
+        },
+        {
+          "order": 2,
+          "task_id": "alarm_005",
+          "duration_minutes": 20,
+          "status": "ready",
+          "ni_task_ref": [
+            "11.6",
+            "11.7",
+            "11.8",
+            "11.10"
+          ],
+          "note": "Drive off toward structure variant"
+        },
+        {
+          "order": 3,
+          "task_id": "buffer_027",
+          "duration_minutes": 60,
+          "status": "placeholder",
+          "description": "Full scenario — approach plus WCF triggered at operating radius plus departure",
+          "ni_task_ref": [
+            "8.1",
+            "8.2",
+            "11.3",
+            "11.10",
+            "10.1"
+          ]
+        }
       ]
     },
     {
@@ -296,9 +1575,29 @@
       "focus": "Mock Oral Examination",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "review_004", "duration_minutes": 30, "status": "ready", "ni_task_ref": null },
-        { "order": 2, "task_id": "buffer_028a", "duration_minutes": 45, "status": "placeholder", "description": "Revise weakest topic areas from review_004", "ni_task_ref": null },
-        { "order": 3, "task_id": "buffer_028b", "duration_minutes": 45, "status": "placeholder", "description": "Practical drill on weakest practical skill from review_004", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "review_004",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": null
+        },
+        {
+          "order": 2,
+          "task_id": "buffer_028a",
+          "duration_minutes": 45,
+          "status": "placeholder",
+          "description": "Revise weakest topic areas from review_004",
+          "ni_task_ref": null
+        },
+        {
+          "order": 3,
+          "task_id": "buffer_028b",
+          "duration_minutes": 45,
+          "status": "placeholder",
+          "description": "Practical drill on weakest practical skill from review_004",
+          "ni_task_ref": null
+        }
       ]
     },
     {
@@ -306,7 +1605,29 @@
       "focus": "Full Assessment Operation",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "ops_001", "duration_minutes": 120, "status": "ready", "ni_task_ref": ["7.1", "7.4", "7.5", "7.20", "7.24", "7.25", "8.1", "8.2", "8.5", "8.6", "10.1", "10.2", "2.5", "2.6"], "note": "Full assessment — compound failure variant" }
+        {
+          "order": 1,
+          "task_id": "ops_001",
+          "duration_minutes": 120,
+          "status": "ready",
+          "ni_task_ref": [
+            "7.1",
+            "7.4",
+            "7.5",
+            "7.20",
+            "7.24",
+            "7.25",
+            "8.1",
+            "8.2",
+            "8.5",
+            "8.6",
+            "10.1",
+            "10.2",
+            "2.5",
+            "2.6"
+          ],
+          "note": "Full assessment — compound failure variant"
+        }
       ]
     },
     {
@@ -314,8 +1635,22 @@
       "focus": "DPO Sign-Off and Logbook Review",
       "target_duration_minutes": 120,
       "slots": [
-        { "order": 1, "task_id": "review_004", "duration_minutes": 30, "status": "ready", "ni_task_ref": null, "note": "DPO sign-off oral examination" },
-        { "order": 2, "task_id": "buffer_030", "duration_minutes": 90, "status": "placeholder", "description": "Logbook review — all NI task sections reviewed with DPO. Confirm all passive-eligible sections addressed. Identify remaining active requirements.", "ni_task_ref": null }
+        {
+          "order": 1,
+          "task_id": "review_004",
+          "duration_minutes": 30,
+          "status": "ready",
+          "ni_task_ref": null,
+          "note": "DPO sign-off oral examination"
+        },
+        {
+          "order": 2,
+          "task_id": "buffer_030",
+          "duration_minutes": 90,
+          "status": "placeholder",
+          "description": "Logbook review — all NI task sections reviewed with DPO. Confirm all passive-eligible sections addressed. Identify remaining active requirements.",
+          "ni_task_ref": null
+        }
       ]
     }
   ]

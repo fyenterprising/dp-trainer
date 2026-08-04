@@ -1,0 +1,234 @@
+{
+  "domain": "dp_systems_and_modes",
+  "title": "DP System Behaviour, Modes and Performance Monitoring",
+  "order": 14,
+  "recommended_training_days": "3-15",
+  "description": "Where joystick_control builds hand-skill, this domain builds system literacy. The TDPO learns to watch what the DP controller is actually doing underneath the surface — how it builds and settles its model, what gain and relaxed-gain trade off against each other, and how to treat the system's own self-assessment tools (capability plots, footprint records) as things to be checked rather than trusted outright.",
+  "source_reference": "DP Operator's Handbook 3rd ed (Bray) Ch.1-2; IMO MSC.1/Circ.1580 (Jun 2017)",
+  "sources": [
+    "DP Operator's Handbook, 3rd Edition (Bray, Daniels, Fiander, Foster; The Nautical Institute) — Chapters 1-2",
+    "IMCA-published introduction to DP systems and operations",
+    "IMO MSC.1/Circ.1580 — Guidelines for vessels and units with dynamic positioning (DP) systems"
+  ],
+  "tasks": [
+    {
+      "id": "ds_001",
+      "title": "Model-Build and Settling-Time Observation",
+      "competency": "system_understanding_and_model_behaviour",
+      "difficulty": 1,
+      "min_training_day": 3,
+      "ni_task_ref": [
+        "7.16",
+        "7.17",
+        "4.12"
+      ],
+      "duration_minutes": 35,
+      "environment": {
+        "wind_speed_kts": 12,
+        "wind_dir_deg": 40,
+        "wave_height_m": 0.8,
+        "wave_dir_deg": 55,
+        "current_speed_kts": 0.2,
+        "current_dir_deg": 100
+      },
+      "vessel_mode_start": "JSMH",
+      "vessel_mode_execute": "DP",
+      "setup": "Have the vessel stationary or slow-moving under manual (JSMH) control. Note the exact time on the DP desk clock before you do anything else.",
+      "execute": "Select DP. Do not touch any controls once selected. Watch the position and heading trend on the DP display for the full settling period — typically up to 30 minutes on older systems, sometimes 10-20 on newer ones. Record how the excursions reduce over time and note the point at which the vessel visibly stops hunting and settles to a steady residual.",
+      "professional_standard": [
+        "No manual intervention once DP was selected",
+        "Correctly identified the point the model appeared to settle, not just when the timer ran out",
+        "Can explain in own words why a freshly-engaged DP system behaves like a helmsman just taking the wheel",
+        "Logged actual settling time, not the textbook figure"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "time_dp_selected",
+            "type": "text",
+            "label": "Time DP selected"
+          },
+          {
+            "key": "time_model_appeared_settled_minutes",
+            "type": "number",
+            "label": "Time to apparent settling (minutes)"
+          },
+          {
+            "key": "max_position_excursion_during_settling_m",
+            "type": "number",
+            "label": "Max position excursion during settling (m)"
+          },
+          {
+            "key": "max_heading_excursion_during_settling_deg",
+            "type": "number",
+            "label": "Max heading excursion during settling (degrees)"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "The DP model takes time to adapt to the vessel and the present environment, in the same way a helmsman takes a few minutes to get the feel of a vessel after taking the wheel. Why would selecting DP straight after a large heading change give you a worse settling period than selecting DP from steady, stationary conditions?",
+        "Some newer systems have shortened this settling period from 30 minutes to as little as 10. What does a DPO gain from that, and what might a DPO lose by relying on it during a safety-critical operation?",
+        "Your captain's technique after a large JSMH transit — slow to near zero, brief Monitor selection, then DP — relies on this same model-build principle. In your own words, why does that sequence give the model cleaner data to build from than going straight from JSMH to DP?",
+        "If you had watched this same exercise in deteriorating weather instead of steady conditions, what would you expect to look different about the settling trace?"
+      ],
+      "variants": [
+        {
+          "id": "ds_001a",
+          "title": "Model-Build After Large Heading Change",
+          "based_on": "ds_001",
+          "changes": {
+            "pre_dp_heading_change_deg": 90
+          },
+          "note_to_tdpo": "Execute a 90° manual heading change immediately before selecting DP, then run the same observation. Compare the settling trace directly against your ds_001 record."
+        },
+        {
+          "id": "ds_001b",
+          "title": "Model-Build in Rising Wind",
+          "based_on": "ds_001",
+          "changes": {
+            "wind_rising_during_settling": true,
+            "wind_speed_kts_end": 22
+          },
+          "note_to_tdpo": "Wind rises steadily through the settling window. Watch particularly for whether the model chases the change or the wind feed-forward function appears to compensate directly."
+        }
+      ]
+    },
+    {
+      "id": "ds_002",
+      "title": "Gain and Footprint Comparison",
+      "competency": "power_precision_tradeoff",
+      "difficulty": 2,
+      "min_training_day": 5,
+      "ni_task_ref": [
+        "7.15",
+        "8.5",
+        "7.17"
+      ],
+      "duration_minutes": 40,
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 30,
+        "wave_height_m": 1.5,
+        "wave_dir_deg": 40,
+        "current_speed_kts": 0.4,
+        "current_dir_deg": 95
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "With the vessel settled on DP in the given environment, select low gain and allow ten minutes for the system to settle into that setting before recording anything.",
+      "execute": "Record footprint (position scatter) and average thruster load over a ten-minute period on low gain. Without changing the environment, switch to high gain, allow ten minutes to bed in, and record the same two measures again.",
+      "professional_standard": [
+        "Environment held constant between the two recording periods",
+        "Allowed a full settling period after each gain change before recording",
+        "Could state, in figures, the trade-off between footprint tightness and thrust/fuel cost",
+        "Correctly distinguished relaxed gain from simple low gain when asked"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "low_gain_position_scatter_radius_m",
+            "type": "number",
+            "label": "Low gain — position scatter radius (m)"
+          },
+          {
+            "key": "low_gain_avg_thrust_pct",
+            "type": "number",
+            "label": "Low gain — average thrust (%)"
+          },
+          {
+            "key": "high_gain_position_scatter_radius_m",
+            "type": "number",
+            "label": "High gain — position scatter radius (m)"
+          },
+          {
+            "key": "high_gain_avg_thrust_pct",
+            "type": "number",
+            "label": "High gain — average thrust (%)"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Which gain setting held the tighter footprint, and what did that cost you in thrust and, by extension, fuel? Describe a real operation where paying that cost would clearly be worth it, and one where it wouldn't.",
+        "Relaxed gain lets the vessel drift freely within a set radius before the system intervenes at all. How is that functionally different from simply running on low gain?",
+        "If you were holding station 15m from a structure for a lift, which setting would you choose, and why would you accept the higher fuel burn that comes with it?",
+        "Under relaxed gain, power only increases once the vessel nears the edge of the set circle. What would tell you, before any alarm fires, that the vessel is approaching that edge?"
+      ],
+      "variants": [
+        {
+          "id": "ds_002a",
+          "title": "Gain Comparison in Calm Weather",
+          "based_on": "ds_002",
+          "changes": {
+            "wind_speed_kts": 8,
+            "wave_height_m": 0.4
+          },
+          "note_to_tdpo": "Repeat the same comparison in calm conditions. The gap between low and high gain performance should be much smaller here — notice by how much, and why."
+        }
+      ]
+    },
+    {
+      "id": "ds_003",
+      "title": "Capability Plot vs Reality Cross-Check",
+      "competency": "critical_use_of_decision_support_tools",
+      "difficulty": 2,
+      "min_training_day": 8,
+      "ni_task_ref": [
+        "7.21",
+        "7.17",
+        "9.15"
+      ],
+      "duration_minutes": 30,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "With the vessel settled on DP, open the live DP capability plot for the present conditions.",
+      "execute": "Record what the plotted capability envelope shows for the current heading and wind. Separately, read the actual thrust percentage being used by each thruster from the propulsion readout. Compare the two.",
+      "professional_standard": [
+        "Recorded actual per-thruster load, not just an overall average",
+        "Correctly identified whether the plotted envelope and actual load were consistent",
+        "Could explain what the capability plot does NOT account for",
+        "Knew the difference between Live and Theoretical modes without being told"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "plotted_capability_headings_at_risk",
+            "type": "text",
+            "label": "Headings shown as marginal/at-risk on the plot"
+          },
+          {
+            "key": "actual_thruster_pct_used_each_unit",
+            "type": "text",
+            "label": "Actual thrust % used, each thruster"
+          },
+          {
+            "key": "any_generator_or_thruster_offline_yn",
+            "type": "text",
+            "label": "Any generator or thruster offline? (Y/N, which)"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Capability plots always assume full power is available. If a generator were offline right now, would the plot in front of you reflect that? What could go wrong if a DPO trusted the plot without checking against actual thrust loads?",
+        "How would you independently verify whether today's capability plot is trustworthy, using only the real thrust readings on your desk?",
+        "The plot has Live and Theoretical modes. When would a DPO deliberately switch to Theoretical during passive time rather than just reading Live?",
+        "If your actual thrust usage on the critical heading is already close to the plotted limit in benign weather, what does that tell you about your reserve capacity if weather deteriorates?"
+      ],
+      "variants": []
+    }
+  ]
+}

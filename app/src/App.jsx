@@ -19,11 +19,21 @@ import failuresData from '../../content/domains/failures.json'
 import watchkeepingData from '../../content/domains/watchkeeping.json'
 import operationsData from '../../content/domains/operations.json'
 import reviewData from '../../content/domains/review.json'
+import asogData from '../../content/domains/asog-cam-tam.json'
+import dpDrillsData from '../../content/domains/dp-drills.json'
+import dpSystemsData from '../../content/domains/dp-systems-and-modes.json'
+import prsRedundancyData from '../../content/domains/position-reference-and-redundancy.json'
+import emergencyResponseData from '../../content/domains/emergency-response.json'
+import trialsAssuranceData from '../../content/domains/dp-trials-and-assurance.json'
+import drillConductData from '../../content/domains/drill-conduct-and-debrief.json'
+import tagosData from '../../content/domains/tagos-power-strategy.json'
 import curriculumData from '../../content/curriculum.json'
 
 const allDomains = [
   setupData, joystickData, environmentalData, sensorsData, modeData,
   approachData, alarmsData, failuresData, watchkeepingData, operationsData, reviewData,
+  asogData, dpDrillsData, dpSystemsData, prsRedundancyData, emergencyResponseData,
+  trialsAssuranceData, drillConductData, tagosData,
 ]
 
 const taskById = {}

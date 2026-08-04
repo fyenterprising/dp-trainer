@@ -1,0 +1,139 @@
+{
+  "domain": "position_reference_and_redundancy",
+  "title": "Position Reference Systems, Redundancy and Failure Awareness",
+  "order": 15,
+  "recommended_training_days": "6-20",
+  "description": "The TDPO learns to treat position reference not as a single trusted number but as a pool of independent, imperfect systems the DP weights against each other. This domain also builds the vocabulary and judgement behind equipment class, redundancy and worst-case failure — the concepts that turn 'the vessel held position' into 'the vessel held position because it was designed to survive this specific failure.'",
+  "source_reference": "DP Operator's Handbook 3rd ed (Bray) Ch.1-2; IMO MSC.1/Circ.1580 (Jun 2017)",
+  "sources": [
+    "DP Operator's Handbook, 3rd Edition (Bray, Daniels, Fiander, Foster; The Nautical Institute) — Chapters 1-2",
+    "IMCA-published introduction to DP systems and operations — position reference systems and equipment class sections",
+    "IMO MSC.1/Circ.1580 — Guidelines for vessels and units with dynamic positioning (DP) systems — definitions, equipment classes, DP control system requirements"
+  ],
+  "tasks": [
+    {
+      "id": "prs_002",
+      "title": "Working Near a Fixed Structure",
+      "competency": "environmental_and_prs_degradation_awareness",
+      "difficulty": 3,
+      "min_training_day": 10,
+      "ni_task_ref": [
+        "5.1",
+        "6.3",
+        "8.1"
+      ],
+      "duration_minutes": 30,
+      "environment": {
+        "wind_speed_kts": 18,
+        "wind_dir_deg": 300,
+        "wave_height_m": 1.2,
+        "wave_dir_deg": 300
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Position the vessel at moderate range from a virtual platform structure, with DGPS enabled as one of the active PRS and the vessel positioned downwind of the structure.",
+      "execute": "Close on the structure per the exercise plan while watching DGPS position quality/scatter. Note any degradation as range decreases, and compare your wind sensor reading against the wind you'd expect given the logged environment.",
+      "professional_standard": [
+        "Detected DGPS degradation from the data, not just from an alarm",
+        "Recognised the wind sensor reading as suspect before it caused a visible position problem",
+        "Could state which PRS types would NOT be expected to degrade in this scenario",
+        "Maintained a direct visual reference to the structure throughout, not just instrument watch"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "dgps_scatter_far_from_structure_m",
+            "type": "number",
+            "label": "DGPS scatter, far from structure (m)"
+          },
+          {
+            "key": "dgps_scatter_close_to_structure_m",
+            "type": "number",
+            "label": "DGPS scatter, close to structure (m)"
+          },
+          {
+            "key": "wind_sensor_reading_vs_expected",
+            "type": "text",
+            "label": "Wind sensor reading vs expected true wind"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Why does a large fixed structure nearby specifically degrade DGPS, while an acoustic or laser-based PRS might be unaffected by the same proximity?",
+        "Working close-in on the downwind side of a platform, your wind sensor may be actively wind-shadowed rather than simply unreliable. What's the practical difference between those two failure types for a DPO trying to trust the reading?",
+        "What visual cues should tell you a positioning problem is developing near a structure before any instrument alarm fires?",
+        "If your only degraded PRS near the structure is DGPS, and you still have two other independent references online, should that change how concerned you are? Why or why not?"
+      ],
+      "variants": []
+    },
+    {
+      "id": "prs_003",
+      "title": "Equipment Class and Worst-Case Failure Identification",
+      "competency": "redundancy_concept_application",
+      "difficulty": 3,
+      "min_training_day": 12,
+      "ni_task_ref": [
+        "11.3",
+        "11.12",
+        "3.1"
+      ],
+      "duration_minutes": 25,
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Using the vessel's own FMEA or class documentation where available (or the exercise's provided vessel specification), identify the assigned equipment class and the worst-case failure it's designed to survive without losing position.",
+      "execute": "With the vessel settled on DP, talk through what would actually happen to position-keeping if that specific worst-case failure occurred right now. Use the consequence analysis display if the system is fitted with one.",
+      "professional_standard": [
+        "Correctly stated the vessel's equipment class from documentation, not assumption",
+        "Could describe the worst-case failure in specific terms (which thruster group, which bus section), not just 'a failure'",
+        "Correctly interpreted whether consequence analysis was currently showing margin or risk",
+        "Distinguished single-fault criteria from a total, unrealistic failure of everything at once"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "equipment_class",
+            "type": "text",
+            "label": "Assigned equipment class"
+          },
+          {
+            "key": "defined_worst_case_failure",
+            "type": "text",
+            "label": "Defined worst-case failure"
+          },
+          {
+            "key": "consequence_analysis_alarm_status",
+            "type": "text",
+            "label": "Consequence analysis status/alarm"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "In your own words: what actually separates equipment class 1, 2 and 3, in terms of the kind of failure the vessel must survive without losing position?",
+        "Consequence analysis continuously checks that the vessel could survive its worst-case failure right now, under present conditions. What's the practical difference in a real emergency between a vessel that has this running and one that doesn't?",
+        "A single inadvertent act by someone on board counts as a single fault under class 2/3 criteria. Can you think of a plausible inadvertent act on this vessel that could, on its own, cause the worst-case failure?",
+        "If the consequence analysis showed marginal capability on your present heading, what are your options, and which would you reach for first?"
+      ],
+      "variants": [
+        {
+          "id": "prs_003a",
+          "title": "Worst-Case Failure Under Degraded Power",
+          "based_on": "prs_003",
+          "changes": {
+            "one_generator_offline": true
+          },
+          "note_to_tdpo": "Repeat with one generator already offline before you start. Notice how much the margin in the consequence analysis has already been eaten into before any new failure occurs."
+        }
+      ]
+    }
+  ]
+}

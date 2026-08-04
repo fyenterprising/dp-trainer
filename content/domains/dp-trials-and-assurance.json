@@ -1,0 +1,405 @@
+{
+  "domain": "dp_trials_and_assurance",
+  "title": "DP Trials and Assurance Practice",
+  "order": 17,
+  "recommended_training_days": "15-26",
+  "description": "The TDPO learns to work the way a trials practitioner works: expected results committed to paper before the failure is applied, actual results recorded against them without omission, and a record complete enough that a stranger could repeat the test. This is the assurance mindset — the difference between watching a system behave and verifying that it behaves as documented.",
+  "source_reference": "IMCA M249 Rev. 1, DP Practitioner Accreditation Scheme Handbook — Sections 2.2-2.5 and Appendices B-C. The scheme's trials-witnessing, FMEA verification and evidence-portfolio requirements, translated into simulator practice.",
+  "tasks": [
+    {
+      "id": "ta_001",
+      "title": "Trials Test Sheet Discipline",
+      "competency": "test_documentation_and_witnessing",
+      "difficulty": 3,
+      "min_training_day": 15,
+      "duration_minutes": 30,
+      "ni_task_ref": [
+        "1.1",
+        "1.1.4",
+        "6.1",
+        "11.9"
+      ],
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 210,
+        "wave_height_m": 1.5,
+        "wave_dir_deg": 220,
+        "current_speed_kts": 0.4,
+        "current_dir_deg": 180
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Choose a single sensor failure test — one gyro is the baseline. Before touching anything, write a formal test sheet: test objective, method steps in order, the alarms you expect, the system response you expect, and the position and heading effect you expect. The sheet is complete before the first action. This is how a trials practitioner works: expected results are committed to paper before the failure is applied, never after.",
+      "execute": "With the model settled, execute your test sheet exactly as written. Deselect the gyro. Record every alarm as it appears, the actual system response, and the actual position and heading excursion. Against each expected item mark confirmed, not confirmed, or unexpected. Reinstate the gyro, verify the system is fully restored, and close the sheet with date, session identifier and a signature line.",
+      "professional_standard": [
+        "Test sheet complete before execution begins",
+        "Every expected item has an actual result recorded against it",
+        "Deviations and unexpected events documented, not omitted",
+        "System restored and restoration verified before the sheet is closed"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "expected_items_count",
+            "type": "number",
+            "label": "Expected items written before test"
+          },
+          {
+            "key": "items_confirmed",
+            "type": "number",
+            "label": "Expected items confirmed"
+          },
+          {
+            "key": "items_not_confirmed",
+            "type": "number",
+            "label": "Expected items not confirmed"
+          },
+          {
+            "key": "unexpected_events_count",
+            "type": "number",
+            "label": "Unexpected events"
+          },
+          {
+            "key": "max_position_excursion_metres",
+            "type": "number",
+            "label": "Max position excursion (metres)"
+          },
+          {
+            "key": "max_heading_excursion_degrees",
+            "type": "number",
+            "label": "Max heading excursion (degrees)"
+          },
+          {
+            "key": "time_to_restore_and_verify_seconds",
+            "type": "number",
+            "label": "Time to restore and verify (seconds)"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "Why must expected results be written before the test rather than reconstructed afterwards?",
+        "If an actual result did not match your expectation, what does that gap mean for the vessel's assurance documentation, and who would need to know on a real vessel?",
+        "In formal trials, the person witnessing a test cannot only be the author of the test programme. What failure of assurance does that rule protect against?",
+        "What is the difference between this exercise run as a trial and the same failure run as a drill — what is each one for?",
+        "Your test produced a measurable heading excursion. How would you decide whether that excursion is an acceptable result or a finding?"
+      ],
+      "variants": [
+        {
+          "id": "ta_001a",
+          "title": "Wind Sensor Test Sheet",
+          "based_on": "ta_001",
+          "changes": {
+            "test_subject": "single wind sensor deselection",
+            "ni_task_ref": [
+              "1.1",
+              "1.1.4",
+              "6.3",
+              "11.9"
+            ]
+          },
+          "note_to_tdpo": "The wind feed drives feedforward thrust. Predict what the thrust picture does the moment the sensor drops — this one is harder to predict correctly than the gyro."
+        },
+        {
+          "id": "ta_001b",
+          "title": "Single PRS Test Sheet",
+          "based_on": "ta_001",
+          "changes": {
+            "test_subject": "single position reference deselection",
+            "ni_task_ref": [
+              "1.1",
+              "1.1.4",
+              "7.9",
+              "11.9"
+            ]
+          },
+          "note_to_tdpo": "Predict the reference weighting shift, not just the alarm. Your expected-results column should name which surviving reference takes the load."
+        }
+      ]
+    },
+    {
+      "id": "ta_002",
+      "title": "FMEA Prediction and Verification",
+      "competency": "fmea_verification_and_gap_analysis",
+      "difficulty": 4,
+      "min_training_day": 18,
+      "duration_minutes": 35,
+      "ni_task_ref": [
+        "1.2",
+        "4.6",
+        "7.6",
+        "11.4"
+      ],
+      "environment": {
+        "wind_speed_kts": 22,
+        "wind_dir_deg": 315,
+        "wave_height_m": 1.8,
+        "wave_dir_deg": 320,
+        "current_speed_kts": 0.6,
+        "current_dir_deg": 270
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "From your knowledge of the vessel's DP layout, write down the redundancy groups as you understand them. For the loss of each complete group, predict in writing: which thrusters and generators remain, the peak thrust you expect on the survivors, and whether the current environment sits inside the post-failure capability. All predictions are on paper before anything is executed.",
+      "execute": "Allow the model to settle. Remove every element of the first redundancy group from DP. Hold position for 5 minutes. Record peak thruster load on the survivors, maximum position and heading excursion, and alarm count. Reinstate, stabilise fully, then repeat for the second group. Finish by writing one line per group: prediction confirmed, or gap found — and exactly what the gap was.",
+      "professional_standard": [
+        "Predictions written in full before execution",
+        "Both groups tested, with full stabilisation between tests",
+        "Every gap between predicted and observed behaviour explicitly documented",
+        "Environment assessed against post-failure capability before each removal"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "group1_predicted_remaining",
+            "type": "text",
+            "label": "Group 1 — predicted surviving units"
+          },
+          {
+            "key": "group1_peak_thruster_load_percent",
+            "type": "number",
+            "label": "Group 1 — peak survivor thruster load (%)"
+          },
+          {
+            "key": "group1_max_excursion_metres",
+            "type": "number",
+            "label": "Group 1 — max excursion (metres)"
+          },
+          {
+            "key": "group1_alarm_count",
+            "type": "number",
+            "label": "Group 1 — alarm count"
+          },
+          {
+            "key": "group2_predicted_remaining",
+            "type": "text",
+            "label": "Group 2 — predicted surviving units"
+          },
+          {
+            "key": "group2_peak_thruster_load_percent",
+            "type": "number",
+            "label": "Group 2 — peak survivor thruster load (%)"
+          },
+          {
+            "key": "group2_max_excursion_metres",
+            "type": "number",
+            "label": "Group 2 — max excursion (metres)"
+          },
+          {
+            "key": "group2_alarm_count",
+            "type": "number",
+            "label": "Group 2 — alarm count"
+          },
+          {
+            "key": "gaps_found_count",
+            "type": "number",
+            "label": "Prediction gaps found"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "What is an FMEA gap analysis, and why is a difference between documented failure effects and observed behaviour treated as a serious finding rather than a curiosity?",
+        "Why do formal trials require the witnessing practitioner to be independent of the vessel?",
+        "Which group loss produced the worse station-keeping outcome, and does that ranking match your pre-test capability assessment?",
+        "How would rotating the environment 90 degrees change which group loss is worst?",
+        "Why must both the prediction and the result survive in the record even when the prediction was wrong?"
+      ],
+      "variants": [
+        {
+          "id": "ta_002a",
+          "title": "FMEA Verification in Degraded Weather",
+          "based_on": "ta_002",
+          "changes": {
+            "environment": {
+              "wind_speed_kts": 30,
+              "wind_dir_deg": 315
+            }
+          },
+          "note_to_tdpo": "Same predictions, harder environment. If your capability assessment says one group removal is no longer acceptable, that written no-go is a valid result — record it and test the other group only."
+        }
+      ]
+    },
+    {
+      "id": "ta_003",
+      "title": "Mini Trials Programme",
+      "competency": "trials_programme_design_and_record",
+      "difficulty": 4,
+      "min_training_day": 22,
+      "duration_minutes": 45,
+      "ni_task_ref": [
+        "1.1",
+        "1.1.4",
+        "1.3.3",
+        "7.20"
+      ],
+      "environment": {
+        "wind_speed_kts": 18,
+        "wind_dir_deg": 150,
+        "wave_height_m": 1.2,
+        "wave_dir_deg": 160,
+        "current_speed_kts": 0.4,
+        "current_dir_deg": 120
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Design a three-test programme covering one power system test, one thruster or propulsion test, and one reference or sensor test. Write a full test sheet for each, then sequence them deliberately — decide which runs first and why. Prepare a single trials record header: date, session, environment, vessel configuration.",
+      "execute": "Run the programme in your planned sequence. Between tests: reinstate, verify restoration, and allow full stabilisation before the next test begins. Log actual start and finish times per test, results against expected, and any deviation from your written method the moment it happens. Close out the record with a summary of findings and any items you would carry forward to a future session.",
+      "professional_standard": [
+        "Programme fully written and sequenced before the first test",
+        "Restoration verified — not assumed — before each subsequent test",
+        "Deviations from written method logged at the time, not afterwards",
+        "Record complete enough that another TDPO could repeat the programme without asking a single question"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "tests_completed",
+            "type": "number",
+            "label": "Tests completed"
+          },
+          {
+            "key": "deviations_from_written_method_count",
+            "type": "number",
+            "label": "Deviations from written method"
+          },
+          {
+            "key": "total_programme_time_minutes",
+            "type": "number",
+            "label": "Total programme time (minutes)"
+          },
+          {
+            "key": "longest_stabilisation_wait_seconds",
+            "type": "number",
+            "label": "Longest stabilisation wait between tests (seconds)"
+          },
+          {
+            "key": "findings_carried_forward_count",
+            "type": "number",
+            "label": "Findings carried forward"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "What logic did you use to sequence the three tests, and what would go wrong if you ran them in reverse order?",
+        "Why must restoration be verified rather than assumed before the next test starts?",
+        "What makes a trials record repeatable, and why does repeatability matter more than neatness?",
+        "In real annual trials, the trials document exists in a pre-trials revision written before anyone steps aboard. Why is the authorship done in advance?",
+        "Which of your three tests would you promote into a recurring personal drill, and why that one?"
+      ],
+      "variants": []
+    },
+    {
+      "id": "dv_001",
+      "title": "The Paperwork Holding You in Position",
+      "competency": "dp_documentation_and_verification",
+      "difficulty": 2,
+      "min_training_day": 20,
+      "duration_minutes": 45,
+      "ni_task_ref": [
+        "1.1",
+        "1.1.5",
+        "1.2",
+        "1.3.1"
+      ],
+      "environment": {
+        "wind_speed_kts": 15,
+        "wind_dir_deg": 37,
+        "wave_height_m": 1.0,
+        "wave_dir_deg": 48,
+        "current_speed_kts": 0.3,
+        "current_dir_deg": 90
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP — sustained hold throughout documentation audit",
+      "setup": "Establish a stable DP hold at your datum with the model fully built. The vessel does nothing but hold position for this entire task. That is the point: while she holds, you audit the documentation that certifies she can. Have a notebook ready — you will be moving around the bridge, not sitting at the desk.",
+      "execute": "While the vessel holds position, locate aboard — or, where the simulator vessel's set differs, name and state the correct location of — each of the following: the DPVAD; the FMEA and its proving trials results; the DP operations manual; annual survey and periodic (5-year) test records; DP capability plots (fully operational AND post-worst-case-failure); the location checklist; the watchkeeping checklist; the blackout recovery procedure; the list of critical components; and the ASOG if the vessel carries one. For each, record where it lives, its date or revision, and one sentence on what it proves about the system holding position in front of you right now. Then make three live cross-checks: (1) confirm the equipment class stated on the DPVAD matches the redundancy actually set up on the desk — bus configuration, thruster split across power systems, number and diversity of position references; (2) plot the current wind and sea state against the post-worst-case-failure capability plot and state whether you are inside the envelope, and by how much; (3) confirm the watchkeeping checklist in use at the desk is the version referenced in the operations manual.",
+      "professional_standard": [
+        "Every listed document located, or its absence positively identified and recorded — no line left blank",
+        "DPVAD equipment class correctly matched against the live desk configuration, with the specific evidence stated (bus state, thruster allocation, PRS count and diversity)",
+        "Current conditions correctly placed inside or outside the post-worst-case-failure capability envelope, with the margin stated",
+        "Currency correctly assessed for each record: annual survey within three months either side of the DPVAD anniversary date, periodic testing within five years, FMEA revision reflecting the vessel as she currently is"
+      ],
+      "observe_and_record": {
+        "fields": [
+          {
+            "key": "dpvad_equipment_class",
+            "type": "text",
+            "label": "Equipment class stated on DPVAD"
+          },
+          {
+            "key": "dpvad_valid_until",
+            "type": "text",
+            "label": "DPVAD valid until (date)"
+          },
+          {
+            "key": "last_annual_survey_date",
+            "type": "text",
+            "label": "Last annual survey date"
+          },
+          {
+            "key": "fmea_revision_date",
+            "type": "text",
+            "label": "FMEA revision date"
+          },
+          {
+            "key": "documents_located",
+            "type": "number",
+            "label": "Documents located (of 10)"
+          },
+          {
+            "key": "documents_missing_or_out_of_date",
+            "type": "text",
+            "label": "Documents missing or out of date"
+          },
+          {
+            "key": "post_wcf_capability_check",
+            "type": "text",
+            "label": "Post-WCF capability check — inside/outside envelope and margin"
+          },
+          {
+            "key": "class_vs_configuration_match",
+            "type": "text",
+            "label": "DPVAD class vs live desk configuration — match or discrepancy"
+          },
+          {
+            "key": "notes",
+            "type": "text",
+            "label": "Notes"
+          }
+        ]
+      },
+      "debrief_questions": [
+        "The annual survey does not just confirm the equipment works — it tests the vessel's ability to keep position after single failures for her assigned equipment class, and validates the FMEA and operations manual. Why is that distinction the entire point of the survey, and what would a survey that only function-tested equipment fail to prove?",
+        "Name three things that cause a DPVAD to cease to be valid, and explain for each one exactly why it breaks the chain of assurance between the paperwork and the vessel holding position right now.",
+        "Your online consequence analysis and the post-worst-case-failure capability plot answer the same question — 'will she hold if the worst single failure happens now?' — in two different ways. What does each rely on, what does each assume, and why does the guidance require both rather than either one alone?",
+        "The FMEA must be kept updated so that it remains current, and no significant change may be made to the DP system after survey without sanction, except direct like-for-like replacement for repair. A yard fitted a different-model thruster drive last refit. What has to happen to the FMEA, the proving trials and the DPVAD before this vessel legitimately works a Class 2 operation again?",
+        "You join this vessel cold tomorrow as an incoming DPO. Of everything you handled in this task, which single document do you read first, and why does it beat the others?"
+      ],
+      "variants": [
+        {
+          "id": "dv_001a",
+          "title": "The Gap",
+          "based_on": "dv_001",
+          "changes": {
+            "inject_discrepancy": true
+          },
+          "note_to_tdpo": "Have your supervising DPO secretly designate one document as missing, expired, or mismatched against the desk — or set the trap for yourself before you start. When you find it, state the operational consequence in one sentence, whether DP operations may continue, and who gets told before anything else happens. Finding the gap is easy. Knowing what it costs is the skill."
+        }
+      ]
+    }
+  ]
+}

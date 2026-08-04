@@ -1,0 +1,166 @@
+{
+  "domain": "tagos_power_strategy",
+  "title": "Thruster and Generator Operating Strategy",
+  "order": 19,
+  "recommended_training_days": "16-30",
+  "description": "The TDPO learns to reason about configuration the way a TAGOS does: the units that survive the worst case failure must be able to carry the whole load, so limits are set on the survivors' behalf before anything fails. This domain also covers force off — the loss-of-position mode where nothing breaks and the environment simply wins.",
+  "source_reference": "IMCA M220 Rev. 3, Recommended Practice on Operational Activity Planning — Section 3.4 (Thruster and Generator Operating Strategy), Section 2.2 definitions (WCF, drift off, drive off, force off) and Appendix 3 (TAGOS example).",
+  "tasks": [
+    {
+      "id": "tg_001",
+      "title": "Build and Validate a TAGOS Row",
+      "competency": "post_wcf_limit_calculation_and_validation",
+      "difficulty": 4,
+      "min_training_day": 16,
+      "duration_minutes": 40,
+      "ni_task_ref": ["4.4", "4.6", "7.6", "7.17"],
+      "environment": {
+        "wind_speed_kts": 20,
+        "wind_dir_deg": 250,
+        "wave_height_m": 1.5,
+        "wave_dir_deg": 260,
+        "current_speed_kts": 0.5,
+        "current_dir_deg": 230
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "For your simulator vessel's configuration, write one TAGOS-style row for normal DP operation: thrusters online, generators online, bus-tie state, and — the core of the exercise — the maximum permitted pre-failure thrust limit. Compute it from the governing principle: the units surviving the worst case failure must replace the lost capacity. If the worst case failure removes two of four thrusters, the survivors are half the fleet, so thrust must be held low enough beforehand that the remaining half can carry the total demand. Write the number down before executing anything.",
+      "execute": "Set the configuration and settle in DP. Confirm pre-failure thrust sits inside your computed limit. Then apply the worst case failure: remove the entire redundancy group at once. Hold position for 5 minutes. Record peak survivor thrust, peak generator load, and maximum position excursion. Reinstate and stabilise.",
+      "professional_standard": [
+        "Thrust limit computed and written before execution",
+        "Pre-failure thrust confirmed inside the computed limit before the failure is applied",
+        "Position held throughout the post-failure period",
+        "Any exceedance of the computed limits explained in the record, not ignored"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "computed_thrust_limit_percent", "type": "number", "label": "Computed pre-failure thrust limit (%)" },
+          { "key": "peak_pre_failure_thrust_percent", "type": "number", "label": "Peak pre-failure thrust (%)" },
+          { "key": "peak_post_failure_thrust_percent", "type": "number", "label": "Peak post-failure survivor thrust (%)" },
+          { "key": "peak_post_failure_generator_load_percent", "type": "number", "label": "Peak post-failure generator load (%)" },
+          { "key": "max_excursion_post_failure_metres", "type": "number", "label": "Max post-failure excursion (metres)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Why are thrust limits set against post-failure capacity rather than installed capacity?",
+        "Your post-failure survivor thrust peaked at a specific number. At roughly what environmental increase would this operation have become unsafe to start?",
+        "Why does generator step-load capability belong in the same calculation as thruster limits?",
+        "If a vessel routinely operates above its strategy limits in benign weather without incident, what has actually been lost?"
+      ],
+      "variants": [
+        {
+          "id": "tg_001a",
+          "title": "TAGOS Validation Beam-On",
+          "based_on": "tg_001",
+          "changes": {
+            "vessel_heading": "beam-on to the environment"
+          },
+          "note_to_tdpo": "Same computed limit, different demand picture. Notice how heading choice consumes or preserves your post-failure margin."
+        }
+      ]
+    },
+    {
+      "id": "tg_002",
+      "title": "Maintenance Configuration and Go/No-Go",
+      "competency": "degraded_configuration_planning",
+      "difficulty": 4,
+      "min_training_day": 20,
+      "duration_minutes": 35,
+      "ni_task_ref": ["4.5", "4.6", "7.6", "11.3"],
+      "environment": {
+        "wind_speed_kts": 22,
+        "wind_dir_deg": 190,
+        "wave_height_m": 1.6,
+        "wave_dir_deg": 200,
+        "current_speed_kts": 0.5,
+        "current_dir_deg": 160
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Take one thruster out of service — deselected and treated as under maintenance for the whole task. Recompute the operating strategy row for this degraded configuration: which units now survive the worst case failure, and what the new pre-failure thrust limit must be. Then make a written go or no-go call: is the current environment still acceptable for DP operations in this state? Write the reasoning, not just the answer.",
+      "execute": "If your call is go: settle in the degraded configuration, confirm thrust inside the recomputed limit, apply the worst case failure to the remaining worst group, and hold for 5 minutes. If your call is no-go: reduce the simulated environment step by step until the answer becomes go, record that threshold, then execute the failure at the threshold. Either way, record survivor thrust, maximum excursion, and heading deviation.",
+      "professional_standard": [
+        "Recomputed limit and go/no-go decision written before operating",
+        "Threshold reasoning recorded, not just the number",
+        "Post-failure control assessed honestly against the recomputed limits",
+        "Heading held throughout the post-failure period"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "recomputed_thrust_limit_percent", "type": "number", "label": "Recomputed thrust limit (%)" },
+          { "key": "go_no_go_environment_threshold_kts", "type": "number", "label": "Go/no-go wind threshold (kts)" },
+          { "key": "peak_post_failure_thrust_percent", "type": "number", "label": "Peak post-failure survivor thrust (%)" },
+          { "key": "max_excursion_metres", "type": "number", "label": "Max excursion (metres)" },
+          { "key": "max_heading_deviation_degrees", "type": "number", "label": "Max heading deviation (degrees)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Operating with a thruster offline is a textbook task appropriate mode decision. What must exist on paper, and who must sign it, before a real vessel operates that way?",
+        "Who is notified, and what operating-guideline status change occurs, when DP equipment comes out of service mid-operation?",
+        "Why is reinstating equipment done outside the work area wherever possible?",
+        "Your go/no-go threshold was a single number. Describe what sits on each side of it."
+      ],
+      "variants": []
+    },
+    {
+      "id": "tg_003",
+      "title": "Force Off Recognition",
+      "competency": "environmental_exceedance_recognition",
+      "difficulty": 3,
+      "min_training_day": 18,
+      "duration_minutes": 30,
+      "ni_task_ref": ["7.17", "7.21", "9.2", "9.12"],
+      "environment": {
+        "starting_conditions": {
+          "wind_speed_kts": 15,
+          "wind_dir_deg": 270,
+          "wave_height_m": 1.0,
+          "wave_dir_deg": 280,
+          "current_speed_kts": 0.4,
+          "current_dir_deg": 250
+        },
+        "escalation": "wind increased in 5 kt steps during execution"
+      },
+      "vessel_mode_start": "DP",
+      "vessel_mode_execute": "DP",
+      "setup": "Settle in DP in the starting environment and log baseline thrust and generator load. Force off is being pushed outside the capability envelope by environment alone, with nothing failed — the loss-of-position mode this task teaches you to see coming. Before the first wind step, decide and write down the mean thrust percentages at which you would declare an advisory status and a degraded status. Note: the power and thrust monitoring habits this task builds map to NI logbook Section 9 references, which can only be signed off during active DP sea time — here you are building the habit, not the sign-off.",
+      "execute": "Increase simulated wind in 5 knot steps, allowing two minutes of settling at each step. At each step record wind speed, mean thrust percentage, and generator load. Declare your pre-decided status changes aloud as their thresholds are crossed. Stop the escalation once mean thrust exceeds 75 percent or position becomes unstable, then step the environment back down in a controlled de-escalation and record the recovery.",
+      "professional_standard": [
+        "Status thresholds written before the first wind step",
+        "Every step settled and recorded before the next increase",
+        "Declarations made when thresholds are crossed, not retrospectively",
+        "Controlled de-escalation completed with the vessel stable at every step down"
+      ],
+      "observe_and_record": {
+        "fields": [
+          { "key": "baseline_thrust_percent", "type": "number", "label": "Baseline mean thrust (%)" },
+          { "key": "wind_at_advisory_declaration_kts", "type": "number", "label": "Wind at advisory declaration (kts)" },
+          { "key": "wind_at_degraded_declaration_kts", "type": "number", "label": "Wind at degraded declaration (kts)" },
+          { "key": "wind_at_75_percent_thrust_kts", "type": "number", "label": "Wind at 75% mean thrust (kts)" },
+          { "key": "max_excursion_during_escalation_metres", "type": "number", "label": "Max excursion during escalation (metres)" },
+          { "key": "generator_load_at_peak_percent", "type": "number", "label": "Generator load at peak (%)" },
+          { "key": "notes", "type": "text", "label": "Notes" }
+        ]
+      },
+      "debrief_questions": [
+        "Define drift off, drive off and force off in one sentence each. Which of the three gives the least warning per unit of attention, and why?",
+        "Why do operating guidelines put status triggers on thrust and generator load rather than on absolute wind speeds?",
+        "How does heading relative to the environment move the wind speed at which force off occurs?",
+        "At your advisory declaration point, what should a DPO on a working vessel actually be doing — list the concrete actions, not the sentiment?"
+      ],
+      "variants": [
+        {
+          "id": "tg_003a",
+          "title": "Force Off with Current Dominant",
+          "based_on": "tg_003",
+          "changes": {
+            "escalation": "current increased in 0.2 kt steps instead of wind"
+          },
+          "note_to_tdpo": "Current is not measured by any sensor — the DP model infers it. Watch how much later the picture becomes obvious compared to a wind escalation."
+        }
+      ]
+    }
+  ]
+}
