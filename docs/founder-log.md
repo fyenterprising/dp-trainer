@@ -2,6 +2,164 @@
 
 ---
 
+## Day 7
+**Date:** 4 August 2026
+**Phase:** Build → Validation
+**Mood / Energy:** Energetic to be live. Want to make
+sure the i's are dotted and t's crossed before the
+project is viewed by professionals — my coworkers.
+
+### Top Outcome for Today
+Literature integration complete. 27 new tasks across
+8 new domains, extracted from six industry documents.
+19 domains, 72 tasks, all deployed live.
+
+### What I Worked On
+- Built a data stack from six sources: IMCA M220
+  Rev 3, M273 (Jan 2026), M249 Rev 1, M117 Rev 3.3,
+  IMO MSC.1/Circ.1580, DP Operator's Handbook 3rd ed
+- Ran extraction across four separate chats due to
+  PDF limits, each producing domain JSON plus a
+  coverage report
+- New domains: asog_cam_tam, dp_drills,
+  dp_systems_and_modes,
+  position_reference_and_redundancy,
+  emergency_response, dp_trials_and_assurance,
+  drill_conduct_and_debrief, tagos_power_strategy
+- Every task mapped to NI logbook task references
+- Curriculum days 3-22 rewired, buffer placeholders
+  replaced with real tasks, 120-minute floor held
+- Integration, verification, push, live deploy
+
+### Decisions Made
+- Decision: Write a full content spec before the
+  final extraction rounds
+- Reasoning: The first two batches came back with
+  missing NI references, order collisions and
+  duplicate tasks. The extraction chat couldn't see
+  what already existed. A spec listing existing
+  domains, task IDs, covered competencies and the
+  full NI logbook reference list fixed it — batch 3
+  came back clean.
+- Decision: Accept null results from extraction
+- Reasoning: The 2003 IMCA intro document was
+  assessed and nothing extracted because it
+  duplicated existing content. Refusing to force
+  tasks out of thin source material is a feature,
+  not a failure.
+
+### Lessons Learned Today
+- A curriculum has more knowledge than I do. I can't
+  teach future DPOs — I only know what I want to
+  learn and what the NI says you must learn. Building
+  it from the literature makes it a tool that can
+  HELP everyone who's training, not just me.
+- The best extraction output came from the strictest
+  instructions. Quality wasn't the constraint —
+  context was.
+
+### Next Actions
+1. Keep sharing with coworkers and get their feedback
+2. Validate task content with a senior DPO
+3. Use DPTrainer for my own remaining passive days
+
+---
+
+## Day 6
+**Date:** 26 July 2026
+**Phase:** Build → Deployment
+**Mood / Energy:** Big step.
+
+### Top Outcome for Today
+DPTrainer deployed live at dptrainer.netlify.app.
+No longer a local project — a URL anyone can open.
+
+### What I Worked On
+- Netlify deployment connected to the GitHub repo
+- Debugged a blank white page — build command and
+  publish directory were never set, so Netlify was
+  serving raw source files instead of the built app
+- Discovered Milestone 6 had never actually been
+  pushed; all the theme work was sitting as unstaged
+  local changes
+- Added app footer: copyright, privacy note, contact
+  email, NI non-affiliation disclaimer
+- Created LICENSE file — proprietary, all rights
+  reserved
+- Set up dptrainer.app@gmail.com
+
+### Decisions Made
+- Decision: Deploy before beta testing
+- Reasoning: Colleagues can now explore in their own
+  time and make private investigation into the
+  application. Handing someone a URL is a completely
+  different ask than asking them to sit at my laptop.
+- Decision: Add legal basics immediately on going
+  live
+- Reasoning: Deployment created exposure. I don't
+  want time pressure to get things checked by
+  colleagues before institutions can develop my idea
+  without me.
+
+### Lessons Learned Today
+- Deployment makes the project real in a way local
+  development never does.
+- Going public and protecting the work are the same
+  task, done on the same day.
+
+---
+
+## Day 5
+**Date:** 30 May 2026
+**Phase:** Build
+**Mood / Energy:** Focused, frustrated in patches —
+macOS file permissions fought back all day.
+
+### Top Outcome for Today
+Milestone 6 — full UI pass. Day and night themes,
+new typography, NI-derived colour palette.
+
+### What I Worked On
+- Complete CSS rewrite: dual theme system with
+  theme-day and theme-night
+- Inter and IBM Plex Mono replacing monospace body
+  text
+- Colour palette derived from the NI's own navy and
+  sky blue
+- Theme toggle with localStorage persistence and
+  pre-render init so night mode users don't get
+  flashed with white on refresh
+- Rewrote all four review tasks so the simulator runs
+  during reflection
+- Fought macOS TCC permissions blocking file writes —
+  required deleting and recreating index.css
+
+### Decisions Made
+- Decision: Move away from the default AI-generated
+  look
+- Reasoning: I had seen that same look all over the
+  internet. I want my build taken seriously, and that
+  starts with people's first impressions.
+- Decision: Day mode default, night mode remembered
+- Reasoning: Day and night modes are common practice
+  on vessel navigation screens — ECDIS, radar. Felt
+  like a no-brainer. Default to day for first
+  impressions, but never flash a night-mode user with
+  white on an accidental refresh.
+- Decision: No desk-only tasks anywhere in the app
+- Reasoning: There can't be a no-simulator day in a
+  simulator trainer. The tool is all about work.
+
+### Lessons Learned Today
+- Design conventions from the industry beat design
+  conventions from the web. Day/night wasn't a
+  styling choice, it was maritime practice.
+- Every task in the app must have the simulator
+  running. That rule became a permanent content
+  standard.
+
+---
+
 ## Day 4
 **Date:** 29 May 2026
 **Phase:** Build
