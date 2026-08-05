@@ -153,3 +153,41 @@ server-side record of any session.
 React 18, Vite, no backend. Content is version-
 controlled JSON, separated from application code, so
 curriculum changes require no code changes.
+
+## Project Structure
+
+```
+content/
+├── domains/          19 task libraries
+├── checklists/        session and drill checklists
+└── curriculum.json   30-day schedule
+app/src/
+├── screens/           application screens
+└── components/        shared components
+docs/                  NI references, founder log,
+                       milestone log
+```
+
+## Development
+
+Requires Node.js 18 or later.
+
+```
+npm install
+npm run dev      # local development
+npm run build    # production build
+```
+
+Deployed continuously from `main` via Netlify.
+
+## Licence and Contact
+
+Proprietary. All rights reserved. See LICENSE.
+
+The application content — tasks, curriculum structure,
+debrief questions and documentation — may not be
+copied, reproduced, distributed, or used to create
+derivative works without written permission.
+
+Enquiries, including from training providers and
+operators: dptrainer.app@gmail.com
