@@ -1,64 +1,155 @@
 # DPTrainer
 
-## Overview
+**Live: https://dptrainer.netlify.app**
 
-DPTrainer is a structured session companion for Trainee Dynamic Positioning Operators (TDPOs) undertaking ship-based simulator passive days as part of their Nautical Institute (NI) DP certification. It is not a teaching tool and does not replace qualified DPOs or the NI certification framework. It exists to solve a single, specific problem: TDPOs sit idle during simulator sessions because no one gives them structured work to do.
+A structured session companion for Trainee Dynamic
+Positioning Operators completing ship-based simulator
+passive days under the Nautical Institute DP
+certification scheme.
 
-## Problem
+---
 
-NI DP certification requires TDPOs to complete up to 30 passive simulator days, each a minimum of 2 hours, totalling up to 60 hours of seat time. The quality of that time is entirely dependent on whether a supervising DPO gives the trainee structured tasks to perform. In practice, most TDPOs receive little to no guidance and spend those hours watching rather than practicing. The hours are logged, the certification box is ticked, and the trainee arrives at their first operational DP posting having never been asked a hard question about what they observed.
+## The Problem
 
-## Solution
+NI DP certification allows up to 30 passive simulator
+days, each a minimum of two hours — up to 60 hours of
+seat time at a DP desk.
 
-DPTrainer acts as a virtual session structure companion. Before each simulator session the TDPO selects their training day and vessel type. The app provides a task from the appropriate domain and difficulty band, a structured execution protocol with professional standards, an observe-and-record data capture form, and a set of debrief questions designed to build genuine operational understanding. No scores. No pass/fail. Structured work, observation discipline, and the questions a good DPO would ask.
+The NI prescribes no tasks for that time. The
+expectation is that a supervising DPO structures the
+sessions. In practice, not every trainee has a DPO
+beside them for two hours, and not every vessel has a
+culture of structured simulator training. Without
+structure, those hours are spent watching a vessel
+hold position. The hours are logged, the box is
+ticked, and the trainee arrives at their first
+operational posting having never been asked a hard
+question about what they observed.
 
-## Tech Stack
+Sixty hours is a serious opportunity. The simulator is
+already an excellent tool. The gap is the structure
+around it.
 
-- **Frontend**: React web app (PWA — installable on tablet or phone)
-- **Content**: JSON files per domain, version-controlled in this repository
-- **Build tool**: Vite
-- **Development**: Claude Code assisted, GitHub milestone workflow
-- **Deployment**: Static hosting (no backend required in v1)
+## What DPTrainer Does
 
-## Current Status
+The trainee enters their vessel profile and training
+day, completes a 16-item pre-session checklist, and
+the app serves the tasks scheduled for that day.
 
-**Milestone 1 — Foundation** (In Progress)
+Each task provides a setup protocol, an execution
+instruction, a professional standard to meet, an
+observe-and-record form for measured outcomes, and
+debrief questions of the kind a good DPO would ask.
+Sessions are saved, progress is tracked against NI
+logbook sections, and records export as PDF.
 
-## Milestone Progress
+No scores. No pass or fail. Structured work,
+observation discipline, and a documented record of
+what the time was spent on.
 
-| # | Milestone | Status |
-|---|-----------|--------|
-| 1 | Foundation | In Progress |
-| 2 | Skeleton App | Pending |
-| 3 | Session Flow | Pending |
-| 4 | Vessel Profiles and Progress Tracking | Pending |
-| 5 | PDF Export and Session Record | Pending |
-| 6 | Polish and Beta | Pending |
-| 7 | Beta Testing | Pending |
-| 8 | Investor Ready | Pending |
+## Positioning
 
-## Content Structure
+DPTrainer is a session structure and record-keeping
+tool. It is deliberately not a training provider.
 
-```
-content/
-├── domains/          # Task libraries grouped by operational domain
-├── checklists/       # Pre-session and post-session checklists
-└── scenarios/        # Structured scenario challenge cards
-```
+- It does not deliver instruction, assessment, or
+  certification
+- It does not replace NI-accredited training centres,
+  the Induction or Simulator courses, or supervision
+  by a certified DPO
+- It has no role in sign-off — that remains entirely
+  with certified DPOs and the Master
+- It is not affiliated with or endorsed by the
+  Nautical Institute or IMCA
 
-Each domain file is a self-contained JSON document containing tasks ordered by recommended training day. Tasks include setup instructions, execution protocols, professional standards, observe-and-record fields, debrief questions, and task variants for repeat sessions.
+Its purpose is to make an existing regulatory
+requirement productive. Trainees arrive at accredited
+courses better prepared, with richer logbook records
+and more operational questions. That is intended to
+support the work training centres do, not substitute
+for it.
 
-## Getting Started
+## Content
 
-```bash
-# Install dependencies
-npm install
+19 domains, 72 tasks, mapped across a 30-day
+curriculum. Every task runs with the simulator active,
+produces measurable recorded outcomes, works on any
+ship-based DP simulator regardless of manufacturer,
+and carries references to specific NI logbook task
+sections.
 
-# Run development server
-npm run dev
+Domains: system setup, joystick control, environmental
+awareness, sensors and references, mode transitions,
+approach and close proximity, alarms, failures,
+watchkeeping, operations, review, ASOG/CAM/TAM, DP
+drills, DP systems and modes, position reference and
+redundancy, emergency response, trials and assurance,
+drill conduct and debrief, and thruster and generator
+operating strategy.
 
-# Build for production
-npm run build
-```
+### Source Material
 
-Requires Node.js 18+.
+Task content is original, written against current
+industry guidance:
+
+- IMCA M220 Rev 3 — Operational Activity Planning
+- IMCA M273 (Jan 2026) — Conducting DP Drills and
+  Ensuring Preparedness for DP Failures
+- IMCA M249 Rev 1 — DP Practitioner Accreditation
+  Scheme Handbook
+- IMCA M117 Rev 3.3 — Training and Experience of Key
+  DP Personnel
+- IMO MSC.1/Circ.1580 — Guidelines for Vessels and
+  Units with DP Systems
+- The DP Operator's Handbook, 3rd ed (Bray), published
+  by the Nautical Institute
+- The NI DP Logbook task sections
+
+No source text is reproduced. Each domain file records
+the document and section its tasks were written
+against.
+
+## Status
+
+Deployed and in use. Beta testing with trainee and
+certified DP personnel is in progress.
+
+| Milestone | Status |
+|---|---|
+| 1 — Foundation | Complete |
+| 2 — Application skeleton | Complete |
+| 3 — Session flow | Complete |
+| 4 — Vessel profiles and progress tracking | Complete |
+| 5 — PDF export and DP time log | Complete |
+| 6 — Interface and deployment | Complete |
+| 7 — Beta testing | In progress |
+| 8 — Investor ready | Pending |
+
+## Features
+
+- 30-day curriculum with progressive difficulty
+- Multi-vessel profiles across DP1, DP2 and DP3
+- 16-item pre-session verification checklist
+- Multi-task sessions with a running timer
+- Structured data capture and debrief per task
+- Progress tracking against all 11 NI logbook sections
+- DP time log with active and passive day totals and
+  NI certification threshold tracking
+- PDF export of session records and time logs
+- Day and night interface modes for bridge use
+- Works offline after first load; all data stored
+  locally on the user's device
+
+## Privacy
+
+All training data is held in browser local storage on
+the user's own device. Nothing is uploaded,
+transmitted, or accessible to anyone else. There are
+no accounts, no analytics on user content, and no
+server-side record of any session.
+
+## Technical
+
+React 18, Vite, no backend. Content is version-
+controlled JSON, separated from application code, so
+curriculum changes require no code changes.
