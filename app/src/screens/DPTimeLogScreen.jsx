@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 
 const VESSEL_TYPES = ['PSV', 'Research', 'AHTS', 'CSV', 'MPSV', 'Other']
 const DP_CLASSES = ['DP1', 'DP2', 'DP3']
@@ -28,6 +28,34 @@ const ACTIVITY_CODES = [
 ]
 
 const STORAGE_KEY = 'dp-time-log'
+
+const CSV_HEADER = ['Period', 'Vessel', 'Vessel Type', 'Date', 'A/P', 'Hours', 'DP Class', 'Activity', 'Notes', 'Rank']
+
+const IMPORT_FIELDS = [
+  { key: 'date', label: 'Date', required: true },
+  { key: 'vessel', label: 'Vessel', required: true },
+  { key: 'activePassive', label: 'Active/Passive', required: true },
+  { key: 'hours', label: 'Hours', required: true },
+  { key: 'vesselType', label: 'Vessel Type', required: false },
+  { key: 'dpClass', label: 'DP Class', required: false },
+  { key: 'activityCode', label: 'Activity Code', required: false },
+  { key: 'notes', label: 'Notes', required: false },
+  { key: 'rank', label: 'Rank', required: false },
+  { key: 'period', label: 'Period Number', required: false },
+]
+
+const FIELD_PATTERNS = {
+  date: ['date'],
+  vessel: ['vessel name', 'ship name', 'vessel', 'ship'],
+  activePassive: ['active/passive', 'active / passive', 'a/p', 'ap', 'active', 'passive', 'type'],
+  hours: ['hours', 'hrs', 'hour'],
+  vesselType: ['vessel type', 'ship type', 'vesseltype'],
+  dpClass: ['dp class', 'dpclass', 'class'],
+  activityCode: ['activity code', 'activity', 'code'],
+  notes: ['notes', 'note', 'comments', 'comment', 'remarks'],
+  rank: ['rank', 'position', 'role'],
+  period: ['period number', 'period no', 'period', 'period#'],
+}
 
 function blankEntry(nextPeriod) {
   return {
@@ -67,6 +95,200 @@ function computeTotals(entries) {
     totalDays: activeDates.size + passiveDates.size,
     totalHours: Math.round((activeHours + passiveHours) * 10) / 10,
   }
+}
+
+/* ── CSV EXPORT ── */
+
+function csvEscape(value) {
+  const str = String(value ?? '')
+  if (/[",\r\n]/.test(str)) {
+    return '"' + str.replace(/"/g, '""') + '"'
+  }
+  return str
+}
+
+function entriesToCSV(entries) {
+  const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date))
+  const lines = [CSV_HEADER.map(csvEscape).join(',')]
+  sorted.forEach(e => {
+    lines.push([
+      e.period, e.vesselName, e.vesselType, formatDate(e.date), e.type,
+      e.hours, e.dpClass, e.activityCode, e.notes, e.rank,
+    ].map(csvEscape).join(','))
+  })
+  return lines.join('\r\n')
+}
+
+function todayISODate() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function downloadTextFile(text, filename, mimeType) {
+  const blob = new Blob([text], { type: mimeType })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+/* ── CSV PARSE ── */
+
+function parseCSV(text) {
+  const rows = []
+  let row = []
+  let field = ''
+  let inQuotes = false
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i]
+    if (inQuotes) {
+      if (char === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++ }
+        else { inQuotes = false }
+      } else {
+        field += char
+      }
+      continue
+    }
+    if (char === '"') { inQuotes = true; continue }
+    if (char === ',') { row.push(field); field = ''; continue }
+    if (char === '\r') { continue }
+    if (char === '\n') { row.push(field); rows.push(row); row = []; field = ''; continue }
+    field += char
+  }
+  if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row) }
+  return rows.filter(r => !(r.length === 1 && r[0].trim() === ''))
+}
+
+function normalizeHeader(h) {
+  return (h ?? '').trim().toLowerCase().replace(/\s+/g, ' ')
+}
+
+function guessColumnMap(headers) {
+  const norm = headers.map(normalizeHeader)
+  const candidates = []
+  Object.entries(FIELD_PATTERNS).forEach(([field, patterns]) => {
+    norm.forEach((h, idx) => {
+      if (!h) return
+      let best = 0
+      patterns.forEach(p => {
+        if (h === p) best = Math.max(best, 1000 + p.length)
+        else if (h.includes(p)) best = Math.max(best, p.length)
+      })
+      if (best > 0) candidates.push({ field, idx, score: best })
+    })
+  })
+  candidates.sort((a, b) => b.score - a.score)
+  const map = {}
+  const usedHeaders = new Set()
+  const usedFields = new Set()
+  candidates.forEach(c => {
+    if (usedFields.has(c.field) || usedHeaders.has(c.idx)) return
+    map[c.field] = c.idx
+    usedFields.add(c.field)
+    usedHeaders.add(c.idx)
+  })
+  IMPORT_FIELDS.forEach(f => { if (!(f.key in map)) map[f.key] = null })
+  return map
+}
+
+function validateDateParts(y, mo, d) {
+  const year = parseInt(y, 10), month = parseInt(mo, 10), day = parseInt(d, 10)
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null
+  const daysInMonth = new Date(year, month, 0).getDate()
+  if (day > daysInMonth) return null
+  return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
+function parseImportDate(raw) {
+  const s = String(raw ?? '').trim()
+  if (!s) return null
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
+  if (m) return validateDateParts(m[1], m[2], m[3])
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (m) return validateDateParts(m[3], m[2], m[1])
+  return null
+}
+
+function parseActivePassive(raw) {
+  const s = String(raw ?? '').trim().toLowerCase()
+  if (s === 'a' || s === 'active') return 'A'
+  if (s === 'p' || s === 'passive') return 'P'
+  return null
+}
+
+function parseHoursValue(raw) {
+  const s = String(raw ?? '').trim()
+  if (!/^\d+(\.\d+)?$/.test(s)) return null
+  const n = parseFloat(s)
+  return isNaN(n) ? null : n
+}
+
+function cellAt(row, idx) {
+  if (idx === null || idx === undefined || idx < 0) return ''
+  return (row[idx] ?? '').trim()
+}
+
+function processImportRows(dataRows, columnMap, nextPeriod) {
+  const valid = []
+  const problems = []
+  let periodCounter = nextPeriod
+  const periodMapped = columnMap.period !== null && columnMap.period !== undefined
+
+  dataRows.forEach((row, i) => {
+    const rowNumber = i + 2 // header row is line 1
+    const dateRaw = cellAt(row, columnMap.date)
+    const vesselRaw = cellAt(row, columnMap.vessel)
+    const apRaw = cellAt(row, columnMap.activePassive)
+    const hoursRaw = cellAt(row, columnMap.hours)
+
+    const parsedDate = parseImportDate(dateRaw)
+    const parsedAP = parseActivePassive(apRaw)
+    const parsedHours = parseHoursValue(hoursRaw)
+
+    const reasons = []
+    if (!parsedDate) reasons.push(dateRaw ? `unparseable date "${dateRaw}"` : 'missing date')
+    if (!vesselRaw) reasons.push('missing vessel')
+    if (!parsedAP) reasons.push(apRaw ? `invalid A/P value "${apRaw}"` : 'missing A/P value')
+    if (parsedHours === null) reasons.push(hoursRaw ? `hours not a number "${hoursRaw}"` : 'missing hours')
+
+    if (reasons.length > 0) {
+      problems.push({ rowNumber, reasons })
+      return
+    }
+
+    const activityCodeRaw = cellAt(row, columnMap.activityCode)
+    const activityUnrecognised = !!activityCodeRaw &&
+      !ACTIVITY_CODES.some(a => a.code.toLowerCase() === activityCodeRaw.toLowerCase())
+
+    let period
+    if (periodMapped) {
+      const periodRaw = cellAt(row, columnMap.period)
+      period = /^\d+$/.test(periodRaw) ? parseInt(periodRaw, 10) : periodCounter++
+    } else {
+      period = periodCounter++
+    }
+
+    valid.push({
+      period,
+      vesselName: vesselRaw,
+      vesselType: cellAt(row, columnMap.vesselType),
+      date: parsedDate,
+      activePassive: parsedAP,
+      hours: parsedHours,
+      dpClass: cellAt(row, columnMap.dpClass),
+      activityCode: activityCodeRaw,
+      activityUnrecognised,
+      notes: cellAt(row, columnMap.notes),
+      rank: cellAt(row, columnMap.rank),
+    })
+  })
+
+  return { valid, problems }
 }
 
 function EntryForm({ initial, onSave, onCancel, nextPeriod }) {
@@ -159,6 +381,15 @@ export default function DPTimeLogScreen({ onBack }) {
   const [editEntry, setEditEntry] = useState(null)
   const [printDate] = useState(() => new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }))
 
+  const fileInputRef = useRef(null)
+  const [importStage, setImportStage] = useState(null) // null | 'mapping' | 'preview'
+  const [importHeaders, setImportHeaders] = useState([])
+  const [importRows, setImportRows] = useState([])
+  const [importError, setImportError] = useState('')
+  const [mappingError, setMappingError] = useState('')
+  const [columnMap, setColumnMap] = useState({})
+  const [importResult, setImportResult] = useState('')
+
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
     setEntries(stored)
@@ -201,9 +432,112 @@ export default function DPTimeLogScreen({ onBack }) {
     setEditEntry(null)
   }
 
+  function handleExportCSV() {
+    const csv = entriesToCSV(entries)
+    downloadTextFile(csv, `dp-time-log-${todayISODate()}.csv`, 'text/csv;charset=utf-8;')
+  }
+
+  function handleImportClick() {
+    setImportResult('')
+    fileInputRef.current?.click()
+  }
+
+  function handleFileSelected(e) {
+    const file = e.target.files[0]
+    e.target.value = ''
+    if (!file) return
+    setImportError('')
+    setImportResult('')
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      setImportError('Please choose a .csv file.')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = evt => {
+      try {
+        const text = String(evt.target.result || '').replace(/^\uFEFF/, '')
+        const rows = parseCSV(text)
+        if (rows.length === 0) {
+          setImportError('The file appears to be empty.')
+          return
+        }
+        const headers = rows[0].map(h => h.trim())
+        if (headers.length === 0 || headers.every(h => h === '')) {
+          setImportError('Could not read a header row from this file.')
+          return
+        }
+        const dataRows = rows.slice(1).filter(r => r.some(c => c.trim() !== ''))
+        if (dataRows.length === 0) {
+          setImportError('No data rows found in this file.')
+          return
+        }
+        setImportHeaders(headers)
+        setImportRows(dataRows)
+        setColumnMap(guessColumnMap(headers))
+        setMappingError('')
+        setImportStage('mapping')
+      } catch {
+        setImportError('This file could not be parsed as CSV.')
+      }
+    }
+    reader.onerror = () => setImportError('Could not read the file.')
+    reader.readAsText(file)
+  }
+
+  function setColumnMapField(key, value) {
+    setColumnMap(prev => ({ ...prev, [key]: value === '' ? null : Number(value) }))
+  }
+
+  function handleContinueToPreview() {
+    const missing = IMPORT_FIELDS.filter(f => f.required && (columnMap[f.key] === null || columnMap[f.key] === undefined))
+    if (missing.length > 0) {
+      setMappingError(`Please map the required field${missing.length > 1 ? 's' : ''}: ${missing.map(f => f.label).join(', ')}`)
+      return
+    }
+    setMappingError('')
+    setImportStage('preview')
+  }
+
+  function handleCancelImport() {
+    setImportStage(null)
+    setImportHeaders([])
+    setImportRows([])
+    setColumnMap({})
+    setImportError('')
+    setMappingError('')
+  }
+
+  function handleConfirmImport() {
+    const newEntries = importProcessed.valid.map((v, idx) => ({
+      id: `imp-${Date.now()}-${idx}`,
+      period: v.period,
+      vesselName: v.vesselName,
+      vesselType: v.vesselType,
+      date: v.date,
+      type: v.activePassive,
+      hours: v.hours,
+      dpClass: v.dpClass,
+      activityCode: v.activityCode,
+      notes: v.notes,
+      rank: v.rank,
+    }))
+    const updated = [...newEntries, ...entries]
+    save(updated)
+    setImportResult(`${newEntries.length} entries imported, ${importProcessed.problems.length} rows skipped.`)
+    setImportStage(null)
+    setImportHeaders([])
+    setImportRows([])
+    setColumnMap({})
+  }
+
   const nextPeriod = entries.length > 0 ? Math.max(...entries.map(e => parseInt(e.period) || 0)) + 1 : 1
   const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date))
   const totals = computeTotals(entries)
+
+  const importProcessed = useMemo(() => {
+    if (!importRows.length) return { valid: [], problems: [] }
+    return processImportRows(importRows, columnMap, nextPeriod)
+  }, [importRows, columnMap, nextPeriod])
 
   const traineeName = (() => {
     try {
@@ -267,11 +601,133 @@ export default function DPTimeLogScreen({ onBack }) {
         </div>
       </div>
 
-      {/* ADD ENTRY / EXPORT */}
+      {/* ADD ENTRY / IMPORT / EXPORT */}
       <div className="dplog-toolbar no-print">
         <button className="btn-primary" onClick={handleAddNew}>+ Add Entry</button>
+        <button className="btn-secondary" onClick={handleImportClick}>Import CSV</button>
+        <button className="btn-secondary" onClick={handleExportCSV}>Export CSV</button>
         <button className="btn-secondary" onClick={() => window.print()}>Export PDF</button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv"
+          className="dplog-import-file-input no-print"
+          onChange={handleFileSelected}
+        />
       </div>
+
+      {/* IMPORT: STEP 1 ERROR */}
+      {importError && (
+        <div className="dplog-import-error no-print">
+          <p>{importError}</p>
+          <button className="btn-secondary" onClick={() => setImportError('')}>Dismiss</button>
+        </div>
+      )}
+
+      {/* IMPORT: STEP 2 — COLUMN MAPPING */}
+      {importStage === 'mapping' && (
+        <div className="dplog-form dplog-import no-print">
+          <h2>Map CSV Columns</h2>
+          <p className="dplog-import-hint">
+            Match each DPTrainer field to a column from your file. Required fields are marked with an asterisk.
+          </p>
+          <div className="dplog-import-map-grid">
+            {IMPORT_FIELDS.map(f => (
+              <div className="dplog-field" key={f.key}>
+                <label>{f.label}{f.required ? ' *' : ''}</label>
+                <select
+                  value={columnMap[f.key] ?? ''}
+                  onChange={e => setColumnMapField(f.key, e.target.value)}
+                >
+                  <option value="">Not in file</option>
+                  {importHeaders.map((h, idx) => (
+                    <option key={idx} value={idx}>{h || `Column ${idx + 1}`}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+          {mappingError && <p className="dplog-import-error-text">{mappingError}</p>}
+          <div className="dplog-form-actions">
+            <button className="btn-primary" onClick={handleContinueToPreview}>Continue</button>
+            <button className="btn-secondary" onClick={handleCancelImport}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* IMPORT: STEP 3 — PREVIEW AND CONFIRM */}
+      {importStage === 'preview' && (
+        <div className="dplog-form dplog-import no-print">
+          <h2>Preview Import</h2>
+          <p className="dplog-import-hint">
+            {importProcessed.valid.length} of {importRows.length} row{importRows.length === 1 ? '' : 's'} will be imported.
+            {importProcessed.valid.length > 10 ? ' Showing first 10.' : ''}
+          </p>
+          <div className="dplog-table-wrap">
+            <table className="dplog-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Vessel</th>
+                  <th>Type</th>
+                  <th>Date</th>
+                  <th>A/P</th>
+                  <th>Hrs</th>
+                  <th>DP</th>
+                  <th>Activity</th>
+                  <th>Rank</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {importProcessed.valid.slice(0, 10).map((v, idx) => (
+                  <tr key={idx}>
+                    <td>{v.period}</td>
+                    <td>{v.vesselName}</td>
+                    <td>{v.vesselType}</td>
+                    <td>{formatDate(v.date)}</td>
+                    <td className={v.activePassive === 'A' ? 'dplog-active' : 'dplog-passive'}>{v.activePassive}</td>
+                    <td>{v.hours}</td>
+                    <td>{v.dpClass}</td>
+                    <td>
+                      {v.activityCode}
+                      {v.activityUnrecognised && <span className="dplog-import-flag"> (unrecognised)</span>}
+                    </td>
+                    <td>{v.rank}</td>
+                    <td>{v.notes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {importProcessed.problems.length > 0 && (
+            <div className="dplog-import-problems">
+              <div className="dplog-thresh-heading">Rows skipped ({importProcessed.problems.length})</div>
+              <ul className="dplog-import-problem-list">
+                {importProcessed.problems.map((p, idx) => (
+                  <li key={idx}>Row {p.rowNumber}: {p.reasons.join(', ')}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="dplog-form-actions">
+            <button className="btn-primary" onClick={handleConfirmImport} disabled={importProcessed.valid.length === 0}>
+              Confirm Import
+            </button>
+            <button className="btn-secondary" onClick={handleCancelImport}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* IMPORT: RESULT */}
+      {importResult && (
+        <div className="dplog-import-result no-print">
+          <p>{importResult}</p>
+          <button className="btn-secondary" onClick={() => setImportResult('')}>Dismiss</button>
+        </div>
+      )}
 
       {/* INLINE FORM */}
       {showForm && (
