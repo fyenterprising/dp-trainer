@@ -558,6 +558,7 @@ button {
 /* ── DP TIME LOG CSV IMPORT ── */
 .dplog-import-file-input { display: none; }
 .dplog-import-hint { font-size: 13px; color: var(--txt3); margin-bottom: 16px; line-height: 1.5; }
+.dplog-import-date-format { color: var(--acc); font-weight: 500; margin-top: -10px; }
 .dplog-import-map-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 12px; margin-bottom: 16px; }
 .dplog-import-error {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;

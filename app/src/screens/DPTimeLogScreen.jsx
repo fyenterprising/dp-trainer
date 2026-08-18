@@ -204,14 +204,37 @@ function validateDateParts(y, mo, d) {
   return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
 
-function parseImportDate(raw) {
+function parseImportDate(raw, slashFormat) {
   const s = String(raw ?? '').trim()
   if (!s) return null
   let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
   if (m) return validateDateParts(m[1], m[2], m[3])
   m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-  if (m) return validateDateParts(m[3], m[2], m[1])
+  if (m) {
+    const [, first, second, year] = m
+    return slashFormat === 'mdy'
+      ? validateDateParts(year, first, second)
+      : validateDateParts(year, second, first)
+  }
   return null
+}
+
+// Scans every value in the mapped date column to resolve dd/mm vs mm/dd for the
+// whole file at once, since the two are ambiguous on a single ≤12/≤12 row.
+function detectSlashDateFormat(dataRows, dateIdx) {
+  let sawFirstOver12 = false
+  let sawSecondOver12 = false
+  let hasSlashDates = false
+  dataRows.forEach(row => {
+    const raw = cellAt(row, dateIdx)
+    const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+    if (!m) return
+    hasSlashDates = true
+    if (parseInt(m[1], 10) > 12) sawFirstOver12 = true
+    if (parseInt(m[2], 10) > 12) sawSecondOver12 = true
+  })
+  const format = sawFirstOver12 ? 'dmy' : sawSecondOver12 ? 'mdy' : 'dmy'
+  return { format, hasSlashDates }
 }
 
 function parseActivePassive(raw) {
@@ -233,11 +256,23 @@ function cellAt(row, idx) {
   return (row[idx] ?? '').trim()
 }
 
+function findDuplicateMappings(columnMap) {
+  const byIndex = {}
+  IMPORT_FIELDS.forEach(f => {
+    const idx = columnMap[f.key]
+    if (idx === null || idx === undefined) return
+    if (!byIndex[idx]) byIndex[idx] = []
+    byIndex[idx].push(f.label)
+  })
+  return Object.values(byIndex).filter(labels => labels.length > 1)
+}
+
 function processImportRows(dataRows, columnMap, nextPeriod) {
   const valid = []
   const problems = []
   let periodCounter = nextPeriod
   const periodMapped = columnMap.period !== null && columnMap.period !== undefined
+  const { format: slashFormat, hasSlashDates } = detectSlashDateFormat(dataRows, columnMap.date)
 
   dataRows.forEach((row, i) => {
     const rowNumber = i + 2 // header row is line 1
@@ -246,7 +281,7 @@ function processImportRows(dataRows, columnMap, nextPeriod) {
     const apRaw = cellAt(row, columnMap.activePassive)
     const hoursRaw = cellAt(row, columnMap.hours)
 
-    const parsedDate = parseImportDate(dateRaw)
+    const parsedDate = parseImportDate(dateRaw, slashFormat)
     const parsedAP = parseActivePassive(apRaw)
     const parsedHours = parseHoursValue(hoursRaw)
 
@@ -288,7 +323,7 @@ function processImportRows(dataRows, columnMap, nextPeriod) {
     })
   })
 
-  return { valid, problems }
+  return { valid, problems, slashDateFormat: slashFormat, hasSlashDates }
 }
 
 function EntryForm({ initial, onSave, onCancel, nextPeriod }) {
@@ -494,6 +529,11 @@ export default function DPTimeLogScreen({ onBack }) {
       setMappingError(`Please map the required field${missing.length > 1 ? 's' : ''}: ${missing.map(f => f.label).join(', ')}`)
       return
     }
+    const duplicates = findDuplicateMappings(columnMap)
+    if (duplicates.length > 0) {
+      setMappingError(`The same column is mapped to more than one field: ${duplicates.map(labels => labels.join(' and ')).join('; ')}. Each field needs its own column.`)
+      return
+    }
     setMappingError('')
     setImportStage('preview')
   }
@@ -535,7 +575,7 @@ export default function DPTimeLogScreen({ onBack }) {
   const totals = computeTotals(entries)
 
   const importProcessed = useMemo(() => {
-    if (!importRows.length) return { valid: [], problems: [] }
+    if (!importRows.length) return { valid: [], problems: [], slashDateFormat: 'dmy', hasSlashDates: false }
     return processImportRows(importRows, columnMap, nextPeriod)
   }, [importRows, columnMap, nextPeriod])
 
@@ -632,20 +672,29 @@ export default function DPTimeLogScreen({ onBack }) {
             Match each DPTrainer field to a column from your file. Required fields are marked with an asterisk.
           </p>
           <div className="dplog-import-map-grid">
-            {IMPORT_FIELDS.map(f => (
-              <div className="dplog-field" key={f.key}>
-                <label>{f.label}{f.required ? ' *' : ''}</label>
-                <select
-                  value={columnMap[f.key] ?? ''}
-                  onChange={e => setColumnMapField(f.key, e.target.value)}
-                >
-                  <option value="">Not in file</option>
-                  {importHeaders.map((h, idx) => (
-                    <option key={idx} value={idx}>{h || `Column ${idx + 1}`}</option>
-                  ))}
-                </select>
-              </div>
-            ))}
+            {IMPORT_FIELDS.map(f => {
+              const usedByOthers = new Set(
+                IMPORT_FIELDS
+                  .filter(other => other.key !== f.key && columnMap[other.key] !== null && columnMap[other.key] !== undefined)
+                  .map(other => columnMap[other.key])
+              )
+              return (
+                <div className="dplog-field" key={f.key}>
+                  <label>{f.label}{f.required ? ' *' : ''}</label>
+                  <select
+                    value={columnMap[f.key] ?? ''}
+                    onChange={e => setColumnMapField(f.key, e.target.value)}
+                  >
+                    <option value="">Not in file</option>
+                    {importHeaders.map((h, idx) => (
+                      <option key={idx} value={idx} disabled={usedByOthers.has(idx)}>
+                        {h || `Column ${idx + 1}`}{usedByOthers.has(idx) ? ' (used)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )
+            })}
           </div>
           {mappingError && <p className="dplog-import-error-text">{mappingError}</p>}
           <div className="dplog-form-actions">
@@ -663,6 +712,11 @@ export default function DPTimeLogScreen({ onBack }) {
             {importProcessed.valid.length} of {importRows.length} row{importRows.length === 1 ? '' : 's'} will be imported.
             {importProcessed.valid.length > 10 ? ' Showing first 10.' : ''}
           </p>
+          {importProcessed.hasSlashDates && (
+            <p className="dplog-import-hint dplog-import-date-format">
+              Dates read as {importProcessed.slashDateFormat === 'mdy' ? 'mm/dd/yyyy' : 'dd/mm/yyyy'}.
+            </p>
+          )}
           <div className="dplog-table-wrap">
             <table className="dplog-table">
               <thead>
