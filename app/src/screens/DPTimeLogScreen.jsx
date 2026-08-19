@@ -31,6 +31,12 @@ const STORAGE_KEY = 'dp-time-log'
 
 const CSV_HEADER = ['Period', 'Vessel', 'Vessel Type', 'Date', 'A/P', 'Hours', 'DP Class', 'Activity', 'Notes', 'Rank']
 
+const TEMPLATE_CSV = [
+  CSV_HEADER.join(','),
+  '1,Example Vessel,PSV,22/02/2024,A,6,DP2,SU,,2/O',
+  '2,Example Vessel,PSV,02/03/2024,P,2,DP2,,,2/O',
+].join('\r\n')
+
 const IMPORT_FIELDS = [
   { key: 'date', label: 'Date', required: true },
   { key: 'vessel', label: 'Vessel', required: true },
@@ -440,7 +446,7 @@ export default function DPTimeLogScreen({ onBack }) {
     if (editEntry) {
       updated = entries.map(e => e.id === editEntry.id ? { ...form, id: editEntry.id } : e)
     } else {
-      updated = [{ ...form, id: Date.now().toString() }, ...entries]
+      updated = [...entries, { ...form, id: Date.now().toString() }]
     }
     save(updated)
     setShowForm(false)
@@ -470,6 +476,10 @@ export default function DPTimeLogScreen({ onBack }) {
   function handleExportCSV() {
     const csv = entriesToCSV(entries)
     downloadTextFile(csv, `dp-time-log-${todayISODate()}.csv`, 'text/csv;charset=utf-8;')
+  }
+
+  function handleDownloadTemplate() {
+    downloadTextFile(TEMPLATE_CSV, 'dp-time-log-template.csv', 'text/csv;charset=utf-8;')
   }
 
   function handleImportClick() {
@@ -561,7 +571,7 @@ export default function DPTimeLogScreen({ onBack }) {
       notes: v.notes,
       rank: v.rank,
     }))
-    const updated = [...newEntries, ...entries]
+    const updated = [...entries, ...newEntries]
     save(updated)
     setImportResult(`${newEntries.length} entries imported, ${importProcessed.problems.length} rows skipped.`)
     setImportStage(null)
@@ -571,7 +581,11 @@ export default function DPTimeLogScreen({ onBack }) {
   }
 
   const nextPeriod = entries.length > 0 ? Math.max(...entries.map(e => parseInt(e.period) || 0)) + 1 : 1
-  const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date))
+  const sorted = [...entries].sort((a, b) => {
+    const dateCompare = a.date.localeCompare(b.date)
+    if (dateCompare !== 0) return dateCompare
+    return (parseInt(a.period, 10) || 0) - (parseInt(b.period, 10) || 0)
+  })
   const totals = computeTotals(entries)
 
   const importProcessed = useMemo(() => {
@@ -641,12 +655,66 @@ export default function DPTimeLogScreen({ onBack }) {
         </div>
       </div>
 
+      {/* EMPTY STATE */}
+      {entries.length === 0 && (
+        <div className="history-empty">
+          <p className="no-tasks">No entries yet. Add your first DP time log entry to start tracking your progress toward NI certification thresholds.</p>
+        </div>
+      )}
+
+      {/* TABLE */}
+      {entries.length > 0 && (
+        <div className="dplog-table-wrap">
+          <table className="dplog-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Vessel</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>A/P</th>
+                <th>Hrs</th>
+                <th>DP</th>
+                <th>Activity</th>
+                <th>Rank</th>
+                <th>Notes</th>
+                <th className="no-print">Edit</th>
+                <th className="no-print">Del</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sorted.map(e => (
+                <tr key={e.id}>
+                  <td>{e.period}</td>
+                  <td>{e.vesselName}</td>
+                  <td>{e.vesselType}</td>
+                  <td>{formatDate(e.date)}</td>
+                  <td className={e.type === 'A' ? 'dplog-active' : 'dplog-passive'}>{e.type}</td>
+                  <td>{e.hours}</td>
+                  <td>{e.dpClass}</td>
+                  <td>{e.activityCode}</td>
+                  <td>{e.rank}</td>
+                  <td>{e.notes}</td>
+                  <td className="no-print">
+                    <button className="dplog-btn-edit" onClick={() => handleEdit(e)}>Edit</button>
+                  </td>
+                  <td className="no-print">
+                    <button className="dplog-btn-delete" onClick={() => handleDelete(e.id)}>✕</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       {/* ADD ENTRY / IMPORT / EXPORT */}
       <div className="dplog-toolbar no-print">
         <button className="btn-primary" onClick={handleAddNew}>+ Add Entry</button>
         <button className="btn-secondary" onClick={handleImportClick}>Import CSV</button>
         <button className="btn-secondary" onClick={handleExportCSV}>Export CSV</button>
         <button className="btn-secondary" onClick={() => window.print()}>Export PDF</button>
+        <button className="btn-secondary" onClick={handleDownloadTemplate}>Download Template</button>
         <input
           ref={fileInputRef}
           type="file"
@@ -655,6 +723,9 @@ export default function DPTimeLogScreen({ onBack }) {
           onChange={handleFileSelected}
         />
       </div>
+      <p className="dplog-csv-note no-print">
+        Dates in dd/mm/yyyy. A for active, P for passive. Delete the example rows before importing.
+      </p>
 
       {/* IMPORT: STEP 1 ERROR */}
       {importError && (
@@ -791,59 +862,6 @@ export default function DPTimeLogScreen({ onBack }) {
           onCancel={handleCancelForm}
           nextPeriod={nextPeriod}
         />
-      )}
-
-      {/* EMPTY STATE */}
-      {entries.length === 0 && (
-        <div className="history-empty">
-          <p className="no-tasks">No entries yet. Add your first DP time log entry to start tracking your progress toward NI certification thresholds.</p>
-        </div>
-      )}
-
-      {/* TABLE */}
-      {entries.length > 0 && (
-        <div className="dplog-table-wrap">
-          <table className="dplog-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Vessel</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>A/P</th>
-                <th>Hrs</th>
-                <th>DP</th>
-                <th>Activity</th>
-                <th>Rank</th>
-                <th>Notes</th>
-                <th className="no-print">Edit</th>
-                <th className="no-print">Del</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sorted.map(e => (
-                <tr key={e.id}>
-                  <td>{e.period}</td>
-                  <td>{e.vesselName}</td>
-                  <td>{e.vesselType}</td>
-                  <td>{formatDate(e.date)}</td>
-                  <td className={e.type === 'A' ? 'dplog-active' : 'dplog-passive'}>{e.type}</td>
-                  <td>{e.hours}</td>
-                  <td>{e.dpClass}</td>
-                  <td>{e.activityCode}</td>
-                  <td>{e.rank}</td>
-                  <td>{e.notes}</td>
-                  <td className="no-print">
-                    <button className="dplog-btn-edit" onClick={() => handleEdit(e)}>Edit</button>
-                  </td>
-                  <td className="no-print">
-                    <button className="dplog-btn-delete" onClick={() => handleDelete(e.id)}>✕</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       )}
 
       {/* PRINT FOOTER */}
