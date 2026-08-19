@@ -103,6 +103,27 @@ function computeTotals(entries) {
   }
 }
 
+// NI New Offshore Scheme: a DP day requires a minimum of 2 hours on the DP desk.
+// The app has no record of Induction/Simulator Course dates, so it cannot split
+// entries between Phase B and Phase D — it only tracks totals across both.
+function computeNIProgress(entries) {
+  const qualifying = entries.filter(e => (parseFloat(e.hours) || 0) >= 2)
+  const activeDates = new Set()
+  const passiveDates = new Set()
+  const dp23Dates = new Set()
+  qualifying.forEach(e => {
+    if (e.type === 'A') activeDates.add(e.date)
+    else passiveDates.add(e.date)
+    if (e.dpClass === 'DP2' || e.dpClass === 'DP3') dp23Dates.add(e.date)
+  })
+  const totalDays = new Set([...activeDates, ...passiveDates]).size
+  return {
+    totalDays,
+    passiveDays: passiveDates.size,
+    dp23Days: dp23Dates.size,
+  }
+}
+
 /* ── CSV EXPORT ── */
 
 function csvEscape(value) {
@@ -400,18 +421,21 @@ function EntryForm({ initial, onSave, onCancel, nextPeriod }) {
   )
 }
 
-function ThresholdBar({ label, value, max, note }) {
+function ThresholdBar({ label, value, max, statusText, statusTone }) {
   const pct = Math.min(100, Math.round((value / max) * 100))
   const done = value >= max
   return (
     <div className="dplog-threshold">
       <div className="dplog-threshold-label">
         <span>{label}</span>
-        <span className={done ? 'thresh-done' : 'thresh-partial'}>{value} of {max}{note ? ` — ${note}` : ''}</span>
+        <span className={done ? 'thresh-done' : 'thresh-partial'}>{value} of {max}</span>
       </div>
       <div className="dplog-bar-track">
         <div className={`dplog-bar-fill${done ? ' dplog-bar-fill--done' : ''}`} style={{ width: `${pct}%` }} />
       </div>
+      {statusText && (
+        <div className={`dplog-thresh-status dplog-thresh-status--${statusTone || 'info'}`}>{statusText}</div>
+      )}
     </div>
   )
 }
@@ -587,6 +611,21 @@ export default function DPTimeLogScreen({ onBack }) {
     return (parseInt(a.period, 10) || 0) - (parseInt(b.period, 10) || 0)
   })
   const totals = computeTotals(entries)
+  const ni = computeNIProgress(entries)
+
+  let certStatusText, certStatusTone
+  if (ni.dp23Days >= 60 && ni.totalDays >= 120) {
+    certStatusText = 'On current record: Unlimited certificate'
+    certStatusTone = 'success'
+  } else if (ni.totalDays >= 120) {
+    const needed = 60 - ni.dp23Days
+    certStatusText = `On current record: Limited certificate. ${needed} more DP2/DP3 day${needed === 1 ? '' : 's'} needed for Unlimited.`
+    certStatusTone = 'warning'
+  } else {
+    const remaining = 120 - ni.totalDays
+    certStatusText = `${remaining} day${remaining === 1 ? '' : 's'} remaining to certification.`
+    certStatusTone = 'info'
+  }
 
   const importProcessed = useMemo(() => {
     if (!importRows.length) return { valid: [], problems: [], slashDateFormat: 'dmy', hasSlashDates: false }
@@ -648,12 +687,29 @@ export default function DPTimeLogScreen({ onBack }) {
         </div>
 
         <div className="dplog-thresholds">
-          <div className="dplog-thresh-heading">NI Certification Thresholds</div>
-          <ThresholdBar label="Passive days (max 30)" value={totals.passiveDays} max={30} note="Basic → Advanced" />
-          <ThresholdBar label="Active days (min 30)" value={totals.activeDays} max={30} note="Basic → Advanced" />
-          <ThresholdBar label="Active days toward Full" value={totals.activeDays} max={60} note="Advanced → Full (30–60 required)" />
+          <div className="dplog-thresh-heading">NI New Offshore Scheme Progress</div>
+          <ThresholdBar label="Phase B — DP sea time" value={ni.totalDays} max={60} />
+          <ThresholdBar
+            label="Phase B — passive days used"
+            value={Math.min(ni.passiveDays, 30)}
+            max={30}
+            statusText={ni.passiveDays >= 30 ? 'Passive day limit reached — further passive days cannot be counted toward certification.' : null}
+            statusTone="warning"
+          />
+          <ThresholdBar label="Total days toward certification" value={ni.totalDays} max={120} />
+          <ThresholdBar
+            label="DP2/DP3 days — Unlimited certificate"
+            value={ni.dp23Days}
+            max={60}
+            statusText={certStatusText}
+            statusTone={certStatusTone}
+          />
         </div>
       </div>
+
+      <p className="dplog-thresh-explainer">
+        Phase B and Phase D are split by your Induction and Simulator Course dates. DPTrainer tracks your total days, passive day usage and DP class mix — confirm phase allocation against your logbook.
+      </p>
 
       {/* EMPTY STATE */}
       {entries.length === 0 && (
