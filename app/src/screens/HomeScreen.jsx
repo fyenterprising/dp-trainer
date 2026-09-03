@@ -1,4 +1,12 @@
 import { useState, useEffect } from 'react'
+import logoLightBgRaw from '../../../brand/logo/4d-stacked/logo-4d-stacked-light-bg.svg?raw'
+import logoDarkBgRaw from '../../../brand/logo/4d-stacked/logo-4d-stacked-dark-bg.svg?raw'
+
+// The brand SVGs carry a c2pa provenance block that is ~88% of the file and inert
+// once the markup is inlined, so keep it out of the DOM.
+const stripProvenance = svg => svg.replace(/<metadata>[\s\S]*?<\/metadata>/, '')
+const logoLightBg = stripProvenance(logoLightBgRaw)
+const logoDarkBg = stripProvenance(logoDarkBgRaw)
 
 const CHECKLIST_ITEMS = [
   'NI certified DPO is present and supervising',
@@ -19,7 +27,7 @@ const CHECKLIST_ITEMS = [
   'Session timer started — confirmed',
 ]
 
-export default function HomeScreen({ onStart, onHistory, onProgress, onVesselProfile, onDPLog }) {
+export default function HomeScreen({ theme, onStart, onHistory, onProgress, onVesselProfile, onDPLog }) {
   const [step, setStep] = useState(1)
   const [activeProfile, setActiveProfile] = useState(null)
   const [trainingDay, setTrainingDay] = useState('')
@@ -69,8 +77,12 @@ export default function HomeScreen({ onStart, onHistory, onProgress, onVesselPro
   if (step === 1) {
     return (
       <div className="home-screen">
-        <div className="home-title">DPTrainer</div>
-        <div className="home-tagline">Structured simulator sessions for Trainee DPOs</div>
+        <div
+          className="home-logo"
+          role="img"
+          aria-label="DPTrainer — structured simulator training for trainee DPOs"
+          dangerouslySetInnerHTML={{ __html: theme === 'night' ? logoDarkBg : logoLightBg }}
+        />
 
         <div className="home-nav">
           <button className="btn-nav btn-nav-active">New Session</button>

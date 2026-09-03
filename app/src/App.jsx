@@ -167,6 +167,7 @@ export default function App() {
       <>
         {themeToggle}
         <HomeScreen
+          theme={theme}
           onStart={handleStart}
           onHistory={() => setScreen('history')}
           onProgress={() => setScreen('progress')}

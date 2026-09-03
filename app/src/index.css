@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 /* ── SHARED VARIABLES ── */
 :root {
@@ -225,8 +225,8 @@ button {
 
 /* ── HOME SCREEN ── */
 .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
-.home-title { font-family: var(--font); font-size: 36px; font-weight: 600; color: var(--heading-col); letter-spacing: 0.01em; text-transform: none; margin-bottom: 8px; }
-.home-tagline { font-family: var(--font); font-size: 12px; font-weight: 300; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 32px; }
+.home-logo { display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto 32px; }
+.home-logo svg { display: block; width: 100%; height: auto; }
 .home-nav { display: flex; gap: 0; margin-bottom: 32px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .btn-nav {
   background: transparent;
