@@ -601,7 +601,7 @@ button {
 /* ── PRINT STYLES ── */
 .print-only { display: none; }
 
-@page { size: A4; margin: 14mm; }
+@page { size: A4; margin: 0; }
 
 @media print {
   :root {
@@ -624,6 +624,7 @@ button {
   body { background: #ffffff !important; color: #111111 !important; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11pt; margin: 0; padding: 0; }
 
   .no-print, .btn-back, .timer-bar, .summary-actions, .dplog-toolbar, .dplog-btn-edit, .dplog-btn-delete, .app-footer { display: none !important; }
+  .btn-theme-toggle, .theme-toggle { display: none !important; }
   .print-only { display: block !important; }
   .screen { max-width: 100%; padding: 0; overflow: visible; }
 
@@ -676,53 +677,190 @@ button {
 
   .dplog-screen.pdf-exporting > *:not(.pdf-export-root) { display: none !important; }
   .pdf-exporting .pdf-export-root { position: static !important; left: auto !important; }
+
+  /* @page margin:0 removes ALL paper margin, so every page container must
+     supply its own or content prints to the sheet edge and gets clipped.
+     Also declared unconditionally below, so the off-canvas measurement pass
+     sees the same box model the printer does. */
+  .pdf-page {
+    box-sizing: border-box;
+    padding: 0.5in 0.55in;   /* top/bottom, left/right */
+  }
 }
 
 /* ── DP TIME LOG PDF EXPORT DOCUMENT ── */
 /* Unconditional (not @media print): these must render identically on-screen
-   (while off-canvas, for measurement) and when actually printed. */
-.pdf-export-root { position: fixed; top: 0; left: -10000px; background: #ffffff; color: #111111; }
-.pdf-page {
-  background: #ffffff; color: #111111;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 10.5pt; line-height: 1.45;
-  box-sizing: border-box; padding: 0 0 24px;
+   (while off-canvas, for measurement) and when actually printed.
+   Styling spec: docs/pdf-styling-spec.md. */
+.pdf-export-root {
+  position: fixed; top: 0; left: -10000px;
+  background: #ffffff;
+  /* The PDF is always light — no night-mode variant. */
+  --pdf-navy:     #003087;
+  --pdf-sky:      #0087c8;
+  --pdf-accent:   #0069b4;
+  --pdf-ink:      #1a2d4a;
+  --pdf-muted:    #6b87a0;
+  --pdf-hairline: #eaf0f6;
+  --pdf-border:   #d0dbe8;
+  --pdf-tint:     #f4f7fb;
+  --pdf-zebra:    #f8fafc;
+  --pdf-track:    #e6edf5;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
+.pdf-page {
+  box-sizing: border-box;
+  padding: 0.5in 0.55in;   /* top/bottom, left/right — see @page margin:0 */
+  display: flex; flex-direction: column; overflow: hidden;
+  background: #ffffff; color: var(--pdf-ink);
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-size: 11.5px; line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+.pdf-page-body { flex: 1 1 auto; min-height: 0; }
 .pdf-export-root > .pdf-page:not(:last-child) { page-break-after: always; break-after: page; }
 
-.pdf-header { margin-bottom: 16px; }
-.pdf-header-row { display: flex; justify-content: space-between; align-items: baseline; }
-.pdf-header-title { font-size: 15pt; font-weight: 700; letter-spacing: 0.02em; color: #111111; }
-.pdf-header-page { font-size: 9pt; color: #444444; font-family: Arial, Helvetica, sans-serif; }
-.pdf-header-meta { display: flex; justify-content: space-between; font-size: 9pt; color: #333333; margin-top: 4px; font-family: Arial, Helvetica, sans-serif; }
-.pdf-header-rule { border-top: 2px solid #111111; margin-top: 8px; }
+/* Running header — repeats on every page */
+.pdf-header { padding-bottom: 9px; border-bottom: 2px solid var(--pdf-navy); margin-bottom: 26px; flex-shrink: 0; }
+.pdf-wordmark { display: flex; align-items: center; gap: 10px; }
+.pdf-brand-icon { display: block; flex-shrink: 0; }
+.pdf-wordmark-text { font-size: 19px; line-height: 1; letter-spacing: -0.02em; }
+.pdf-wordmark-dp { font-weight: 700; color: var(--pdf-navy); }
+.pdf-wordmark-trainer { font-weight: 300; color: var(--pdf-sky); }
 
-.pdf-summary { display: flex; gap: 20px; margin: 18px 0 20px; }
-.pdf-summary-col { flex: 1; border: 1px solid #cccccc; border-radius: 4px; padding: 12px 14px; background: #f9f9f9; }
-.pdf-summary-heading {
-  font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-  color: #111111; margin-bottom: 8px; font-family: Arial, Helvetica, sans-serif;
-  border-bottom: 1px solid #cccccc; padding-bottom: 6px;
+/* Running footer — repeats on every page, the only per-page identification */
+.pdf-footer {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 18px;
+  border-top: 1px solid var(--pdf-border); padding-top: 9px; margin-top: 26px;
+  font-size: 9.5px; color: var(--pdf-muted); flex-shrink: 0;
 }
-.pdf-summary-row { display: flex; justify-content: space-between; gap: 12px; font-size: 9.5pt; padding: 3px 0; color: #222222; }
-.pdf-summary-row span:first-child { color: #555555; }
-.pdf-summary-cert { margin-top: 10px; padding-top: 8px; border-top: 1px solid #cccccc; font-size: 9.5pt; font-weight: 700; color: #111111; }
+.pdf-footer-id { font-weight: 500; white-space: nowrap; }
+.pdf-footer-note { text-align: center; }
+.pdf-footer-meta { white-space: nowrap; }
 
-.pdf-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-bottom: 6px; }
-.pdf-table th, .pdf-table td { border: 1px solid #999999; padding: 3px 5px; font-size: 8.5pt; text-align: left; color: #111111; vertical-align: top; overflow-wrap: break-word; }
-.pdf-table th { background: #eeeeee; font-weight: 700; font-family: Arial, Helvetica, sans-serif; font-size: 7.5pt; }
-.pdf-table td:nth-child(1), .pdf-table td:nth-child(4), .pdf-table td:nth-child(5),
-.pdf-table td:nth-child(6), .pdf-table td:nth-child(7), .pdf-table td:nth-child(9) { white-space: nowrap; }
+/* Title block — page 1 only */
+.pdf-title-block { display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; margin-bottom: 30px; }
+.pdf-title {
+  font-family: inherit; font-size: 32px; font-weight: 600; line-height: 1;
+  letter-spacing: -0.025em; text-transform: none; color: var(--pdf-ink); margin: 0 0 9px;
+}
+.pdf-subtitle { font-size: 14px; font-weight: 300; color: var(--pdf-muted); }
+.pdf-meta-grid {
+  display: grid; grid-template-columns: auto auto; gap: 3px 16px;
+  font-size: 12px; text-align: right; align-items: baseline; flex-shrink: 0;
+}
+.pdf-meta-label { color: var(--pdf-muted); }
+.pdf-meta-value { font-weight: 500; color: var(--pdf-ink); white-space: nowrap; }
+
+/* Section labels */
+.pdf-section-label {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--pdf-accent); margin-bottom: 11px;
+}
+.pdf-section-aside {
+  font-size: 11px; font-weight: 400; letter-spacing: 0; text-transform: none;
+  color: var(--pdf-muted); white-space: nowrap;
+}
+.pdf-stat-grid + .pdf-section-label,
+.pdf-panel + .pdf-section-label { margin-top: 28px; }
+
+/* Record totals */
+.pdf-stat-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--pdf-border);
+  border: 1px solid var(--pdf-border); border-radius: 7px; overflow: hidden;
+}
+.pdf-stat { background: #ffffff; padding: 15px 17px; }
+.pdf-stat--lead { background: var(--pdf-tint); }
+.pdf-stat-value { font-size: 31px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; color: var(--pdf-ink); }
+.pdf-stat-value--navy { color: var(--pdf-navy); }
+.pdf-stat-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--pdf-muted); margin-top: 10px;
+}
+.pdf-stat-sub { font-size: 11px; color: var(--pdf-muted); margin-top: 7px; }
+.pdf-stat-grid--secondary { grid-template-columns: repeat(3, 1fr); margin-top: 12px; }
+.pdf-stat-row {
+  background: #ffffff; padding: 11px 17px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+}
+.pdf-stat-row-label { font-size: 12px; color: var(--pdf-muted); }
+.pdf-stat-row-value { font-size: 15px; font-weight: 600; color: var(--pdf-ink); }
+
+/* Progress */
+.pdf-panel { border: 1px solid var(--pdf-border); border-radius: 7px; padding: 17px 19px; }
+.pdf-bar + .pdf-bar { margin-top: 13px; }
+.pdf-bar-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 7px; }
+.pdf-bar-label { font-size: 12.5px; font-weight: 500; color: var(--pdf-ink); }
+.pdf-bar-value { font-size: 12.5px; font-weight: 600; color: var(--pdf-navy); white-space: nowrap; }
+.pdf-bar-max { font-weight: 400; color: var(--pdf-muted); }
+.pdf-bar-track { height: 6px; border-radius: 3px; background: var(--pdf-track); overflow: hidden; }
+.pdf-bar-fill { height: 100%; border-radius: 3px; }
+.pdf-bar-fill--navy { background: var(--pdf-navy); }
+.pdf-bar-fill--sky { background: var(--pdf-sky); }
+.pdf-panel-foot {
+  display: flex; align-items: baseline; gap: 24px;
+  border-top: 1px solid var(--pdf-hairline); padding-top: 11px; margin-top: 14px;
+}
+.pdf-panel-status { font-size: 12.5px; font-weight: 600; color: var(--pdf-navy); flex: 0 0 34%; }
+.pdf-panel-caveat { font-size: 11.5px; color: var(--pdf-muted); flex: 1 1 auto; }
+
+/* Entries table */
+.pdf-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 11.5px; }
+.pdf-table th {
+  background: var(--pdf-navy); color: #ffffff;
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+  padding: 8px 7px; text-align: left; vertical-align: middle;
+}
+.pdf-table th:first-child { text-align: right; }
+.pdf-table td {
+  padding: 7px; border-bottom: 1px solid var(--pdf-hairline);
+  color: var(--pdf-ink); vertical-align: top; overflow-wrap: break-word;
+}
+.pdf-table tbody tr:nth-child(even) td { background: var(--pdf-zebra); }
 .pdf-table tr { page-break-inside: avoid; break-inside: avoid; }
+.pdf-col-num { color: var(--pdf-muted); text-align: right; white-space: nowrap; }
+.pdf-col-date { white-space: nowrap; }
+.pdf-col-vessel { font-weight: 500; white-space: nowrap; }
+.pdf-col-hrs { text-align: right; white-space: nowrap; }
+/* A vs P carries the whole active/passive read of the table. */
+.pdf-col-ap { text-align: center; font-weight: 600; }
+.pdf-col-ap--active { color: var(--pdf-navy); }
+.pdf-col-ap--passive { color: var(--pdf-muted); }
+.pdf-col-notes { color: var(--pdf-muted); }
 
-.pdf-declaration { margin-top: 20px; }
-.pdf-declaration-heading { font-size: 13pt; font-weight: 700; margin-bottom: 12px; color: #111111; }
-.pdf-declaration-text { font-size: 10.5pt; line-height: 1.6; color: #222222; margin-bottom: 32px; }
-.pdf-sig-block { display: flex; flex-direction: column; gap: 22px; max-width: 420px; }
-.pdf-sig-line { display: flex; align-items: flex-end; gap: 10px; font-size: 10pt; color: #111111; }
-.pdf-sig-label { flex-shrink: 0; min-width: 80px; }
-.pdf-sig-fill { flex: 1; border-bottom: 1px solid #333333; height: 1.4em; }
+.pdf-table tfoot td {
+  background: var(--pdf-tint); border-top: 2px solid var(--pdf-navy); border-bottom: none;
+  padding: 9px 7px;
+}
+.pdf-tfoot-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--pdf-navy);
+}
+.pdf-tfoot-hours { text-align: right; font-weight: 600; color: var(--pdf-ink); white-space: nowrap; }
+.pdf-tfoot-split { font-size: 11px; color: var(--pdf-muted); }
 
-.pdf-doc-footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #cccccc; font-size: 8pt; color: #555555; line-height: 1.5; font-family: Arial, Helvetica, sans-serif; }
-.pdf-doc-footer p { margin-bottom: 8px; }
-.pdf-doc-footer p:last-child { margin-bottom: 0; }
+/* Declarations */
+.pdf-declaration-text {
+  font-size: 13.5px; line-height: 1.65; color: var(--pdf-ink);
+  max-width: 44em; text-wrap: pretty; margin: 0;
+}
+.pdf-sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 34px; margin-top: 9px; }
+.pdf-sig-rule { height: 34px; border-bottom: 1px solid var(--pdf-muted); }
+.pdf-sig-caption {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--pdf-muted); margin-top: 8px;
+}
+
+/* Status callout */
+.pdf-callout {
+  background: var(--pdf-tint); border-left: 3px solid var(--pdf-navy);
+  border-radius: 0 6px 6px 0; padding: 15px 18px; margin-top: 28px;
+}
+.pdf-callout-label {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--pdf-navy); margin-bottom: 9px;
+}
+.pdf-callout-body { font-size: 12px; line-height: 1.6; color: #4a6b85; max-width: 52em; margin: 0; }

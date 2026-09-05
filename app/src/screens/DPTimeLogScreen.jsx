@@ -104,6 +104,56 @@ function computeTotals(entries) {
   }
 }
 
+// Record-level counts for the PDF's "Record totals" block. Unlike computeNIProgress
+// these are unfiltered — they describe the record as logged, not the days that
+// qualify toward certification. Defined here so the PDF and the screen share one
+// definition and cannot drift.
+function computeRecordSummary(entries) {
+  const dp1Dates = new Set()
+  const dp23Dates = new Set()
+  const vessels = new Set()
+  entries.forEach(e => {
+    if (e.dpClass === 'DP1') dp1Dates.add(e.date)
+    else if (e.dpClass === 'DP2' || e.dpClass === 'DP3') dp23Dates.add(e.date)
+    if (e.vesselName) vessels.add(e.vesselName.trim().toLowerCase())
+  })
+  const dates = entries.map(e => e.date).filter(Boolean).sort()
+  return {
+    dp1Days: dp1Dates.size,
+    dp23Days: dp23Dates.size,
+    vesselsServed: vessels.size,
+    firstDate: dates[0] ?? null,
+    lastDate: dates[dates.length - 1] ?? null,
+  }
+}
+
+// Rank is stored as free text per entry. The PDF header and footer print a full
+// title where the abbreviation is one we recognise, and the stored string verbatim
+// otherwise.
+const RANK_LABELS = {
+  'MASTER': 'Master',
+  'C/O': 'Chief Officer',
+  'CO': 'Chief Officer',
+  'CHIEF OFFICER': 'Chief Officer',
+  '1/O': 'First Officer',
+  '2/O': 'Second Officer',
+  '3/O': 'Third Officer',
+  'SDPO': 'Senior DPO',
+  'DPO': 'DPO',
+  'TRAINEE': 'Trainee DPO',
+  'TRAINEE DPO': 'Trainee DPO',
+  'CADET': 'Cadet',
+}
+
+// The most recent entry carries the trainee's current rank.
+function currentRankLabel(sortedEntries) {
+  for (let i = sortedEntries.length - 1; i >= 0; i--) {
+    const raw = (sortedEntries[i].rank ?? '').trim()
+    if (raw) return RANK_LABELS[raw.toUpperCase()] ?? raw
+  }
+  return ''
+}
+
 // NI New Offshore Scheme: a DP day requires a minimum of 2 hours on the DP desk.
 // The app has no record of Induction/Simulator Course dates, so it cannot split
 // entries between Phase B and Phase D — it only tracks totals across both.
@@ -446,6 +496,7 @@ export default function DPTimeLogScreen({ onBack }) {
   const [showForm, setShowForm] = useState(false)
   const [editEntry, setEditEntry] = useState(null)
   const [printDate] = useState(() => new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }))
+  const [printDateLong] = useState(() => new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }))
 
   const fileInputRef = useRef(null)
   const pdfExportRef = useRef(null)
@@ -615,6 +666,8 @@ export default function DPTimeLogScreen({ onBack }) {
   })
   const totals = computeTotals(entries)
   const ni = computeNIProgress(entries)
+  const recordSummary = computeRecordSummary(entries)
+  const rankLabel = currentRankLabel(sorted)
 
   let certStatusText, certStatusTone
   if (ni.dp23Days >= 60 && ni.totalDays >= 120) {
@@ -934,8 +987,10 @@ export default function DPTimeLogScreen({ onBack }) {
         ref={pdfExportRef}
         entries={sorted}
         traineeName={traineeName}
-        generatedDate={printDate}
+        rankLabel={rankLabel}
+        generatedDate={printDateLong}
         totals={totals}
+        recordSummary={recordSummary}
         ni={ni}
         certStatusText={certStatusText}
         onActiveChange={setPdfExporting}
