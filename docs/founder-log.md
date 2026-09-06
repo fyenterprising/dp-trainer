@@ -2,6 +2,232 @@
 
 ---
 
+## Day 11
+**Date:** 6 September 2026
+**Phase:** Polish
+**Mood / Energy:** Good. Half way through the month
+onboard. Focussed and motivated to make this look
+clean and professional, not just functional.
+
+### Top Outcome for Today
+DP Time Log PDF restyled to a professional standard,
+Phase B and Phase D split correctly implemented, and
+the pagination engine documented.
+
+### What I Worked On
+- Wrote a full styling specification for the PDF
+  export and saved it to the repo as
+  docs/pdf-styling-spec.md
+- Restyled DPTimeLogPdfExport.jsx against it —
+  running header and footer, title block, record
+  totals grid, progress panel, entries table,
+  trainee declaration, status callout
+- Print CSS now removes browser URL and timestamp
+  chrome, with per-page padding so nothing prints to
+  the sheet edge
+- Added the Simulator Course date field, splitting
+  Phase B from Phase D with carry-forward and the
+  90-day ceiling
+- Made the two-hour DP day rule consistent across
+  stat cards, record totals, progress bars and the
+  PDF
+- Fixed day counting to deduplicate by date — one
+  date is one DP day regardless of how many entries
+  it holds
+- Documented the PDF pagination engine so the
+  measure-then-pack approach is understandable to
+  anyone reading it cold
+
+### Decisions Made
+- Decision: No Master or Senior DPO signature block
+  on the PDF
+- Reasoning: A verification block with vessel,
+  company and ship's stamp fields looks like the
+  company confirmation letter the NI actually
+  requires. A trainee could submit it instead of the
+  real thing and stall their application. Trainee
+  declaration only.
+- Decision: Period dates always print both years
+- Reasoning: A record spanning New Year is normal for
+  a trainee across two contracts. One unconditional
+  format removes a conditional that can fail at the
+  boundary.
+- Decision: Hide the Phase D bars until the course
+  date is saved
+- Reasoning: A Phase B trainee has no use for bars
+  measuring something they have not started. Keeps
+  the panel honest about where the person actually
+  is.
+
+### Lessons Learned Today
+- The export PDF is not just an output, it is a
+  distribution channel. For people in the industry
+  who have finished their training, that document
+  might be their first introduction to DPTrainer. It
+  travels on its own, without the app around it, so
+  it has to leave a good impression by itself.
+- Getting the Phase B and Phase D ruling right was
+  important — it is a genuinely useful feature for
+  the log, and it is the kind of thing a trainee
+  cannot easily work out by hand.
+- Learned a lot about design through the logo
+  process.
+
+### Problems / Blockers
+- Running out of storage on the laptop. Have had it
+  since I was 18 and need a new one badly. It
+  hinders building slightly but I make it work.
+
+### Next Actions
+1. Finish the outstanding items on the to-do list
+2. Show a colleague and get their feedback
+
+---
+
+## Day 10
+**Date:** 3 September 2026
+**Phase:** Polish
+**Mood / Energy:** Purposeful.
+
+### Top Outcome for Today
+Brand assets wired into the app. DPTrainer has its
+own icon, logo and identity rather than defaults.
+
+### What I Worked On
+- Commissioned and received a full brand package —
+  icon in three colourways, four logo lockups, single
+  colour builds, social and email assets, and a
+  manifest
+- Created public/ and wired the favicon, Apple touch
+  icon and PWA icons
+- Configured the web manifest for standalone display,
+  so the app opens fullscreen from the iPad home
+  screen with no browser chrome
+- Added Open Graph and Twitter card tags, so sharing
+  the URL produces a branded preview rather than a
+  blank link
+- Replaced the text wordmark on the home screen with
+  the stacked lockup, switching by theme
+
+### Decisions Made
+- Decision: Inline the logo SVG rather than loading
+  it through an img tag
+- Reasoning: An SVG in an img tag renders as an
+  isolated document and cannot see the page's
+  webfont, so the wordmark would have fallen back to
+  Arial on most Windows machines. The whole point of
+  having it reset in Inter was to match the app.
+
+### Lessons Learned Today
+- The trigger was seeing a generic icon in the tab
+  corner on the ship's iPad. The PDF was a working
+  feature but it did not look professional yet, and
+  the default icon made the whole thing look
+  unfinished. Small details decide whether something
+  reads as a product or a project.
+
+---
+
+## Day 9
+**Date:** 18-20 August 2026
+**Phase:** Build
+**Mood / Energy:** Determined.
+
+### Top Outcome for Today
+DP Time Log made genuinely functional — CSV import
+and export, a template for new users, and NI
+threshold logic corrected.
+
+### What I Worked On
+- Built CSV import with column mapping, fuzzy header
+  matching, a preview step and problem-row flagging
+- Built CSV export and a downloadable template so a
+  new user knows exactly what shape their file needs
+- Fixed date format ambiguity — Excel exports
+  mm/dd/yyyy and the parser was rejecting anything
+  where the day exceeded 12
+- Prevented the same source column being mapped to
+  two fields, which silently corrupted imports
+- Replaced the NI threshold logic entirely after
+  discovering it was wrong about the scheme
+- Rebuilt the PDF export as a proper paginated
+  document for NI submission support
+- Moved the toolbar below the table and reordered
+  entries oldest-first
+- Imported my real 78-entry record
+
+### Decisions Made
+- Decision: Rewrite the threshold logic against the
+  actual NI New Offshore Scheme requirements
+- Reasoning: The original showed "48 of 30" and
+  treated the scheme as two simple 30-day gates. The
+  real scheme is 60 days for Phase B with a 30-day
+  passive cap, 60 for Phase D with a minimum of 30
+  after the Simulator Course, 120 total, and the
+  certificate type decided by the DP class mix. The
+  app was telling trainees they had passed
+  thresholds that do not exist.
+- Decision: Entries table reads oldest-first
+- Reasoning: A physical logbook fills downward and is
+  signed at the bottom. Digital-first instinct is not
+  always right when the paper version has decades of
+  convention behind it.
+
+### Lessons Learned Today
+- I could tell something was not right. I knew we had
+  a basic log but I wanted a functional one with no
+  bugs. Knowing the domain meant the app looked wrong
+  the moment my real data went into it.
+- Testing with real data found what synthetic tests
+  never would — a title block above the headers,
+  trailing legend rows, American date formats, and
+  mixed cell types in one column.
+
+---
+
+## Day 8
+**Date:** 5 August 2026
+**Phase:** Positioning
+**Mood / Energy:** Steady.
+
+### Top Outcome for Today
+README rewritten to reflect what DPTrainer actually
+is, plus a Word version for printing and sharing.
+
+### What I Worked On
+- Rewrote README.md completely — problem, solution,
+  positioning, content, source material, status,
+  features, privacy, technical structure
+- Documented all six source documents behind the
+  curriculum
+- Wrote the Positioning section stating plainly that
+  DPTrainer does not instruct, assess, certify or
+  sign off
+- Produced README-DPTrainer.docx for printing and
+  sharing outside GitHub
+
+### Decisions Made
+- Decision: Lead with positioning rather than
+  features
+- Reasoning: A training centre reading it needs to
+  know immediately whether DPTrainer is a competitor
+  or a feeder. It is a feeder — trainees arrive at
+  accredited courses better prepared — and saying so
+  plainly is both true and the safest ground until
+  there is a decision about monetising.
+
+### Lessons Learned Today
+- The build had progressed a long way since the last
+  README and it needed an update for potential
+  investors. The repo is the shop window for anyone
+  technical, and it was still describing a project
+  with two tasks and eight pending milestones.
+- Most of the people who need to read about DPTrainer
+  will not want a code repository, which is why the
+  Word version matters.
+
+---
+
 ## Day 7
 **Date:** 4 August 2026
 **Phase:** Build → Validation
@@ -133,6 +359,11 @@ new typography, NI-derived colour palette.
   during reflection
 - Fought macOS TCC permissions blocking file writes —
   required deleting and recreating index.css
+- Note: this work was completed on 30 May but sat
+  uncommitted until 31 July due to macOS file
+  permission problems blocking git. The two-month
+  gap in this log is that, not a pause in the
+  project.
 
 ### Decisions Made
 - Decision: Move away from the default AI-generated
