@@ -115,7 +115,7 @@ function TitleBlock({ traineeName, rankLabel, period }) {
   )
 }
 
-function RecordTotals({ totals, recordSummary }) {
+function RecordTotals({ totals, recordSummary, notes }) {
   return (
     <>
       <div className="pdf-stat-grid">
@@ -152,11 +152,16 @@ function RecordTotals({ totals, recordSummary }) {
           <span className="pdf-stat-row-value">{recordSummary.vesselsServed}</span>
         </div>
       </div>
+      {notes?.length > 0 && (
+        <div className="pdf-stat-notes">
+          {notes.map(note => <div key={note}>{note}</div>)}
+        </div>
+      )}
     </>
   )
 }
 
-function ProgressBar({ label, value, max, suffix, tone }) {
+function ProgressBar({ label, value, max, suffix, tone, note }) {
   const pct = Math.min(100, Math.round((value / max) * 100))
   return (
     <div className="pdf-bar">
@@ -167,21 +172,31 @@ function ProgressBar({ label, value, max, suffix, tone }) {
       <div className="pdf-bar-track">
         <div className={`pdf-bar-fill pdf-bar-fill--${tone}`} style={{ width: `${pct}%` }} />
       </div>
+      {note && <div className="pdf-bar-note">{note}</div>}
     </div>
   )
 }
 
-function ProgressPanel({ ni, certStatusText }) {
+// The bar list is built by the screen and passed down whole, so the panel here
+// always shows exactly what the on-screen thresholds panel shows — four bars
+// without a Simulator Course date, six with one.
+function ProgressPanel({ bars, certStatusText, phaseNote }) {
   return (
     <div className="pdf-panel">
-      <ProgressBar label="Total days toward certification" value={ni.totalDays} max={120} tone="navy" />
-      <ProgressBar label="Passive days used" value={Math.min(ni.passiveDays, 30)} max={30} suffix="maximum" tone="sky" />
-      <ProgressBar label="DP2 / DP3 days toward Unlimited certificate" value={ni.dp23Days} max={60} tone="sky" />
+      {bars.map(bar => (
+        <ProgressBar
+          key={bar.key}
+          label={bar.label}
+          value={bar.value}
+          max={bar.max}
+          suffix={bar.suffix}
+          note={bar.note}
+          tone={bar.key === 'total' ? 'navy' : 'sky'}
+        />
+      ))}
       <div className="pdf-panel-foot">
         <span className="pdf-panel-status">{certStatusText}</span>
-        <span className="pdf-panel-caveat">
-          Phase allocation is split by your Induction and Simulator Course dates — confirm against your logbook.
-        </span>
+        <span className="pdf-panel-caveat">{phaseNote}</span>
       </div>
     </div>
   )
@@ -277,7 +292,7 @@ function paginateRows(entries, rowHeights, { headerH, summaryH, theadH }) {
 }
 
 const DPTimeLogPdfExport = forwardRef(function DPTimeLogPdfExport(
-  { entries, traineeName, rankLabel, generatedDate, totals, recordSummary, ni, certStatusText, onActiveChange },
+  { entries, traineeName, rankLabel, generatedDate, totals, recordSummary, countingNotes, progressBars, certStatusText, phaseNote, onActiveChange },
   ref
 ) {
   const [phase, setPhase] = useState(null) // null | 'measuring' | 'ready'
@@ -346,9 +361,9 @@ const DPTimeLogPdfExport = forwardRef(function DPTimeLogPdfExport(
             <div ref={summaryMeasureRef}>
               <TitleBlock traineeName={traineeName} rankLabel={rankLabel} period={period} />
               <SectionLabel>Record totals</SectionLabel>
-              <RecordTotals totals={totals} recordSummary={recordSummary} />
+              <RecordTotals totals={totals} recordSummary={recordSummary} notes={countingNotes} />
               <SectionLabel>NI New Offshore Scheme — Progress</SectionLabel>
-              <ProgressPanel ni={ni} certStatusText={certStatusText} />
+              <ProgressPanel bars={progressBars} certStatusText={certStatusText} phaseNote={phaseNote} />
               <SectionLabel aside={entriesAside}>Entries</SectionLabel>
             </div>
             <table className="pdf-table">
@@ -395,9 +410,9 @@ const DPTimeLogPdfExport = forwardRef(function DPTimeLogPdfExport(
                 <>
                   <TitleBlock traineeName={traineeName} rankLabel={rankLabel} period={period} />
                   <SectionLabel>Record totals</SectionLabel>
-                  <RecordTotals totals={totals} recordSummary={recordSummary} />
+                  <RecordTotals totals={totals} recordSummary={recordSummary} notes={countingNotes} />
                   <SectionLabel>NI New Offshore Scheme — Progress</SectionLabel>
-                  <ProgressPanel ni={ni} certStatusText={certStatusText} />
+                  <ProgressPanel bars={progressBars} certStatusText={certStatusText} phaseNote={phaseNote} />
                   <SectionLabel aside={entriesAside}>Entries</SectionLabel>
                 </>
               )}

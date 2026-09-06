@@ -85,13 +85,27 @@ Cells: Total DP days · Active days (+hours) · Passive days (+hours) · Total h
 Second row, same construction, three cells, `11px 17px` padding: label 12px muted left,
 value 15px/600 right — Days on DP1 / Days on DP2-DP3 / Vessels served.
 
+Below the second row, when the record has any excluded or collapsed entries, a muted 11px/1.6
+block, 10px above: one line per counting note. These explain why the day count is lower than
+the entry count printed in the Entries caption, so the two figures reconcile on the page.
+
 ## Progress
 
 One bordered panel, `17px 19px`, `border-radius:7px`, 13px between bars.
 Per bar: label 12.5px/500 left, value 12.5px/600 navy right with the "of N" part 400 muted.
-Track 6px tall, `border-radius:3px`, `#e6edf5`. Fill navy for total days, sky for the other two.
+Track 6px tall, `border-radius:3px`, `#e6edf5`. Fill navy for the total-days bar, sky for every
+other bar. A bar may carry a warning note below its track: 11px muted, 6px above.
 Footer line above a `1px solid hairline` rule, 11px padding-top: remaining-days in 12.5px/600 navy,
 then the phase-allocation caveat in 11.5px muted.
+
+**The bar list is not fixed.** It mirrors the on-screen thresholds panel exactly — four bars when
+no DP Simulator Course date is set, six when one is — and is built once by the screen and passed
+to the PDF whole, so the two surfaces cannot show different progress. See *Phase B / Phase D*
+under Implementation notes.
+
+Warning notes render in `muted`, not amber. The PDF palette has no amber token, and a
+cross-check record reads as a document rather than as a live dashboard; the note is still
+printed, because how many logged days can actually count is exactly what this document is for.
 
 ## Entries table
 
@@ -148,7 +162,9 @@ Before shipping, export the live 78-entry record and reconcile against the on-sc
 - active / passive split
 - every figure in Record totals (total DP days, active days + hours, passive days + hours,
   total hours, DP1 days, DP2/DP3 days, vessels served)
-- the three progress values and the remaining-days line
+- every progress bar — label, value and denominator — the bar *count* (four or six), any warning
+  note, the remaining-days line and the phase-allocation caveat
+- the count of entries excluded for falling under two hours
 
 The PDF and the screen read from the same data, so any disagreement is a bug in one of them.
 **Report the mismatch — do not reconcile it in the PDF layer.** A cross-check record that quietly
@@ -204,18 +220,69 @@ layer computes nothing that the screen also computes, so the two cannot drift:
 | PDF figure | Source |
 |---|---|
 | Record totals row 1 | `computeTotals(entries)` — same object the on-screen stat tiles render |
-| Days on DP1 / DP2-DP3, Vessels served | `computeRecordSummary(entries)` (record-level, unfiltered) |
-| Progress bars, remaining-days line | `computeNIProgress(entries)` and `certStatusText` — same values and same string as the on-screen thresholds panel |
+| Days on DP1 / DP2-DP3, Vessels served, Period | `computeRecordSummary(entries)` |
+| Progress bars and their warning notes | `buildProgressBars(phase)` — the identical array the on-screen thresholds panel maps over |
+| Remaining-days line | `certificateStatus(phase)` — same string as the on-screen status line |
+| Counting notes under Record totals | `countingNotes(totals)` — same strings as the lines below the on-screen stat cards |
+| Phase-allocation caveat | `phaseAllocationNote(phase)` — same string as the on-screen explainer |
 | tfoot day count / hours / split | `computeTotals(entries)` |
 
-`computeRecordSummary` lives in the screen, not the PDF component, so "Days on DP2/DP3 vessels"
-has one definition for both surfaces.
+All of these live in the screen, not the PDF component, so each figure has one definition for
+both surfaces.
 
-**Known definitional split (not a bug, but read the labels carefully).** Record totals counts
-DP1/DP2-DP3 days across *all* entries; the progress panel's "DP2 / DP3 days toward Unlimited
-certificate" counts only entries of 2 hours or more, because that is the NI qualifying threshold.
-The two figures agree whenever every entry is ≥ 2 h and diverge otherwise. Both match their
-on-screen counterparts exactly; the labels carry the distinction.
+### What counts as a DP day
+
+Two rules, applied once and shared by every surface.
+
+**Two hours minimum.** A DP day requires a minimum of two hours on the DP desk, so an entry
+shorter than that is not a DP day for any purpose — `qualifyingEntries()` filters first.
+
+**One date is one DP day.** The NI counts days, not entries, so `indexQualifyingDays()` collapses
+the qualifying entries by date and every day count is taken over that index:
+
+- *Total DP days* — count of unique qualifying dates.
+- *Active days* — dates carrying any qualifying active entry.
+- *Passive days* — dates carrying only qualifying passive entries.
+
+A date with both active and passive time counts as **active**, and so does not consume the
+30-day Phase B passive allowance: active work was done that day.
+
+**Hours are not deduplicated.** Hours totals sum every qualifying entry — two entries on one date
+is one day but two lots of hours. This is why a record can show more hours than days × 24 would
+suggest, and why the Entries caption's entry count can exceed Total DP days.
+
+Both rules feed the counting notes: "*X* entries under 2 hours are not counted as DP days" and
+"*X* dates have multiple entries and are counted as one DP day each", printed below the stat
+cards on screen and below Record totals in the PDF.
+
+### Phase B / Phase D
+
+Phase B is DP sea time logged before the DP Simulator Course; Phase D is on or after it — an
+entry dated the **same day** as the course counts as Phase D. The course date is stored in
+`localStorage` under `dp-sim-course-date` and set from a field above the thresholds panel.
+
+Phase B requires 60 days, at most 30 of them passive. Phase D requires 60, of which at least 30
+must be dated after the course; the other 30 may be carried forward from surplus Phase B days.
+Pre-course time is therefore worth at most 90 days (60 + 30 carried), and days beyond that
+cannot count, because Phase D's remaining 30 must fall after the course.
+
+    total toward certification = min(phaseB, 60) + min(max(phaseB - 60, 0), 30) + phaseD
+
+**With no course date set** the split is unknown, so the panel keeps its original four bars and
+the total bar shows the raw qualifying-day count rather than the capped figure. The 90-day
+ceiling is raised as a warning on that bar instead of being applied.
+
+**With a course date set** the panel shows six bars: Phase B days, Phase B passive days, surplus
+carried forward, Phase D days, total toward certification, and DP2/DP3 days.
+
+The **certificate status line** always reads the capped total, even where the bar does not: with
+no course date it is computed against `min(total, 90)` and carries the suffix
+" (provisional — set your Simulator Course date to confirm)". Otherwise a record over 120 raw
+days would announce a certificate while the warning immediately above it says only 90 of those
+days can count.
+
+Bar warnings: the passive cap at 30, surplus beyond the 30-day carry-forward limit, and (no
+course date only) a pre-course total above 90.
 
 ### Rank
 

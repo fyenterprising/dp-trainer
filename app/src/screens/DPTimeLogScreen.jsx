@@ -29,6 +29,7 @@ const ACTIVITY_CODES = [
 ]
 
 const STORAGE_KEY = 'dp-time-log'
+const SIM_COURSE_KEY = 'dp-sim-course-date'
 
 const CSV_HEADER = ['Period', 'Vessel', 'Vessel Type', 'Date', 'A/P', 'Hours', 'DP Class', 'Activity', 'Notes', 'Rank']
 
@@ -86,33 +87,81 @@ function formatDate(iso) {
   return `${d}/${m}/${y}`
 }
 
-function computeTotals(entries) {
-  let activeHours = 0, passiveHours = 0
-  const activeDates = new Set(), passiveDates = new Set()
-  entries.forEach(e => {
-    const h = parseFloat(e.hours) || 0
-    if (e.type === 'A') { activeHours += h; activeDates.add(e.date) }
-    else { passiveHours += h; passiveDates.add(e.date) }
+// NI New Offshore Scheme: a DP day requires a minimum of two hours on the DP
+// desk. Anything shorter is not a DP day for any purpose, so every count in the
+// app and in the PDF is taken over this same filtered set.
+const MIN_DP_HOURS = 2
+
+function qualifyingEntries(entries) {
+  return entries.filter(e => (parseFloat(e.hours) || 0) >= MIN_DP_HOURS)
+}
+
+// The NI counts days, not entries: one date is one DP day however many entries
+// it carries. Every day count in the app and in the PDF is taken over this index.
+// A date with any qualifying active time is an active day — a day on which active
+// work was also done must not consume the 30-day passive allowance.
+function indexQualifyingDays(entries) {
+  const days = new Map()
+  qualifyingEntries(entries).forEach(e => {
+    if (!e.date) return
+    const day = days.get(e.date) ?? { date: e.date, active: false, entryCount: 0 }
+    if (e.type === 'A') day.active = true
+    day.entryCount += 1
+    days.set(e.date, day)
   })
+  return days
+}
+
+function computeTotals(entries) {
+  const qualifying = qualifyingEntries(entries)
+  // Hours sum every qualifying entry — two entries on one date is one day but
+  // two lots of hours.
+  let activeHours = 0, passiveHours = 0
+  qualifying.forEach(e => {
+    const h = parseFloat(e.hours) || 0
+    if (e.type === 'A') activeHours += h
+    else passiveHours += h
+  })
+
+  const days = indexQualifyingDays(entries)
+  let activeDays = 0, passiveDays = 0, multiEntryDates = 0
+  days.forEach(day => {
+    if (day.active) activeDays += 1
+    else passiveDays += 1
+    if (day.entryCount > 1) multiEntryDates += 1
+  })
+
   return {
-    activeDays: activeDates.size,
+    activeDays,
     activeHours: Math.round(activeHours * 10) / 10,
-    passiveDays: passiveDates.size,
+    passiveDays,
     passiveHours: Math.round(passiveHours * 10) / 10,
-    totalDays: activeDates.size + passiveDates.size,
+    totalDays: days.size,
     totalHours: Math.round((activeHours + passiveHours) * 10) / 10,
+    shortEntries: entries.length - qualifying.length,
+    multiEntryDates,
   }
 }
 
-// Record-level counts for the PDF's "Record totals" block. Unlike computeNIProgress
-// these are unfiltered — they describe the record as logged, not the days that
-// qualify toward certification. Defined here so the PDF and the screen share one
-// definition and cannot drift.
+// Advisory lines shown below the stat cards on screen and below Record totals in
+// the PDF, so both surfaces explain the same gap between entry count and day count.
+function countingNotes(totals) {
+  const notes = []
+  if (totals.shortEntries === 1) notes.push('1 entry under 2 hours is not counted as a DP day.')
+  else if (totals.shortEntries > 1) notes.push(`${totals.shortEntries} entries under 2 hours are not counted as DP days.`)
+  if (totals.multiEntryDates === 1) notes.push('1 date has multiple entries and is counted as one DP day.')
+  else if (totals.multiEntryDates > 1) notes.push(`${totals.multiEntryDates} dates have multiple entries and are counted as one DP day each.`)
+  return notes
+}
+
+// Record-level counts for the PDF's "Record totals" block, over the same
+// qualifying set as everything else. Defined here so the PDF and the screen
+// share one definition and cannot drift.
 function computeRecordSummary(entries) {
   const dp1Dates = new Set()
   const dp23Dates = new Set()
   const vessels = new Set()
-  entries.forEach(e => {
+  qualifyingEntries(entries).forEach(e => {
     if (e.dpClass === 'DP1') dp1Dates.add(e.date)
     else if (e.dpClass === 'DP2' || e.dpClass === 'DP3') dp23Dates.add(e.date)
     if (e.vesselName) vessels.add(e.vesselName.trim().toLowerCase())
@@ -154,25 +203,149 @@ function currentRankLabel(sortedEntries) {
   return ''
 }
 
-// NI New Offshore Scheme: a DP day requires a minimum of 2 hours on the DP desk.
-// The app has no record of Induction/Simulator Course dates, so it cannot split
-// entries between Phase B and Phase D — it only tracks totals across both.
-function computeNIProgress(entries) {
-  const qualifying = entries.filter(e => (parseFloat(e.hours) || 0) >= 2)
-  const activeDates = new Set()
-  const passiveDates = new Set()
-  const dp23Dates = new Set()
-  qualifying.forEach(e => {
-    if (e.type === 'A') activeDates.add(e.date)
-    else passiveDates.add(e.date)
-    if (e.dpClass === 'DP2' || e.dpClass === 'DP3') dp23Dates.add(e.date)
+// ── NI NEW OFFSHORE SCHEME: PHASE B / PHASE D ──
+//
+// Phase B is DP sea time logged before the DP Simulator Course; Phase D is on or
+// after it (an entry dated the same day as the course counts as Phase D).
+//
+// Phase B requires 60 days, of which at most 30 may be passive. Phase D requires
+// 60 days, of which at least 30 must be dated after the course — the other 30 may
+// be carried forward from surplus Phase B days. That caps what pre-course time can
+// ever be worth at 90 days: 60 for Phase B plus 30 carried forward. Days beyond 90
+// logged before the course cannot count, because Phase D's remaining 30 must fall
+// after it.
+const PHASE_B_DAYS_REQUIRED = 60
+const PASSIVE_DAYS_CAP = 30
+const CARRY_FORWARD_CAP = 30
+const PHASE_D_AFTER_COURSE_MIN = 30
+const TOTAL_DAYS_REQUIRED = 120
+const DP23_DAYS_FOR_UNLIMITED = 60
+const PRE_COURSE_USABLE_MAX = PHASE_B_DAYS_REQUIRED + CARRY_FORWARD_CAP
+
+function computePhaseProgress(entries, courseDate) {
+  const hasCourseDate = Boolean(courseDate)
+  const days = indexQualifyingDays(entries)
+
+  let phaseBDays = 0, phaseDDays = 0, phaseBPassiveDays = 0
+  days.forEach(day => {
+    // ISO dates compare lexicographically, so a plain >= is the phase test.
+    if (hasCourseDate && day.date >= courseDate) phaseDDays += 1
+    else {
+      phaseBDays += 1
+      if (!day.active) phaseBPassiveDays += 1
+    }
   })
-  const totalDays = new Set([...activeDates, ...passiveDates]).size
+
+  const dp23Dates = new Set()
+  qualifyingEntries(entries).forEach(e => {
+    if (e.date && (e.dpClass === 'DP2' || e.dpClass === 'DP3')) dp23Dates.add(e.date)
+  })
+
+  const qualifyingDays = days.size
+  const surplus = Math.max(0, phaseBDays - PHASE_B_DAYS_REQUIRED)
+  const carriedForward = Math.min(surplus, CARRY_FORWARD_CAP)
+  const beyondCarryForward = surplus - carriedForward
+
   return {
-    totalDays,
-    passiveDays: passiveDates.size,
+    hasCourseDate,
+    courseDate: courseDate || null,
+    phaseBDays,
+    phaseDDays,
+    phaseBPassiveDays,
+    carriedForward,
+    beyondCarryForward,
+    qualifyingDays,
     dp23Days: dp23Dates.size,
+    // Without a course date the split is unknown, so the raw qualifying total is
+    // shown and the 90-day ceiling is raised as a warning instead of applied.
+    totalDays: hasCourseDate
+      ? Math.min(phaseBDays, PHASE_B_DAYS_REQUIRED) + carriedForward + phaseDDays
+      : qualifyingDays,
   }
+}
+
+function plural(n, word) {
+  return `${n} ${word}${n === 1 ? '' : 's'}`
+}
+
+const PASSIVE_CAP_NOTE = 'Passive day limit reached — further passive days cannot be counted toward certification.'
+
+// One bar list, rendered by both the on-screen panel and the PDF, so the two
+// surfaces cannot show different progress. `note` carries amber warnings only;
+// the certificate status line is passed alongside and rendered separately.
+function buildProgressBars(phase) {
+  const passiveBar = {
+    key: 'passive',
+    label: 'Phase B — passive days used',
+    value: Math.min(phase.phaseBPassiveDays, PASSIVE_DAYS_CAP),
+    max: PASSIVE_DAYS_CAP,
+    suffix: 'maximum',
+    note: phase.phaseBPassiveDays >= PASSIVE_DAYS_CAP ? PASSIVE_CAP_NOTE : null,
+  }
+
+  if (!phase.hasCourseDate) {
+    return [
+      { key: 'phaseB', label: 'Phase B — DP sea time', value: phase.phaseBDays, max: PHASE_B_DAYS_REQUIRED },
+      passiveBar,
+      {
+        key: 'total',
+        label: 'Total days toward certification',
+        value: phase.totalDays,
+        max: TOTAL_DAYS_REQUIRED,
+        note: phase.qualifyingDays > PRE_COURSE_USABLE_MAX
+          ? `You have logged ${plural(phase.qualifyingDays, 'day')} before your Simulator Course. Only ${PRE_COURSE_USABLE_MAX} can count toward certification — ${PHASE_B_DAYS_REQUIRED} for Phase B and up to ${CARRY_FORWARD_CAP} carried forward. Days beyond ${PRE_COURSE_USABLE_MAX} will not count until the Simulator Course is completed.`
+          : null,
+      },
+      { key: 'dp23', label: 'DP2/DP3 days — Unlimited certificate', value: phase.dp23Days, max: DP23_DAYS_FOR_UNLIMITED },
+    ]
+  }
+
+  return [
+    { key: 'phaseB', label: 'Phase B — days before Simulator Course', value: phase.phaseBDays, max: PHASE_B_DAYS_REQUIRED },
+    passiveBar,
+    {
+      key: 'carry',
+      label: 'Phase B surplus carried forward',
+      value: phase.carriedForward,
+      max: CARRY_FORWARD_CAP,
+      note: phase.beyondCarryForward > 0
+        ? `${plural(phase.beyondCarryForward, 'day')} beyond the ${CARRY_FORWARD_CAP}-day carry-forward limit will not count.`
+        : null,
+    },
+    { key: 'phaseD', label: 'Phase D — days after Simulator Course', value: phase.phaseDDays, max: PHASE_D_AFTER_COURSE_MIN },
+    { key: 'total', label: 'Total days toward certification', value: phase.totalDays, max: TOTAL_DAYS_REQUIRED },
+    { key: 'dp23', label: 'DP2/DP3 days — Unlimited certificate', value: phase.dp23Days, max: DP23_DAYS_FOR_UNLIMITED },
+  ]
+}
+
+const PROVISIONAL_SUFFIX = ' (provisional — set your Simulator Course date to confirm)'
+
+function certificateStatus(phase) {
+  // Without a course date the total bar still shows the raw count, but only 90
+  // pre-course days can ever count — so the status line reads the capped figure
+  // and says it is provisional, rather than contradicting the 90-day warning.
+  const total = phase.hasCourseDate
+    ? phase.totalDays
+    : Math.min(phase.totalDays, PRE_COURSE_USABLE_MAX)
+  const suffix = phase.hasCourseDate ? '' : PROVISIONAL_SUFFIX
+
+  if (phase.dp23Days >= DP23_DAYS_FOR_UNLIMITED && total >= TOTAL_DAYS_REQUIRED) {
+    return { text: 'On current record: Unlimited certificate' + suffix, tone: 'success' }
+  }
+  if (total >= TOTAL_DAYS_REQUIRED) {
+    const needed = DP23_DAYS_FOR_UNLIMITED - phase.dp23Days
+    return {
+      text: `On current record: Limited certificate. ${plural(needed, 'more DP2/DP3 day')} needed for Unlimited.` + suffix,
+      tone: 'warning',
+    }
+  }
+  return { text: `${plural(TOTAL_DAYS_REQUIRED - total, 'day')} remaining to certification.` + suffix, tone: 'info' }
+}
+
+function phaseAllocationNote(phase) {
+  return phase.hasCourseDate
+    ? `Phase B and Phase D are split by your DP Simulator Course date, ${formatDate(phase.courseDate)}. Days on or after that date count toward Phase D. Confirm phase allocation against your logbook.`
+    : 'Phase B and Phase D are split by your DP Simulator Course date, which is not yet set — all days currently count toward Phase B. Confirm phase allocation against your logbook.'
 }
 
 /* ── CSV EXPORT ── */
@@ -472,14 +645,14 @@ function EntryForm({ initial, onSave, onCancel, nextPeriod }) {
   )
 }
 
-function ThresholdBar({ label, value, max, statusText, statusTone }) {
+function ThresholdBar({ label, value, max, suffix, statusText, statusTone }) {
   const pct = Math.min(100, Math.round((value / max) * 100))
   const done = value >= max
   return (
     <div className="dplog-threshold">
       <div className="dplog-threshold-label">
         <span>{label}</span>
-        <span className={done ? 'thresh-done' : 'thresh-partial'}>{value} of {max}</span>
+        <span className={done ? 'thresh-done' : 'thresh-partial'}>{value} of {max}{suffix ? ` ${suffix}` : ''}</span>
       </div>
       <div className="dplog-bar-track">
         <div className={`dplog-bar-fill${done ? ' dplog-bar-fill--done' : ''}`} style={{ width: `${pct}%` }} />
@@ -508,11 +681,29 @@ export default function DPTimeLogScreen({ onBack }) {
   const [mappingError, setMappingError] = useState('')
   const [columnMap, setColumnMap] = useState({})
   const [importResult, setImportResult] = useState('')
+  const [simCourseDate, setSimCourseDate] = useState('')
+  const [courseDraft, setCourseDraft] = useState('')
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
     setEntries(stored)
+    const course = localStorage.getItem(SIM_COURSE_KEY) ?? ''
+    setSimCourseDate(course)
+    setCourseDraft(course)
   }, [])
+
+  function saveCourseDate() {
+    const next = courseDraft || ''
+    setSimCourseDate(next)
+    if (next) localStorage.setItem(SIM_COURSE_KEY, next)
+    else localStorage.removeItem(SIM_COURSE_KEY)
+  }
+
+  function clearCourseDate() {
+    setSimCourseDate('')
+    setCourseDraft('')
+    localStorage.removeItem(SIM_COURSE_KEY)
+  }
 
   function save(updated) {
     setEntries(updated)
@@ -665,23 +856,13 @@ export default function DPTimeLogScreen({ onBack }) {
     return (parseInt(a.period, 10) || 0) - (parseInt(b.period, 10) || 0)
   })
   const totals = computeTotals(entries)
-  const ni = computeNIProgress(entries)
+  const phase = computePhaseProgress(entries, simCourseDate)
+  const progressBars = buildProgressBars(phase)
   const recordSummary = computeRecordSummary(entries)
   const rankLabel = currentRankLabel(sorted)
-
-  let certStatusText, certStatusTone
-  if (ni.dp23Days >= 60 && ni.totalDays >= 120) {
-    certStatusText = 'On current record: Unlimited certificate'
-    certStatusTone = 'success'
-  } else if (ni.totalDays >= 120) {
-    const needed = 60 - ni.dp23Days
-    certStatusText = `On current record: Limited certificate. ${needed} more DP2/DP3 day${needed === 1 ? '' : 's'} needed for Unlimited.`
-    certStatusTone = 'warning'
-  } else {
-    const remaining = 120 - ni.totalDays
-    certStatusText = `${remaining} day${remaining === 1 ? '' : 's'} remaining to certification.`
-    certStatusTone = 'info'
-  }
+  const { text: certStatusText, tone: certStatusTone } = certificateStatus(phase)
+  const dayCountNotes = countingNotes(totals)
+  const phaseNote = phaseAllocationNote(phase)
 
   const importProcessed = useMemo(() => {
     if (!importRows.length) return { valid: [], problems: [], slashDateFormat: 'dmy', hasSlashDates: false }
@@ -742,30 +923,44 @@ export default function DPTimeLogScreen({ onBack }) {
           </div>
         </div>
 
+        {dayCountNotes.map(note => <p className="dplog-short-note" key={note}>{note}</p>)}
+
+        <div className="dplog-course no-print">
+          <div className="dplog-thresh-heading">DP Simulator Course completed</div>
+          <div className="dplog-course-row">
+            <input
+              type="date"
+              value={courseDraft}
+              onChange={e => setCourseDraft(e.target.value)}
+              aria-label="DP Simulator Course completion date"
+            />
+            <button className="btn-secondary" onClick={saveCourseDate}>Save</button>
+            {simCourseDate && <button className="btn-secondary" onClick={clearCourseDate}>Clear</button>}
+          </div>
+          {!simCourseDate && (
+            <p className="dplog-course-hint">
+              Set your DP Simulator Course date to track Phase D separately. Until then all days count toward Phase B.
+            </p>
+          )}
+        </div>
+
         <div className="dplog-thresholds">
           <div className="dplog-thresh-heading">NI New Offshore Scheme Progress</div>
-          <ThresholdBar label="Phase B — DP sea time" value={ni.totalDays} max={60} />
-          <ThresholdBar
-            label="Phase B — passive days used"
-            value={Math.min(ni.passiveDays, 30)}
-            max={30}
-            statusText={ni.passiveDays >= 30 ? 'Passive day limit reached — further passive days cannot be counted toward certification.' : null}
-            statusTone="warning"
-          />
-          <ThresholdBar label="Total days toward certification" value={ni.totalDays} max={120} />
-          <ThresholdBar
-            label="DP2/DP3 days — Unlimited certificate"
-            value={ni.dp23Days}
-            max={60}
-            statusText={certStatusText}
-            statusTone={certStatusTone}
-          />
+          {progressBars.map(bar => (
+            <ThresholdBar
+              key={bar.key}
+              label={bar.label}
+              value={bar.value}
+              max={bar.max}
+              suffix={bar.suffix}
+              statusText={bar.key === 'dp23' ? certStatusText : bar.note}
+              statusTone={bar.key === 'dp23' ? certStatusTone : 'warning'}
+            />
+          ))}
         </div>
       </div>
 
-      <p className="dplog-thresh-explainer">
-        Phase B and Phase D are split by your Induction and Simulator Course dates. DPTrainer tracks your total days, passive day usage and DP class mix — confirm phase allocation against your logbook.
-      </p>
+      <p className="dplog-thresh-explainer">{phaseNote}</p>
 
       {/* EMPTY STATE */}
       {entries.length === 0 && (
@@ -991,8 +1186,10 @@ export default function DPTimeLogScreen({ onBack }) {
         generatedDate={printDateLong}
         totals={totals}
         recordSummary={recordSummary}
-        ni={ni}
+        countingNotes={dayCountNotes}
+        progressBars={progressBars}
         certStatusText={certStatusText}
+        phaseNote={phaseNote}
         onActiveChange={setPdfExporting}
       />
     </div>
