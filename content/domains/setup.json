@@ -40,6 +40,21 @@
         "Which sensor is most critical for DP position keeping and why?",
         "If one gyro was showing a 2 degree difference from the other at setup — would you proceed? What would you do and why?"
       ],
+      "model_answers": [
+        "Depth feeds the current and shallow-water model. Enter a depth much greater than actual and the model under-estimates the current force and the sluggish shallow-water response, so the controller's feed-forward is wrong before anything else happens: the vessel sits with a steady offset the DPO cannot explain, and thruster demand does not match what the sea state suggests it should be. Too shallow and the model over-reacts. The point is that the whole simulation is only as good as what was typed in — a wrong depth is not a small error, it invalidates the exercise.",
+        "The controller resolves thruster demand into vessel axes using heading. If the entered heading is wrong by even a few degrees, the model's idea of where the bow is points somewhere the vessel is not, so surge demand leaks into sway and the vessel walks off track while the display reports it holding. On the reference vessel, heading is 000° True at setup and the entered value must match the gyro exactly. Wind feed-forward is resolved the same way, so a heading error also puts the wind correction on the wrong axis.",
+        "It confirms the vessel has reached equilibrium — that thruster output is balancing the environment and not chasing an error the DPO introduced. On the reference vessel in calm conditions expect low, steady demand on the tunnels with the mains trimming, and position and heading holding within a metre and a fraction of a degree. If it is not stable, something entered at setup is wrong or a sensor is feeding bad data: the answer is to find that cause, not to start the drill and hope it settles.",
+        "Position reference is what DP cannot run without — with no accepted reference the system has nothing to close the loop on and drops to a heading-and-thruster-only mode. But the honest answer names the gyro alongside it: heading is used to resolve every reference and every thruster command into vessel axes, so a gyro fault corrupts good position data as well. On the reference vessel, two DGPS and two gyros mean neither is a single point of failure, and that redundancy is the reason for the pairing.",
+        "No. Two degrees is far outside the half-degree agreement expected at setup, and with only two gyros there is no third to vote on which one is right. Report it to the supervising DPO, check both against a known bearing or the vessel's heading on a reference before accepting either, and do not start a drill until the disagreement is understood. Proceeding on a wrongly-resolved heading means every observation recorded that session is against a model that was never correct."
+      ],
+      "model_outcome": {
+        "time_to_complete_minutes": "10–15 for a competent first pass; under 10 by the end of the 30 days",
+        "items_missed_first_attempt": "Typically none by day 3; draft and water depth are the two most often left at default",
+        "sensor_status_at_completion": "All green — both DGPS accepted with SNR above 35, both gyros within 0.5°, both wind sensors active, both VRUs healthy",
+        "thruster_status_at_completion": "All five enabled and shown in the schematic — two bow tunnel, one stern tunnel, two main azimuth aft",
+        "steady_state_result": "Stable: position held within 1 m and heading within 0.5° over the 3 minutes, with low steady thruster demand and no rejections",
+        "notes": "Bus tie open with one bow tunnel and one main on each board — confirm the split before declaring setup complete"
+      },
       "variants": [
         {
           "id": "setup_001a",

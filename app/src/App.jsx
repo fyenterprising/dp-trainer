@@ -8,41 +8,10 @@ import HistoryScreen from './screens/HistoryScreen.jsx'
 import VesselProfileScreen from './screens/VesselProfileScreen.jsx'
 import ProgressScreen from './screens/ProgressScreen.jsx'
 import DPTimeLogScreen from './screens/DPTimeLogScreen.jsx'
-import setupData from '../../content/domains/setup.json'
-import joystickData from '../../content/domains/joystick-control.json'
-import environmentalData from '../../content/domains/environmental.json'
-import sensorsData from '../../content/domains/sensors.json'
-import modeData from '../../content/domains/mode-transitions.json'
-import approachData from '../../content/domains/approach.json'
-import alarmsData from '../../content/domains/alarms.json'
-import failuresData from '../../content/domains/failures.json'
-import watchkeepingData from '../../content/domains/watchkeeping.json'
-import operationsData from '../../content/domains/operations.json'
-import reviewData from '../../content/domains/review.json'
-import asogData from '../../content/domains/asog-cam-tam.json'
-import dpDrillsData from '../../content/domains/dp-drills.json'
-import dpSystemsData from '../../content/domains/dp-systems-and-modes.json'
-import prsRedundancyData from '../../content/domains/position-reference-and-redundancy.json'
-import emergencyResponseData from '../../content/domains/emergency-response.json'
-import trialsAssuranceData from '../../content/domains/dp-trials-and-assurance.json'
-import drillConductData from '../../content/domains/drill-conduct-and-debrief.json'
-import tagosData from '../../content/domains/tagos-power-strategy.json'
-import curriculumData from '../../content/curriculum.json'
-
-const allDomains = [
-  setupData, joystickData, environmentalData, sensorsData, modeData,
-  approachData, alarmsData, failuresData, watchkeepingData, operationsData, reviewData,
-  asogData, dpDrillsData, dpSystemsData, prsRedundancyData, emergencyResponseData,
-  trialsAssuranceData, drillConductData, tagosData,
-]
-
-const taskById = {}
-allDomains.forEach(domain => {
-  domain.tasks.forEach(t => { taskById[t.id] = t })
-})
+import { curriculum, taskById } from './data/content.js'
 
 function selectNextTask(trainingDay, completedTaskIds) {
-  const dayEntry = curriculumData.curriculum.find(d => d.day === trainingDay)
+  const dayEntry = curriculum.find(d => d.day === trainingDay)
   if (!dayEntry) {
     console.log('[selectNextTask] No curriculum entry for day', trainingDay)
     return null
