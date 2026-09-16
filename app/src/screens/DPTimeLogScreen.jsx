@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import DPTimeLogPdfExport from '../components/DPTimeLogPdfExport.jsx'
+import Icon from '../components/Icon.jsx'
 
 const VESSEL_TYPES = ['PSV', 'Research', 'AHTS', 'CSV', 'MPSV', 'Other']
 const DP_CLASSES = ['DP1', 'DP2', 'DP3']
@@ -890,7 +891,7 @@ export default function DPTimeLogScreen({ onBack }) {
 
       {/* SCREEN HEADER */}
       <div className="history-header no-print">
-        <button className="btn-back" onClick={onBack}>← Back</button>
+        <button className="btn-back" onClick={onBack}><Icon name="arrow" className="icon--flip" /> Back</button>
         <h1>DP Time Log</h1>
       </div>
 
@@ -1006,7 +1007,7 @@ export default function DPTimeLogScreen({ onBack }) {
                     <button className="dplog-btn-edit" onClick={() => handleEdit(e)}>Edit</button>
                   </td>
                   <td className="no-print">
-                    <button className="dplog-btn-delete" onClick={() => handleDelete(e.id)}>✕</button>
+                    <button className="dplog-btn-delete" onClick={() => handleDelete(e.id)}><Icon name="cross" className="icon-delete" /></button>
                   </td>
                 </tr>
               ))}

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Icon from '../components/Icon.jsx'
 
 function formatTime(seconds) {
   const h = Math.floor(seconds / 3600)
@@ -71,7 +72,11 @@ function TaskRecord({ entry, index }) {
           <h3>Professional Standard</h3>
           <ul className="print-standard-list">
             {task.professional_standard.map((item, i) => (
-              <li key={i}>☐ {item}</li>
+              <li key={i}>
+                <Icon name="box" className="icon-screen-variant" />
+                <Icon name="box-print" className="icon-print-variant" />
+                {' '}{item}
+              </li>
             ))}
           </ul>
         </div>
@@ -232,7 +237,7 @@ export default function SummaryScreen({ profile, completedTasks, sessionStartTim
       {/* ── ACTIONS (screen only) ── */}
       <div className="summary-actions no-print">
         {saved ? (
-          <div className="saved-badge">✓ Session saved to history</div>
+          <div className="saved-badge"><Icon name="tick" /> Session saved to history</div>
         ) : (
           <button className="btn-save btn-primary" onClick={handleSave}>
             Save Session

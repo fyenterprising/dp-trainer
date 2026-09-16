@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../components/Icon.jsx'
 
 function formatTime(seconds) {
   const h = Math.floor(seconds / 3600)
@@ -118,7 +119,7 @@ export default function HistoryScreen({ onBack }) {
   return (
     <div className="screen">
       <div className="history-header">
-        <button className="btn-back" onClick={onBack}>← Back</button>
+        <button className="btn-back" onClick={onBack}><Icon name="arrow" className="icon--flip" /> Back</button>
         <h1>Past Sessions</h1>
       </div>
 
@@ -154,7 +155,9 @@ export default function HistoryScreen({ onBack }) {
                   {' · '}{session.profile.dpClass}
                 </div>
               </div>
-              <div className="history-card-chevron">{isOpen ? '▲' : '▼'}</div>
+              <div className="history-card-chevron">
+                <Icon name="chevron" className={isOpen ? 'icon--rotate-180' : ''} />
+              </div>
             </div>
 
             {isOpen && <SessionDetail session={session} />}

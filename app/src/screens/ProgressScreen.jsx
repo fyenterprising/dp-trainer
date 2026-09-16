@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../components/Icon.jsx'
 import curriculumData from '../../../content/curriculum.json'
 
 const NI_SECTION_TOTALS = {
@@ -108,7 +109,7 @@ export default function ProgressScreen({ onBack }) {
   return (
     <div className="screen">
       <div className="history-header">
-        <button className="btn-back" onClick={onBack}>← Back</button>
+        <button className="btn-back" onClick={onBack}><Icon name="arrow" className="icon--flip" /> Back</button>
         <h1>Progress</h1>
       </div>
 

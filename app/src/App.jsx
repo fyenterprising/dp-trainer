@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Footer from './components/Footer.jsx'
+import Icon from './components/Icon.jsx'
 import HomeScreen from './screens/HomeScreen.jsx'
 import TaskScreen from './screens/TaskScreen.jsx'
 import BetweenTaskScreen from './screens/BetweenTaskScreen.jsx'
@@ -127,7 +128,9 @@ export default function App() {
       onClick={toggleTheme}
       style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 1000 }}
     >
-      {theme === 'day' ? '☽ NIGHT MODE' : '☀ DAY MODE'}
+      {theme === 'day'
+        ? <><Icon name="moon" /> NIGHT MODE</>
+        : <><Icon name="sun" /> DAY MODE</>}
     </button>
   )
 

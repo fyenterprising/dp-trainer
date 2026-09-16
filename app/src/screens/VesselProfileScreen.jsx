@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../components/Icon.jsx'
 
 const DP_CLASSES = ['DP1', 'DP2', 'DP3']
 const DP_SYSTEMS = ['Converteam', 'Kongsberg K-Pos', 'Wärtsilä NACOS', 'Other']
@@ -137,7 +138,7 @@ export default function VesselProfileScreen({ onBack }) {
       <div className="home-screen">
         <div className="vp-form-header">
           <button className="btn-back" onClick={() => { setMode('list'); setError('') }}>
-            ← Back
+            <Icon name="arrow" className="icon--flip" /> Back
           </button>
           <div className="vp-form-title">{isEdit ? 'Edit Profile' : 'New Profile'}</div>
         </div>
@@ -216,7 +217,7 @@ export default function VesselProfileScreen({ onBack }) {
   return (
     <div className="screen">
       <div className="history-header">
-        <button className="btn-back" onClick={onBack}>← Back</button>
+        <button className="btn-back" onClick={onBack}><Icon name="arrow" className="icon--flip" /> Back</button>
         <h1>Vessel Profiles</h1>
       </div>
 

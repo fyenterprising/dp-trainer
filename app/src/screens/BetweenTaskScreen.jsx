@@ -1,3 +1,5 @@
+import Icon from '../components/Icon.jsx'
+
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60).toString().padStart(2, '0')
   const s = (seconds % 60).toString().padStart(2, '0')
@@ -18,7 +20,7 @@ export default function BetweenTaskScreen({ lastTask, nextTaskAvailable, onNextT
       <div className="between-actions">
         {nextTaskAvailable ? (
           <button className="btn-primary btn-between-next" onClick={onNextTask}>
-            Next Task →
+            Next Task <Icon name="arrow" />
           </button>
         ) : (
           <p className="between-tasks-done">

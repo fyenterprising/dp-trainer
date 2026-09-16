@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Icon from '../components/Icon.jsx'
 import logoLightBgRaw from '../../../brand/logo/4d-stacked/logo-4d-stacked-light-bg.svg?raw'
 import logoDarkBgRaw from '../../../brand/logo/4d-stacked/logo-4d-stacked-dark-bg.svg?raw'
 
@@ -145,7 +146,7 @@ export default function HomeScreen({ theme, onStart, onHistory, onProgress, onVe
             onClick={handleProfileNext}
             disabled={!activeProfile}
           >
-            Next →
+            Next <Icon name="arrow" />
           </button>
         </div>
       </div>
@@ -192,7 +193,7 @@ export default function HomeScreen({ theme, onStart, onHistory, onProgress, onVe
             onClick={() => toggleItem(i)}
           >
             <div className={`pre-check-box${checked[i] ? ' pre-check-box--checked' : ''}`}>
-              {checked[i] && '✓'}
+              <Icon name={checked[i] ? 'box-checked' : 'box'} size={20} />
             </div>
             <span className="pre-checklist-text">{item}</span>
           </div>
@@ -208,7 +209,7 @@ export default function HomeScreen({ theme, onStart, onHistory, onProgress, onVe
         </div>
         <div className="checklist-actions">
           <button className="btn-secondary" onClick={() => setStep(1)}>
-            ← Back
+            <Icon name="arrow" className="icon--flip" /> Back
           </button>
           <button
             className={`btn-start${allChecked ? '' : ' btn-start--disabled'}`}
