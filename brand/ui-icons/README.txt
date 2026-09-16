@@ -50,17 +50,19 @@ Print icons                 Stroke width 2
   page — same reasoning as newsprint or engraved type running bolder
   than its on-screen equivalent.
 
-Combined control
+Combined control             Stroke width 1.75
   box-checked.svg           Checked state of the pre-session checklist
-                             items (stroke width 2, matching the print
-                             weight — it's rendered larger, at 20px,
-                             where the extra weight reads better).
-                             Draws the whole checked control as one
-                             shape — rounded-rect box plus tick in a
-                             single path set — rather than layering
-                             tick.svg over box.svg. Replaces what was
-                             previously a CSS-bordered box with a
-                             unicode tick floated inside it.
+                             items, at the same screen weight as
+                             box.svg so the checked and unchecked
+                             states of the control match — rendered
+                             larger, at 20px, purely so the tick stays
+                             legible at that size. Draws the whole
+                             checked control as one shape — rounded-
+                             rect box plus tick in a single path set —
+                             rather than layering tick.svg over
+                             box.svg. Replaces what was previously a
+                             CSS-bordered box with a unicode tick
+                             floated inside it.
 
 =====================================================================
 Geometry
