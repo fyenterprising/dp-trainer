@@ -67,7 +67,13 @@ html, body, #root {
 ::-webkit-scrollbar-thumb { background: var(--border); }
 ::-webkit-scrollbar-thumb:hover { background: var(--txt3); }
 
-.screen { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+/* width:100% (not just max-width) — .screen is a flex item of #root (column
+   direction) and its auto left/right margins, used to center it, otherwise
+   absorb the stretch that would normally cap its width at the viewport. Left
+   at auto margins alone, a deeply nested min-width (the DP log table, in
+   particular) sizes .screen itself to content and the whole page scrolls
+   sideways instead of just the table within its own wrapper. */
+.screen { width: 100%; max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
 
 /* ── TIMER BAR ── */
 .timer-bar {
@@ -223,6 +229,15 @@ button {
 }
 .btn-complete:hover { filter: brightness(1.1); }
 
+/* ── APP TOPBAR ── */
+/* In normal document flow (not fixed/sticky) so it never overlays screen
+   content — it just occupies its own row above whichever screen is showing. */
+.app-topbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px 0;
+}
+
 /* ── THEME TOGGLE ── */
 .btn-theme-toggle {
   background: transparent;
@@ -247,7 +262,7 @@ button {
 .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
 .home-logo { display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto 32px; }
 .home-logo svg { display: block; width: 100%; height: auto; }
-.home-nav { display: flex; gap: 0; margin-bottom: 32px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.home-nav { display: flex; gap: 0; margin-bottom: 32px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; max-width: 100%; }
 .btn-nav {
   background: transparent;
   border: none;
@@ -261,6 +276,7 @@ button {
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 0;
+  min-width: 0;
 }
 .btn-nav:last-child { border-right: none; }
 .btn-nav:hover { color: var(--txt); background: var(--panel2); }
@@ -321,7 +337,7 @@ button {
 .checklist-footer .btn-start:not(.btn-start--disabled):hover { filter: brightness(1.1); }
 
 /* ── PRE-SESSION CHECKLIST SCREEN ── */
-.checklist-screen { max-width: 700px; margin: 0 auto; padding: 32px 16px 120px; }
+.checklist-screen { width: 100%; max-width: 700px; margin: 0 auto; padding: 32px 16px 120px; }
 .checklist-screen-header { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
 .checklist-screen-title { font-family: var(--font); font-size: 28px; font-weight: 600; color: var(--heading-col); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 10px; }
 .checklist-screen-vessel { font-size: 14px; color: var(--txt2); margin-bottom: 4px; }
@@ -398,6 +414,17 @@ button {
 .count-partial { color: var(--amb); font-weight: 500; }
 .checklist-actions { display: flex; gap: 12px; align-items: center; }
 
+@media (max-width: 600px) {
+  /* The count text plus two buttons never fit one row in this footer's
+     padding at phone width — the Start Session button was rendering off the
+     right edge of the viewport. Stack instead of squeezing. */
+  .checklist-footer { flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 16px; }
+  .checklist-count { text-align: center; }
+  .checklist-actions { width: 100%; }
+  .checklist-actions .btn-secondary,
+  .checklist-actions .btn-start { flex: 1; }
+}
+
 /* ── SUMMARY SCREEN ── */
 .summary-header { margin-bottom: 24px; }
 .summary-header h1 { margin-bottom: 14px; }
@@ -426,10 +453,15 @@ button {
 }
 .summary-task h2 { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
 .summary-task-time { font-family: var(--mono); font-size: 11px; color: var(--txt3); font-weight: normal; letter-spacing: 1px; }
-.summary-field { display: flex; justify-content: space-between; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--border); gap: 16px; }
+.summary-field { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--border); gap: 4px 16px; }
 .summary-field:last-child { border-bottom: none; }
-.summary-field-label { font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.08em; flex-shrink: 0; }
-.summary-field-value { font-size: 13px; color: var(--txt); text-align: right; word-break: break-word; }
+/* No flex-shrink:0 here — a long label (e.g. a full observe-and-record field
+   name) needs to be able to shrink and wrap onto its own lines. Without this,
+   the label holds its full single-line width and forces .summary-field-value
+   into a sliver so narrow (combined with its own word-break below) that text
+   stacks one character per line. */
+.summary-field-label { font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.08em; }
+.summary-field-value { flex: 1 0 auto; min-width: 120px; max-width: 100%; font-size: 13px; color: var(--txt); text-align: right; overflow-wrap: break-word; }
 .summary-field-value.empty { color: var(--txt3); font-style: italic; }
 .debrief-answer { padding: 8px 0; border-bottom: 1px solid var(--border); }
 .debrief-answer:last-child { border-bottom: none; }
@@ -536,8 +568,41 @@ button {
 /* ── DP TIME LOG ── */
 .dplog-screen { padding-bottom: 60px; }
 .dplog-totals { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; box-shadow: var(--card-shadow); }
-.dplog-totals-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 20px; }
+/* Its own card now that the Simulator Course date lives here instead of in
+   .dplog-totals above — same card recipe as .dplog-totals, not a new one. */
+.dplog-thresholds { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; box-shadow: var(--card-shadow); }
+/* Named areas (not source order) drive the layout, so the reading order stays
+   "category across, unit down" — Active/Passive/Total days, then the same
+   three again in hours — regardless of column count. */
+.dplog-totals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    "ad pd td"
+    "ah ph th";
+  gap: 16px;
+  margin-bottom: 20px;
+}
 .dplog-stat { text-align: center; }
+.dplog-stat--active-days   { grid-area: ad; }
+.dplog-stat--active-hours  { grid-area: ah; }
+.dplog-stat--passive-days  { grid-area: pd; }
+.dplog-stat--passive-hours { grid-area: ph; }
+.dplog-stat--total-days    { grid-area: td; }
+.dplog-stat--total-hours   { grid-area: th; }
+
+@media (max-width: 600px) {
+  /* Two columns below phone width. Re-shaped (not just narrowed) so each
+     category's day/hour pair stays on one row instead of splitting across
+     the grid the way three columns would with only two per row. */
+  .dplog-totals-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "ad ah"
+      "pd ph"
+      "td th";
+  }
+}
 .dplog-stat-value { font-family: var(--mono); font-size: 28px; font-weight: 500; color: var(--acc); line-height: 1; }
 .dplog-stat-label { font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; }
 .dplog-thresh-heading { font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
@@ -623,6 +688,28 @@ button {
 }
 .app-footer-email { color: var(--acc); text-decoration: none; }
 
+/* ── TOUCH TARGETS ── */
+/* Buttons and inputs sized fine for a mouse pointer read as small on a
+   touch screen. Scoped to touch input only, so nothing changes for mouse
+   users at any width. */
+@media (hover: none) and (pointer: coarse) {
+  button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-group input,
+  .form-group select,
+  .field-row input[type="number"],
+  .dplog-field input,
+  .dplog-field select,
+  .dplog-course-row input[type="date"] {
+    min-height: 44px;
+  }
+}
+
 /* ── PRINT STYLES ── */
 .print-only { display: none; }
 
@@ -649,7 +736,7 @@ button {
   body { background: #ffffff !important; color: #111111 !important; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11pt; margin: 0; padding: 0; }
 
   .no-print, .btn-back, .timer-bar, .summary-actions, .dplog-toolbar, .dplog-btn-edit, .dplog-btn-delete, .app-footer { display: none !important; }
-  .btn-theme-toggle, .theme-toggle { display: none !important; }
+  .btn-theme-toggle, .theme-toggle, .app-topbar { display: none !important; }
   .print-only { display: block !important; }
   .screen { max-width: 100%; padding: 0; overflow: visible; }
 
@@ -687,7 +774,7 @@ button {
   .dplog-table th { background: #eee; }
   .dplog-active { color: #006600; }
   .dplog-passive { color: #cc7700; }
-  .dplog-totals { background: #f4f4f4; border: 1px solid #ccc; box-shadow: none; }
+  .dplog-totals, .dplog-thresholds { background: #f4f4f4; border: 1px solid #ccc; box-shadow: none; }
   .dplog-stat-value { color: #0066cc; font-size: 18pt; }
   .dplog-stat-label { color: #555; }
   .thresh-done { color: #006600; }

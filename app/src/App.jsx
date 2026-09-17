@@ -123,15 +123,13 @@ export default function App() {
   }
 
   const themeToggle = (
-    <button
-      className="btn-theme-toggle"
-      onClick={toggleTheme}
-      style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 1000 }}
-    >
-      {theme === 'day'
-        ? <><Icon name="moon" /> NIGHT MODE</>
-        : <><Icon name="sun" /> DAY MODE</>}
-    </button>
+    <div className="app-topbar">
+      <button className="btn-theme-toggle" onClick={toggleTheme}>
+        {theme === 'day'
+          ? <><Icon name="moon" /> NIGHT MODE</>
+          : <><Icon name="sun" /> DAY MODE</>}
+      </button>
+    </div>
   )
 
   if (screen === 'home') {

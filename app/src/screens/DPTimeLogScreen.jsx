@@ -897,35 +897,43 @@ export default function DPTimeLogScreen({ onBack }) {
 
       {/* TOTALS */}
       <div className="dplog-totals">
+        {/* DOM order groups each category's day/hour pair together (the order a
+            screen reader will read); grid-area in CSS places them in the visual
+            reading order — category across the columns, unit down the rows. */}
         <div className="dplog-totals-grid">
-          <div className="dplog-stat">
+          <div className="dplog-stat dplog-stat--active-days">
             <div className="dplog-stat-value">{totals.activeDays}</div>
             <div className="dplog-stat-label">Active Days</div>
           </div>
-          <div className="dplog-stat">
+          <div className="dplog-stat dplog-stat--active-hours">
             <div className="dplog-stat-value">{totals.activeHours}</div>
             <div className="dplog-stat-label">Active Hours</div>
           </div>
-          <div className="dplog-stat">
+          <div className="dplog-stat dplog-stat--passive-days">
             <div className="dplog-stat-value">{totals.passiveDays}</div>
             <div className="dplog-stat-label">Passive Days</div>
           </div>
-          <div className="dplog-stat">
+          <div className="dplog-stat dplog-stat--passive-hours">
             <div className="dplog-stat-value">{totals.passiveHours}</div>
             <div className="dplog-stat-label">Passive Hours</div>
           </div>
-          <div className="dplog-stat">
+          <div className="dplog-stat dplog-stat--total-days">
             <div className="dplog-stat-value">{totals.totalDays}</div>
             <div className="dplog-stat-label">Total Days</div>
           </div>
-          <div className="dplog-stat">
+          <div className="dplog-stat dplog-stat--total-hours">
             <div className="dplog-stat-value">{totals.totalHours}</div>
             <div className="dplog-stat-label">Total Hours</div>
           </div>
         </div>
 
         {dayCountNotes.map(note => <p className="dplog-short-note" key={note}>{note}</p>)}
+      </div>
 
+      {/* NI PROGRESS — the Simulator Course date sits here rather than in the
+          totals card above, since it's the input that determines the Phase
+          B/D split the bars below it show, not another raw total. */}
+      <div className="dplog-thresholds">
         <div className="dplog-course no-print">
           <div className="dplog-thresh-heading">DP Simulator Course completed</div>
           <div className="dplog-course-row">
@@ -945,20 +953,18 @@ export default function DPTimeLogScreen({ onBack }) {
           )}
         </div>
 
-        <div className="dplog-thresholds">
-          <div className="dplog-thresh-heading">NI New Offshore Scheme Progress</div>
-          {progressBars.map(bar => (
-            <ThresholdBar
-              key={bar.key}
-              label={bar.label}
-              value={bar.value}
-              max={bar.max}
-              suffix={bar.suffix}
-              statusText={bar.key === 'dp23' ? certStatusText : bar.note}
-              statusTone={bar.key === 'dp23' ? certStatusTone : 'warning'}
-            />
-          ))}
-        </div>
+        <div className="dplog-thresh-heading">NI New Offshore Scheme Progress</div>
+        {progressBars.map(bar => (
+          <ThresholdBar
+            key={bar.key}
+            label={bar.label}
+            value={bar.value}
+            max={bar.max}
+            suffix={bar.suffix}
+            statusText={bar.key === 'dp23' ? certStatusText : bar.note}
+            statusTone={bar.key === 'dp23' ? certStatusTone : 'warning'}
+          />
+        ))}
       </div>
 
       <p className="dplog-thresh-explainer">{phaseNote}</p>
