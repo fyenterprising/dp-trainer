@@ -503,6 +503,17 @@ button {
 .history-task-header { font-family: var(--font); font-size: 12px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: flex; justify-content: space-between; }
 .history-task-time { font-family: var(--mono); color: var(--txt3); font-weight: normal; }
 .history-run-label { font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--acc); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; margin-top: 10px; }
+
+/* ── DPO REVIEW MARKER ── */
+.review-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.review-status-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.review-unreviewed-text { font-size: 13px; color: var(--txt3); font-style: italic; }
+.review-reviewed-text { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--grn); }
+.btn-review-remove { background: transparent; border: 1px solid var(--border); color: var(--txt3); font-family: var(--font); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 14px; cursor: pointer; border-radius: var(--radius); }
+.btn-review-remove:hover { border-color: var(--red); color: var(--red); }
+.review-form { display: flex; flex-direction: column; gap: 12px; max-width: 360px; }
+.review-form-actions { display: flex; gap: 12px; }
+
 .history-clear-section { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
 .btn-clear { background: transparent; border: 1px solid var(--red); color: var(--red); font-family: var(--font); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 20px; cursor: pointer; border-radius: var(--radius); }
 .btn-clear:hover { background: color-mix(in srgb, var(--red) 10%, transparent); }

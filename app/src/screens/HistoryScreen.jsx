@@ -15,7 +15,82 @@ function FieldValue({ value }) {
   return <span className="summary-field-value">{value}</span>
 }
 
-function SessionDetail({ session }) {
+// The DPO review marker is a working note that a trainee and DPO discussed
+// the session — not a signature, verification, or piece of evidence — so it
+// is never surfaced in the PDF export or the DP time log, only here.
+function formatReviewDateTime(dateTimeStr) {
+  const d = new Date(dateTimeStr)
+  if (isNaN(d.getTime())) return { date: '—', time: '—' }
+  return {
+    date: d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+    time: d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+  }
+}
+
+function nowForDateTimeLocal() {
+  const d = new Date()
+  const pad = n => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+function ReviewSection({ session, reviewDraft, onStartReview, onDraftChange, onConfirmReview, onCancelReview, onRemoveReview }) {
+  if (session.reviewed) {
+    const { date, time } = formatReviewDateTime(session.reviewed.dateTime)
+    return (
+      <div className="review-section">
+        <div className="review-status-row">
+          <span className="review-reviewed-text">
+            <Icon name="tick" />
+            Reviewed by {session.reviewed.dpoName} — {date} at {time}
+          </span>
+          <button className="btn-review-remove" onClick={() => onRemoveReview(session.id)}>
+            Remove Review
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (reviewDraft?.sessionId === session.id) {
+    return (
+      <div className="review-section">
+        <div className="review-form">
+          <div className="form-group">
+            <label>DPO Name</label>
+            <input
+              type="text"
+              value={reviewDraft.dpoName}
+              onChange={e => onDraftChange({ ...reviewDraft, dpoName: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Date and Time</label>
+            <input
+              type="datetime-local"
+              value={reviewDraft.dateTime}
+              onChange={e => onDraftChange({ ...reviewDraft, dateTime: e.target.value })}
+            />
+          </div>
+          <div className="review-form-actions">
+            <button className="btn-primary" onClick={() => onConfirmReview(session.id)}>Confirm</button>
+            <button className="btn-secondary" onClick={onCancelReview}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="review-section">
+      <div className="review-status-row">
+        <span className="review-unreviewed-text">Not yet reviewed by a DPO.</span>
+        <button className="btn-secondary" onClick={() => onStartReview(session)}>Mark as Reviewed</button>
+      </div>
+    </div>
+  )
+}
+
+function SessionDetail({ session, reviewDraft, onStartReview, onDraftChange, onConfirmReview, onCancelReview, onRemoveReview }) {
   const { profile, completedTasks } = session
   return (
     <div className="history-detail">
@@ -88,6 +163,16 @@ function SessionDetail({ session }) {
           </div>
         )
       })}
+
+      <ReviewSection
+        session={session}
+        reviewDraft={reviewDraft}
+        onStartReview={onStartReview}
+        onDraftChange={onDraftChange}
+        onConfirmReview={onConfirmReview}
+        onCancelReview={onCancelReview}
+        onRemoveReview={onRemoveReview}
+      />
     </div>
   )
 }
@@ -96,6 +181,7 @@ export default function HistoryScreen({ onBack }) {
   const [sessions, setSessions] = useState([])
   const [expanded, setExpanded] = useState({})
   const [showConfirm, setShowConfirm] = useState(false)
+  const [reviewDraft, setReviewDraft] = useState(null) // { sessionId, dpoName, dateTime } | null
 
   useEffect(() => {
     const saved = localStorage.getItem('dp-sessions')
@@ -114,6 +200,38 @@ export default function HistoryScreen({ onBack }) {
     localStorage.removeItem('dp-sessions')
     setSessions([])
     setShowConfirm(false)
+  }
+
+  // `sessions` is held newest-first for display; storage keeps the original
+  // chronological order SummaryScreen appends to, so reverse back on the way out.
+  function persistSessions(updatedDisplayOrder) {
+    setSessions(updatedDisplayOrder)
+    localStorage.setItem('dp-sessions', JSON.stringify([...updatedDisplayOrder].reverse()))
+  }
+
+  function handleStartReview(session) {
+    setReviewDraft({
+      sessionId: session.id,
+      dpoName: session.profile?.dpoName ?? '',
+      dateTime: nowForDateTimeLocal(),
+    })
+  }
+
+  function handleCancelReview() {
+    setReviewDraft(null)
+  }
+
+  function handleConfirmReview(sessionId) {
+    if (!reviewDraft) return
+    persistSessions(sessions.map(s => s.id === sessionId
+      ? { ...s, reviewed: { dpoName: reviewDraft.dpoName, dateTime: reviewDraft.dateTime } }
+      : s
+    ))
+    setReviewDraft(null)
+  }
+
+  function handleRemoveReview(sessionId) {
+    persistSessions(sessions.map(s => s.id === sessionId ? { ...s, reviewed: null } : s))
   }
 
   return (
@@ -160,7 +278,17 @@ export default function HistoryScreen({ onBack }) {
               </div>
             </div>
 
-            {isOpen && <SessionDetail session={session} />}
+            {isOpen && (
+              <SessionDetail
+                session={session}
+                reviewDraft={reviewDraft}
+                onStartReview={handleStartReview}
+                onDraftChange={setReviewDraft}
+                onConfirmReview={handleConfirmReview}
+                onCancelReview={handleCancelReview}
+                onRemoveReview={handleRemoveReview}
+              />
+            )}
           </div>
         )
       })}
